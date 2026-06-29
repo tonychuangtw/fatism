@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>塔羅占卜 · Tarot Reading</title>
+<style>
+  :root {
+    --bg-1: #1a1340;
+    --bg-2: #2d1b5e;
+    --bg-3: #4a1a6e;
+    --gold: #d4af37;
+    --gold-dim: #8a7028;
+    --ivory: #f5e9c8;
+    --text: #ece4d3;
+    --text-dim: #b3a98c;
+    --card-back: linear-gradient(135deg, #1e0a4a 0%, #4a1a6e 50%, #1e0a4a 100%);
+    --card-face: linear-gradient(160deg, #f8efd4 0%, #e8d8a8 100%);
+    --shadow: 0 8px 32px rgba(0,0,0,0.5);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Serif TC', 'Noto Serif SC', 'Cormorant Garamond', Georgia, serif;
+    background: radial-gradient(ellipse at top, var(--bg-3) 0%, var(--bg-2) 40%, var(--bg-1) 100%);
+    min-height: 100vh;
+    color: var(--text);
+    padding: 24px 16px;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.4), transparent),
+      radial-gradient(1px 1px at 60% 70%, rgba(255,255,255,0.3), transparent),
+      radial-gradient(1.5px 1.5px at 80% 20%, rgba(255,255,255,0.5), transparent),
+      radial-gradient(1px 1px at 30% 80%, rgba(255,255,255,0.3), transparent),
+      radial-gradient(2px 2px at 90% 50%, rgba(255,255,255,0.4), transparent);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .container { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+  header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; flex-wrap: wrap; gap: 12px; }
+  h1 {
+    font-size: clamp(28px, 5vw, 44px);
+    color: var(--gold);
+    letter-spacing: 0.08em;
+    text-shadow: 0 2px 12px rgba(212,175,55,0.3);
+  }
+  h1 .deco { color: var(--text-dim); font-size: 0.7em; margin: 0 8px; }
+  .lang-switch { display: flex; gap: 4px; background: rgba(0,0,0,0.3); border: 1px solid var(--gold-dim); border-radius: 999px; padding: 4px; }
+  .lang-switch button {
+    background: transparent; color: var(--text-dim); border: none;
+    padding: 6px 14px; border-radius: 999px; cursor: pointer;
+    font-size: 13px; font-family: inherit; transition: all 0.2s;
+  }
+  .lang-switch button.active { background: var(--gold); color: var(--bg-1); font-weight: 600; }
+  .lang-switch button:hover:not(.active) { color: var(--ivory); }
+
+  .intro { text-align: center; margin-bottom: 24px; color: var(--text-dim); font-style: italic; font-size: 15px; line-height: 1.7; }
+  .intro p { max-width: 640px; margin: 0 auto; }
+
+  .controls {
+    background: rgba(0,0,0,0.3); border: 1px solid var(--gold-dim);
+    border-radius: 16px; padding: 24px; margin-bottom: 32px;
+  }
+  .section-label { color: var(--gold); font-size: 13px; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 12px; }
+  .spreads { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 20px; }
+  .spread-option {
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(212,175,55,0.3);
+    border-radius: 10px; padding: 14px 16px; cursor: pointer; transition: all 0.2s;
+    text-align: left;
+  }
+  .spread-option:hover { background: rgba(212,175,55,0.1); border-color: var(--gold); }
+  .spread-option.selected { background: rgba(212,175,55,0.18); border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold); }
+  .spread-title { color: var(--ivory); font-weight: 600; margin-bottom: 4px; }
+  .spread-desc { color: var(--text-dim); font-size: 13px; line-height: 1.4; }
+
+  .question-box {
+    display: flex; gap: 8px; margin-bottom: 16px;
+  }
+  .question-box input {
+    flex: 1; background: rgba(0,0,0,0.4); border: 1px solid var(--gold-dim);
+    border-radius: 8px; padding: 12px 14px; color: var(--text);
+    font-family: inherit; font-size: 15px;
+  }
+  .question-box input:focus { outline: none; border-color: var(--gold); }
+  .question-box input::placeholder { color: var(--text-dim); font-style: italic; }
+
+  .actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+  .btn {
+    background: linear-gradient(180deg, var(--gold) 0%, var(--gold-dim) 100%);
+    color: var(--bg-1); border: none; border-radius: 8px;
+    padding: 12px 28px; font-family: inherit; font-size: 15px; font-weight: 600;
+    letter-spacing: 0.05em; cursor: pointer; transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(212,175,55,0.3);
+  }
+  .btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(212,175,55,0.4); }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn.ghost {
+    background: transparent; color: var(--gold); border: 1px solid var(--gold);
+    box-shadow: none;
+  }
+  .btn.ghost:hover:not(:disabled) { background: rgba(212,175,55,0.1); }
+
+  .stage {
+    min-height: 380px; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; margin-bottom: 24px;
+  }
+  .deck-area {
+    perspective: 1200px; display: flex; flex-wrap: wrap; gap: 18px;
+    justify-content: center; align-items: flex-start; min-height: 320px;
+  }
+  .card-slot { display: flex; flex-direction: column; align-items: center; gap: 10px; min-width: 150px; }
+  .slot-label { color: var(--gold); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; text-align: center; }
+  .card {
+    width: 140px; height: 220px; position: relative; transform-style: preserve-3d;
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+  }
+  .card.flipped { transform: rotateY(180deg); }
+  .card.reversed.flipped { transform: rotateY(180deg) rotate(180deg); }
+  .card-face, .card-back-face {
+    position: absolute; inset: 0; border-radius: 10px;
+    backface-visibility: hidden; box-shadow: var(--shadow);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 12px; text-align: center; border: 1px solid var(--gold-dim);
+  }
+  .card-back-face {
+    background: var(--card-back);
+    background-image:
+      radial-gradient(circle at 50% 50%, rgba(212,175,55,0.15) 0%, transparent 60%),
+      var(--card-back);
+  }
+  .card-back-face::before {
+    content: '✦'; font-size: 64px; color: var(--gold); opacity: 0.5;
+    text-shadow: 0 0 20px rgba(212,175,55,0.6);
+  }
+  .card-back-face::after {
+    content: ''; position: absolute; inset: 6px; border: 1px solid rgba(212,175,55,0.4);
+    border-radius: 6px; pointer-events: none;
+  }
+  .card-face {
+    background: var(--card-face); color: #2d1b5e; transform: rotateY(180deg);
+    background-image: linear-gradient(160deg, #f8efd4 0%, #e8d8a8 100%);
+  }
+  .card-face::after {
+    content: ''; position: absolute; inset: 6px; border: 1px solid rgba(74,26,110,0.3);
+    border-radius: 6px; pointer-events: none;
+  }
+  .card-icon { font-size: 48px; line-height: 1; margin-bottom: 8px; }
+  .card-num { font-size: 11px; letter-spacing: 0.2em; color: var(--bg-2); opacity: 0.7; margin-bottom: 6px; font-weight: 700; }
+  .card-name { font-size: 16px; font-weight: 700; color: var(--bg-1); line-height: 1.2; }
+
+  .interpretations { margin-top: 32px; display: flex; flex-direction: column; gap: 16px; }
+  .interp-card {
+    background: rgba(0,0,0,0.35); border: 1px solid var(--gold-dim);
+    border-radius: 12px; padding: 20px; opacity: 0; transform: translateY(10px);
+    animation: fadeUp 0.5s forwards;
+  }
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+  .interp-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; flex-wrap: wrap; gap: 8px; }
+  .interp-position { color: var(--gold); font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; }
+  .interp-orient { color: var(--text-dim); font-size: 12px; font-style: italic; }
+  .interp-name { font-size: 20px; color: var(--ivory); font-weight: 700; margin-bottom: 6px; }
+  .interp-keywords { color: var(--gold); font-size: 13px; margin-bottom: 10px; letter-spacing: 0.05em; }
+  .interp-body { color: var(--text); line-height: 1.7; font-size: 15px; }
+
+  .celtic-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 150px);
+    grid-template-rows: repeat(4, auto);
+    gap: 14px;
+    justify-content: center;
+  }
+  .celtic-grid .card-slot.pos-1 { grid-column: 2; grid-row: 2; }
+  .celtic-grid .card-slot.pos-2 { grid-column: 2; grid-row: 2; z-index: 2; transform: translateX(50%) rotate(90deg); }
+  .celtic-grid .card-slot.pos-3 { grid-column: 2; grid-row: 3; }
+  .celtic-grid .card-slot.pos-4 { grid-column: 1; grid-row: 2; }
+  .celtic-grid .card-slot.pos-5 { grid-column: 2; grid-row: 1; }
+  .celtic-grid .card-slot.pos-6 { grid-column: 3; grid-row: 2; }
+  .celtic-grid .card-slot.pos-7 { grid-column: 4; grid-row: 4; }
+  .celtic-grid .card-slot.pos-8 { grid-column: 4; grid-row: 3; }
+  .celtic-grid .card-slot.pos-9 { grid-column: 4; grid-row: 2; }
+  .celtic-grid .card-slot.pos-10 { grid-column: 4; grid-row: 1; }
+
+  @media (max-width: 720px) {
+    .celtic-grid { grid-template-columns: repeat(2, 140px); grid-template-rows: auto; }
+    .celtic-grid .card-slot { grid-column: auto !important; grid-row: auto !important; transform: none !important; }
+  }
+  footer { text-align: center; margin-top: 40px; color: var(--text-dim); font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>✦ <span data-i18n="title">塔羅占卜</span> <span class="deco">·</span> <span style="font-size:0.6em;color:var(--text-dim)">Tarot</span></h1>
+    <div class="lang-switch" id="langSwitch">
+      <button data-lang="tw" class="active">繁中</button>
+      <button data-lang="cn">简中</button>
+      <button data-lang="en">EN</button>
+    </div>
+  </header>
+
+  <div class="intro">
+    <p data-i18n="intro">靜下心，凝視內心的問題。塔羅不預測命運，而是映照當下的能量。深呼吸三次，按下抽牌。</p>
+  </div>
+
+  <div class="controls">
+    <div class="section-label" data-i18n="chooseSpread">選擇牌陣</div>
+    <div class="spreads" id="spreads"></div>
+
+    <div class="section-label" data-i18n="askQuestion">你的問題（選填）</div>
+    <div class="question-box">
+      <input id="question" type="text" maxlength="120">
+    </div>
+
+    <div class="actions">
+      <button class="btn" id="drawBtn" data-i18n="drawBtn">抽牌</button>
+      <button class="btn ghost" id="resetBtn" data-i18n="resetBtn">重來</button>
+    </div>
+  </div>
+
+  <div class="stage">
+    <div class="deck-area" id="deckArea"></div>
+  </div>
+
+  <div class="interpretations" id="interp"></div>
+
+  <footer>
+    <p data-i18n="footer">塔羅僅供反思啟發，不構成決策建議。</p>
+  </footer>
+</div>
+
+<script>
+const I18N = {
+  tw: {
+    title: '塔羅占卜',
+    intro: '靜下心，凝視內心的問題。塔羅不預測命運，而是映照當下的能量。深呼吸三次，按下抽牌。',
+    chooseSpread: '選擇牌陣',
+    askQuestion: '你的問題（選填）',
+    questionPh: '例如：這份工作我該接嗎？',
+    drawBtn: '抽牌',
+    resetBtn: '重來',
+    footer: '塔羅僅供反思啟發，不構成決策建議。',
+    upright: '正位', reversed: '逆位',
+    flipHint: '點擊卡片翻開',
+  },
+  cn: {
+    title: '塔罗占卜',
+    intro: '静下心，凝视内心的问题。塔罗不预测命运，而是映照当下的能量。深呼吸三次，按下抽牌。',
+    chooseSpread: '选择牌阵',
+    askQuestion: '你的问题（选填）',
+    questionPh: '例如：这份工作我该接吗？',
+    drawBtn: '抽牌',
+    resetBtn: '重来',
+    footer: '塔罗仅供反思启发，不构成决策建议。',
+    upright: '正位', reversed: '逆位',
+    flipHint: '点击卡片翻开',
+  },
+  en: {
+    title: 'Tarot Reading',
+    intro: 'Quiet your mind. Hold your question. The cards do not predict fate — they mirror the energy of this moment. Three breaths, then draw.',
+    chooseSpread: 'Choose a Spread',
+    askQuestion: 'Your question (optional)',
+    questionPh: 'e.g. Should I take this job offer?',
+    drawBtn: 'Draw',
+    resetBtn: 'Reset',
+    footer: 'Tarot is for reflection, not decision-making.',
+    upright: 'Upright', reversed: 'Reversed',
+    flipHint: 'Click card to reveal',
+  },
+};
+
+const SPREADS = {
+  single: {
+    count: 1,
+    name: { tw:'單張牌 · 今日指引', cn:'单张牌 · 今日指引', en:'Single Card · Daily Guidance' },
+    desc: { tw:'一個簡潔的方向。', cn:'一个简洁的方向。', en:'One clear direction.' },
+    positions: [
+      { tw:'今日訊息', cn:'今日讯息', en:'Today\'s Message' },
+    ],
+  },
+  three: {
+    count: 3,
+    name: { tw:'三張牌 · 過去現在未來', cn:'三张牌 · 过去现在未来', en:'Three Cards · Past · Present · Future' },
+    desc: { tw:'時間軸上的能量流動。', cn:'时间轴上的能量流动。', en:'Flow of energy across time.' },
+    positions: [
+      { tw:'過去', cn:'过去', en:'Past' },
+      { tw:'現在', cn:'现在', en:'Present' },
+      { tw:'未來', cn:'未来', en:'Future' },
+    ],
+  },
+  celtic: {
+    count: 10,
+    name: { tw:'凱爾特十字 · 深度解讀', cn:'凯尔特十字 · 深度解读', en:'Celtic Cross · Deep Reading' },
+    desc: { tw:'十張牌全面掃描處境與走向。', cn:'十张牌全面扫描处境与走向。', en:'Ten cards. A full scan of situation and trajectory.' },
+    positions: [
+      { tw:'1.現況核心', cn:'1.现况核心', en:'1. Heart of the matter' },
+      { tw:'2.挑戰', cn:'2.挑战', en:'2. Challenge' },
+      { tw:'3.根源', cn:'3.根源', en:'3. Root cause' },
+      { tw:'4.近期過去', cn:'4.近期过去', en:'4. Recent past' },
+      { tw:'5.意識目標', cn:'5.意识目标', en:'5. Conscious goal' },
+      { tw:'6.近期未來', cn:'6.近期未来', en:'6. Near future' },
+      { tw:'7.你的處境', cn:'7.你的处境', en:'7. Your stance' },
+      { tw:'8.外部環境', cn:'8.外部环境', en:'8. Environment' },
+      { tw:'9.希望與恐懼', cn:'9.希望与恐惧', en:'9. Hopes & fears' },
+      { tw:'10.最終結果', cn:'10.最终结果', en:'10. Outcome' },
+    ],
+  },
+};
+
+const DECK = [
+  { id:0, num:'0', icon:'🌅', name:{tw:'愚者',cn:'愚者',en:'The Fool'},
+    up:{kw:{tw:'起步·純真·冒險',cn:'起步·纯真·冒险',en:'New journey · innocence · leap'}, body:{tw:'毫無包袱地踏出第一步。風險真實存在，但天真本身就是力量。',cn:'毫无包袱地踏出第一步。风险真实存在，但天真本身就是力量。',en:'Step out without baggage. The risk is real, but innocence itself is power.'}},
+    rev:{kw:{tw:'魯莽·猶豫·不負責',cn:'鲁莽·犹豫·不负责',en:'Recklessness · hesitation · folly'}, body:{tw:'不是還沒準備好，就是準備過頭卡住了。誠實面對是哪一種。',cn:'不是还没准备好，就是准备过头卡住了。诚实面对是哪一种。',en:'Either you are not ready, or you are over-prepared and stuck. Be honest about which.'}}},
+  { id:1, num:'I', icon:'🪄', name:{tw:'魔術師',cn:'魔术师',en:'The Magician'},
+    up:{kw:{tw:'意志·創造·專注',cn:'意志·创造·专注',en:'Will · creation · focus'}, body:{tw:'資源齊備，剩下的是執行。把意念精準對焦在一個目標上。',cn:'资源齐备，剩下的是执行。把意念精准对焦在一个目标上。',en:'All resources are present. What remains is execution. Aim your will at one clear target.'}},
+    rev:{kw:{tw:'操弄·分心·能力錯用',cn:'操弄·分心·能力错用',en:'Manipulation · scattered · misused power'}, body:{tw:'力量在但用偏了。檢查動機是否誠實，注意是否被巧言操弄。',cn:'力量在但用偏了。检查动机是否诚实，注意是否被巧言操弄。',en:'The power is there but misdirected. Check motives. Watch for being talked into something.'}}},
+  { id:2, num:'II', icon:'🌙', name:{tw:'女祭司',cn:'女祭司',en:'The High Priestess'},
+    up:{kw:{tw:'直覺·靜觀·潛意識',cn:'直觉·静观·潜意识',en:'Intuition · stillness · the unseen'}, body:{tw:'答案不在外面，在你還沒承認的內在感知裡。先別行動，先聆聽。',cn:'答案不在外面，在你还没承认的内在感知里。先别行动，先聆听。',en:'The answer is not outside — it is in what you already sense but have not admitted. Listen before acting.'}},
+    rev:{kw:{tw:'隔絕直覺·秘密·混亂',cn:'隔绝直觉·秘密·混乱',en:'Disconnected · secrets · confusion'}, body:{tw:'你正在把內心訊號當雜音壓下去。或者有事情被刻意隱瞞了。',cn:'你正在把内心信号当杂音压下去。或者有事情被刻意隐瞒了。',en:'You are silencing the signals you should be hearing. Or something is being deliberately withheld.'}}},
+  { id:3, num:'III', icon:'🌾', name:{tw:'皇后',cn:'皇后',en:'The Empress'},
+    up:{kw:{tw:'豐盛·孕育·感官',cn:'丰盛·孕育·感官',en:'Abundance · nurture · sensuality'}, body:{tw:'創造力處於成熟期。允許自己被照顧、被滋養、慢下來品味。',cn:'创造力处于成熟期。允许自己被照顾、被滋养、慢下来品味。',en:'Creativity is ripening. Allow yourself to be nurtured. Slow down and savour.'}},
+    rev:{kw:{tw:'依賴·堵塞·失衡',cn:'依赖·堵塞·失衡',en:'Dependence · creative block · imbalance'}, body:{tw:'過度給予或過度索取，能量不流通。回到自己的需求。',cn:'过度给予或过度索取，能量不流通。回到自己的需求。',en:'Giving too much or taking too much. The flow is blocked. Return to your own needs.'}}},
+  { id:4, num:'IV', icon:'👑', name:{tw:'皇帝',cn:'皇帝',en:'The Emperor'},
+    up:{kw:{tw:'結構·權威·穩定',cn:'结构·权威·稳定',en:'Structure · authority · stability'}, body:{tw:'用紀律和邊界建立秩序。現在是制定規則、握住主導權的時候。',cn:'用纪律和边界建立秩序。现在是制定规则、握住主导权的时候。',en:'Build order through discipline and boundaries. Time to set rules and take charge.'}},
+    rev:{kw:{tw:'專制·僵化·無力',cn:'专制·僵化·无力',en:'Tyranny · rigidity · powerlessness'}, body:{tw:'要嘛權威過度壓制，要嘛你正在放棄自己的權威。',cn:'要么权威过度压制，要么你正在放弃自己的权威。',en:'Either authority is crushing you, or you are giving away your own.'}}},
+  { id:5, num:'V', icon:'🛐', name:{tw:'教皇',cn:'教皇',en:'The Hierophant'},
+    up:{kw:{tw:'傳統·教導·體制',cn:'传统·教导·体制',en:'Tradition · teaching · institution'}, body:{tw:'循前人的路是聰明的。找個導師，或學一門有架構的知識。',cn:'循前人的路是聪明的。找个导师，或学一门有架构的知识。',en:'Following the proven path is wise. Find a teacher, or study a structured tradition.'}},
+    rev:{kw:{tw:'反叛·教條·脫離',cn:'反叛·教条·脱离',en:'Rebellion · dogma · breaking free'}, body:{tw:'規則該被質疑了。但小心是真正的覺醒，還是無意義的反抗。',cn:'规则该被质疑了。但小心是真正的觉醒，还是无意义的反抗。',en:'The rules deserve questioning. But check — is this real awakening, or empty rebellion?'}}},
+  { id:6, num:'VI', icon:'💞', name:{tw:'戀人',cn:'恋人',en:'The Lovers'},
+    up:{kw:{tw:'結合·選擇·和諧',cn:'结合·选择·和谐',en:'Union · choice · alignment'}, body:{tw:'一個依價值觀做的重大選擇。對的人或對的路會讓你完整。',cn:'一个依价值观做的重大选择。对的人或对的路会让你完整。',en:'A major choice aligned with your values. The right person — or path — completes you.'}},
+    rev:{kw:{tw:'失調·誘惑·分離',cn:'失调·诱惑·分离',en:'Misalignment · temptation · disconnection'}, body:{tw:'價值觀錯位。短期誘惑可能背離長期想要的。',cn:'价值观错位。短期诱惑可能背离长期想要的。',en:'Values are out of sync. Short-term temptation may betray what you actually want.'}}},
+  { id:7, num:'VII', icon:'🏇', name:{tw:'戰車',cn:'战车',en:'The Chariot'},
+    up:{kw:{tw:'意志·勝利·掌控',cn:'意志·胜利·掌控',en:'Willpower · victory · control'}, body:{tw:'把相反的力量握在同一雙手裡駕馭它們前進。專注就會贏。',cn:'把相反的力量握在同一双手里驾驭它们前进。专注就会赢。',en:'Drive opposing forces forward with both hands on the reins. Focus wins.'}},
+    rev:{kw:{tw:'失控·缺乏方向·攻擊',cn:'失控·缺乏方向·攻击',en:'Out of control · no direction · aggression'}, body:{tw:'力氣很大但方向亂。先停車校準目的地，再踩油門。',cn:'力气很大但方向乱。先停车校准目的地，再踩油门。',en:'Lots of power, no direction. Stop. Recalibrate. Then accelerate.'}}},
+  { id:8, num:'VIII', icon:'🦁', name:{tw:'力量',cn:'力量',en:'Strength'},
+    up:{kw:{tw:'柔韌·勇氣·自制',cn:'柔韧·勇气·自制',en:'Gentle strength · courage · self-mastery'}, body:{tw:'用溫柔馴服心中的猛獸。真正的力量是不需要硬碰硬。',cn:'用温柔驯服心中的猛兽。真正的力量是不需要硬碰硬。',en:'Tame the beast within through gentleness. True strength does not need force.'}},
+    rev:{kw:{tw:'懷疑·情緒失控·虛弱',cn:'怀疑·情绪失控·虚弱',en:'Self-doubt · emotional flooding · weakness'}, body:{tw:'你在跟自己內在搏鬥。先承認感受，不要急著壓制。',cn:'你在跟自己内在搏斗。先承认感受，不要急着压制。',en:'You are fighting yourself. Acknowledge the feeling before trying to suppress it.'}}},
+  { id:9, num:'IX', icon:'🕯️', name:{tw:'隱者',cn:'隐者',en:'The Hermit'},
+    up:{kw:{tw:'內省·智慧·獨處',cn:'内省·智慧·独处',en:'Introspection · wisdom · solitude'}, body:{tw:'退一步。獨自思考的時間會給出比群體更清楚的答案。',cn:'退一步。独自思考的时间会给出比群体更清楚的答案。',en:'Step back. Time alone will give clearer answers than the crowd will.'}},
+    rev:{kw:{tw:'孤立·拒絕求助·停滯',cn:'孤立·拒绝求助·停滞',en:'Isolation · refusing help · stagnation'}, body:{tw:'獨處變成了躲藏。該回到人群裡了。',cn:'独处变成了躲藏。该回到人群里了。',en:'Solitude has become hiding. Time to come back to people.'}}},
+  { id:10, num:'X', icon:'🎡', name:{tw:'命運之輪',cn:'命运之轮',en:'Wheel of Fortune'},
+    up:{kw:{tw:'轉機·循環·命運',cn:'转机·循环·命运',en:'Turning point · cycle · destiny'}, body:{tw:'局勢正在翻牌。順勢而為，不要試圖卡住輪子。',cn:'局势正在翻牌。顺势而为，不要试图卡住轮子。',en:'The situation is turning. Move with it. Do not try to jam the wheel.'}},
+    rev:{kw:{tw:'運勢逆轉·失控·循環卡住',cn:'运势逆转·失控·循环卡住',en:'Reversal · loss of control · stuck in loop'}, body:{tw:'運勢往下走，或者你陷在同樣的模式裡走不出去。',cn:'运势往下走，或者你陷在同样的模式里走不出去。',en:'Luck is turning down, or you are stuck repeating the same pattern.'}}},
+  { id:11, num:'XI', icon:'⚖️', name:{tw:'正義',cn:'正义',en:'Justice'},
+    up:{kw:{tw:'公平·因果·誠實',cn:'公平·因果·诚实',en:'Fairness · cause-effect · honesty'}, body:{tw:'每個行動都會有相應的結果。現在是面對真相、做公平決定的時候。',cn:'每个行动都会有相应的结果。现在是面对真相、做公平决定的时候。',en:'Every action has its consequence. Time to face the truth and decide fairly.'}},
+    rev:{kw:{tw:'不公·逃避責任·偏見',cn:'不公·逃避责任·偏见',en:'Injustice · avoiding responsibility · bias'}, body:{tw:'有事被擱著沒處理。或者你正用偏頗的角度看局勢。',cn:'有事被搁着没处理。或者你正用偏颇的角度看局势。',en:'Something is being left undealt with. Or you are seeing it through a biased lens.'}}},
+  { id:12, num:'XII', icon:'🙃', name:{tw:'吊人',cn:'吊人',en:'The Hanged Man'},
+    up:{kw:{tw:'視角轉換·暫停·犧牲',cn:'视角转换·暂停·牺牲',en:'New perspective · pause · sacrifice'}, body:{tw:'倒過來看才看得到。短期犧牲換來長期清明。',cn:'倒过来看才看得到。短期牺牲换来长期清明。',en:'You only see it when you flip upside down. A short sacrifice for long-term clarity.'}},
+    rev:{kw:{tw:'拖延·無謂犧牲·卡關',cn:'拖延·无谓牺牲·卡关',en:'Stalling · pointless sacrifice · stuck'}, body:{tw:'懸在那裡已經太久了。要嘛跳下來，要嘛承認這個犧牲沒意義。',cn:'悬在那里已经太久了。要么跳下来，要么承认这个牺牲没意义。',en:'You have been hanging too long. Either come down, or admit the sacrifice is meaningless.'}}},
+  { id:13, num:'XIII', icon:'💀', name:{tw:'死神',cn:'死神',en:'Death'},
+    up:{kw:{tw:'結束·蛻變·放下',cn:'结束·蜕变·放下',en:'Ending · transformation · letting go'}, body:{tw:'某段不適用的已經結束了。承認它的結束，新的才能進來。',cn:'某段不适用的已经结束了。承认它的结束，新的才能进来。',en:'Something that no longer fits has ended. Honour the ending so the new can enter.'}},
+    rev:{kw:{tw:'抗拒改變·停滯·拖延結束',cn:'抗拒改变·停滞·拖延结束',en:'Resisting change · stagnation · delayed ending'}, body:{tw:'你死抓著該放的東西。越拖代價越大。',cn:'你死抓着该放的东西。越拖代价越大。',en:'You are clutching what needs to go. The longer you wait, the higher the cost.'}}},
+  { id:14, num:'XIV', icon:'🧪', name:{tw:'節制',cn:'节制',en:'Temperance'},
+    up:{kw:{tw:'平衡·融合·耐心',cn:'平衡·融合·耐心',en:'Balance · integration · patience'}, body:{tw:'兩股對立的能量正在合成新東西。慢慢調，不要急。',cn:'两股对立的能量正在合成新东西。慢慢调，不要急。',en:'Two opposing energies are blending into something new. Adjust slowly. Do not rush.'}},
+    rev:{kw:{tw:'失衡·過度·急躁',cn:'失衡·过度·急躁',en:'Imbalance · excess · impatience'}, body:{tw:'某個面向被你過度放大了。中道才是路。',cn:'某个面向被你过度放大了。中道才是路。',en:'One side has been over-amplified. The middle way is the way.'}}},
+  { id:15, num:'XV', icon:'😈', name:{tw:'惡魔',cn:'恶魔',en:'The Devil'},
+    up:{kw:{tw:'執著·束縛·物質慾',cn:'执着·束缚·物质欲',en:'Attachment · bondage · material craving'}, body:{tw:'你自願戴上的鎖鏈。仔細看，鑰匙一直在你手上。',cn:'你自愿戴上的锁链。仔细看，钥匙一直在你手上。',en:'Chains you put on yourself. Look closer — the key was always in your hand.'}},
+    rev:{kw:{tw:'解脫·覺醒·斷開',cn:'解脱·觉醒·断开',en:'Liberation · awakening · breaking free'}, body:{tw:'你看見了綁住你的是什麼。現在可以開始解開了。',cn:'你看见了绑住你的是什么。现在可以开始解开了。',en:'You can see what was binding you. Now you can begin to unbind.'}}},
+  { id:16, num:'XVI', icon:'🗼', name:{tw:'高塔',cn:'高塔',en:'The Tower'},
+    up:{kw:{tw:'劇變·破壞·啟示',cn:'剧变·破坏·启示',en:'Sudden upheaval · destruction · revelation'}, body:{tw:'建在錯誤地基上的東西正在崩塌。痛，但會逼出真相。',cn:'建在错误地基上的东西正在崩塌。痛，但会逼出真相。',en:'What was built on a false foundation is collapsing. Painful — but it forces the truth out.'}},
+    rev:{kw:{tw:'避免崩塌·恐懼改變·延遲',cn:'避免崩塌·恐惧改变·延迟',en:'Averting disaster · fear of change · delayed crash'}, body:{tw:'你看見裂縫但還在補。要嘛真修，要嘛主動拆。',cn:'你看见裂缝但还在补。要么真修，要么主动拆。',en:'You see the cracks but keep patching. Either truly fix it, or tear it down on your terms.'}}},
+  { id:17, num:'XVII', icon:'⭐', name:{tw:'星星',cn:'星星',en:'The Star'},
+    up:{kw:{tw:'希望·療癒·信念',cn:'希望·疗愈·信念',en:'Hope · healing · faith'}, body:{tw:'風暴過後天空清朗了。允許自己再次相信。',cn:'风暴过后天空清朗了。允许自己再次相信。',en:'After the storm, the sky clears. Let yourself believe again.'}},
+    rev:{kw:{tw:'失望·失去信念·疏離',cn:'失望·失去信念·疏离',en:'Despair · loss of faith · disconnection'}, body:{tw:'希望被遮住了，但沒消失。是時候找回引導你的那顆星。',cn:'希望被遮住了，但没消失。是时候找回引导你的那颗星。',en:'Hope is hidden, not gone. Time to find your guiding star again.'}}},
+  { id:18, num:'XVIII', icon:'🌕', name:{tw:'月亮',cn:'月亮',en:'The Moon'},
+    up:{kw:{tw:'幻象·恐懼·潛意識',cn:'幻象·恐惧·潜意识',en:'Illusion · fear · subconscious'}, body:{tw:'你看到的不全是真實的。先穿過情緒霧霾再做判斷。',cn:'你看到的不全是真实的。先穿过情绪雾霾再做判断。',en:'What you see is not entirely real. Walk through the emotional fog before judging.'}},
+    rev:{kw:{tw:'真相浮現·解除幻覺·混亂結束',cn:'真相浮现·解除幻觉·混乱结束',en:'Truth surfacing · illusion lifting · confusion ends'}, body:{tw:'霧開始散了。原本看不清的開始清晰。',cn:'雾开始散了。原本看不清的开始清晰。',en:'The fog is lifting. What was unclear is clarifying.'}}},
+  { id:19, num:'XIX', icon:'☀️', name:{tw:'太陽',cn:'太阳',en:'The Sun'},
+    up:{kw:{tw:'喜悅·成功·活力',cn:'喜悦·成功·活力',en:'Joy · success · vitality'}, body:{tw:'一切被照亮。慶祝你已經到達的，繼續這個方向。',cn:'一切被照亮。庆祝你已经到达的，继续这个方向。',en:'Everything is lit up. Celebrate where you are. Keep going in this direction.'}},
+    rev:{kw:{tw:'暫時受阻·過度樂觀·延遲喜悅',cn:'暂时受阻·过度乐观·延迟喜悦',en:'Temporary clouds · over-optimism · delayed joy'}, body:{tw:'光還在，只是被雲擋了一下。或者你把樂觀放得比現實更前面。',cn:'光还在，只是被云挡了一下。或者你把乐观放得比现实更前面。',en:'The light is still there, just behind clouds. Or you have put optimism ahead of reality.'}}},
+  { id:20, num:'XX', icon:'📯', name:{tw:'審判',cn:'审判',en:'Judgement'},
+    up:{kw:{tw:'覺醒·召喚·重生',cn:'觉醒·召唤·重生',en:'Awakening · calling · rebirth'}, body:{tw:'一個更大的召喚在響。誠實檢視過去，然後升起。',cn:'一个更大的召唤在响。诚实检视过去，然后升起。',en:'A larger calling is sounding. Review the past honestly, then rise.'}},
+    rev:{kw:{tw:'自我懷疑·拒絕召喚·停留過去',cn:'自我怀疑·拒绝召唤·停留过去',en:'Self-doubt · ignoring the call · stuck in past'}, body:{tw:'你聽到了召喚但裝沒聽見。或還在審判自己的過去。',cn:'你听到了召唤但装没听见。或还在审判自己的过去。',en:'You heard the call but pretend you did not. Or you are still judging your own past.'}}},
+  { id:21, num:'XXI', icon:'🌍', name:{tw:'世界',cn:'世界',en:'The World'},
+    up:{kw:{tw:'完成·整合·圓滿',cn:'完成·整合·圆满',en:'Completion · integration · wholeness'}, body:{tw:'一個循環圓滿結束。慶祝它，準備進入下一個更大的循環。',cn:'一个循环圆满结束。庆祝它，准备进入下一个更大的循环。',en:'A cycle closes completely. Celebrate it, then prepare for the next, larger cycle.'}},
+    rev:{kw:{tw:'未完成·缺口·延遲圓滿',cn:'未完成·缺口·延迟圆满',en:'Incomplete · loose ends · delayed closure'}, body:{tw:'差最後一哩。找出沒收尾的那塊，把它做完。',cn:'差最后一哩。找出没收尾的那块，把它做完。',en:'The last mile is missing. Find what is unfinished. Close it.'}}},
+];
+
+let state = {
+  lang: 'tw',
+  spread: 'three',
+  drawn: [],
+  revealed: 0,
+};
+
+function t(key) { return I18N[state.lang][key] || key; }
+
+function applyI18n() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.dataset.i18n;
+    if (I18N[state.lang][k]) el.textContent = I18N[state.lang][k];
+  });
+  document.getElementById('question').placeholder = t('questionPh');
+  document.documentElement.lang = ({tw:'zh-TW',cn:'zh-CN',en:'en'})[state.lang];
+  renderSpreads();
+  if (state.drawn.length) renderStage();
+  renderInterps();
+}
+
+function renderSpreads() {
+  const el = document.getElementById('spreads');
+  el.innerHTML = '';
+  for (const [key, sp] of Object.entries(SPREADS)) {
+    const div = document.createElement('div');
+    div.className = 'spread-option' + (state.spread === key ? ' selected' : '');
+    div.innerHTML = `<div class="spread-title">${sp.name[state.lang]}</div><div class="spread-desc">${sp.desc[state.lang]}</div>`;
+    div.onclick = () => { state.spread = key; reset(); renderSpreads(); };
+    el.appendChild(div);
+  }
+}
+
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function draw() {
+  const sp = SPREADS[state.spread];
+  const shuffled = shuffle(DECK);
+  state.drawn = shuffled.slice(0, sp.count).map(card => ({
+    card,
+    reversed: Math.random() < 0.5,
+  }));
+  state.revealed = 0;
+  renderStage();
+  renderInterps();
+}
+
+function renderStage() {
+  const sp = SPREADS[state.spread];
+  const el = document.getElementById('deckArea');
+  el.innerHTML = '';
+  el.className = 'deck-area' + (state.spread === 'celtic' ? ' celtic-grid' : '');
+  state.drawn.forEach((d, idx) => {
+    const slot = document.createElement('div');
+    slot.className = 'card-slot' + (state.spread === 'celtic' ? ` pos-${idx+1}` : '');
+    const label = document.createElement('div');
+    label.className = 'slot-label';
+    label.textContent = sp.positions[idx][state.lang];
+    const card = document.createElement('div');
+    card.className = 'card' + (d.reversed ? ' reversed' : '');
+    if (idx < state.revealed) card.classList.add('flipped');
+    card.innerHTML = `
+      <div class="card-back-face"></div>
+      <div class="card-face">
+        <div class="card-icon">${d.card.icon}</div>
+        <div class="card-num">${d.card.num}</div>
+        <div class="card-name">${d.card.name[state.lang]}</div>
+      </div>`;
+    card.onclick = () => {
+      if (idx === state.revealed) {
+        state.revealed++;
+        card.classList.add('flipped');
+        renderInterps();
+      }
+    };
+    slot.appendChild(label);
+    slot.appendChild(card);
+    el.appendChild(slot);
+  });
+}
+
+function renderInterps() {
+  const el = document.getElementById('interp');
+  el.innerHTML = '';
+  const sp = SPREADS[state.spread];
+  state.drawn.slice(0, state.revealed).forEach((d, idx) => {
+    const o = d.reversed ? d.card.rev : d.card.up;
+    const div = document.createElement('div');
+    div.className = 'interp-card';
+    div.style.animationDelay = `${idx * 0.1}s`;
+    div.innerHTML = `
+      <div class="interp-head">
+        <span class="interp-position">${sp.positions[idx][state.lang]}</span>
+        <span class="interp-orient">${d.card.icon} ${d.card.name[state.lang]} · ${d.reversed ? t('reversed') : t('upright')}</span>
+      </div>
+      <div class="interp-name">${d.card.name[state.lang]}</div>
+      <div class="interp-keywords">${o.kw[state.lang]}</div>
+      <div class="interp-body">${o.body[state.lang]}</div>`;
+    el.appendChild(div);
+  });
+}
+
+function reset() {
+  state.drawn = [];
+  state.revealed = 0;
+  document.getElementById('deckArea').innerHTML = '';
+  document.getElementById('interp').innerHTML = '';
+}
+
+document.getElementById('langSwitch').addEventListener('click', (e) => {
+  if (e.target.tagName !== 'BUTTON') return;
+  state.lang = e.target.dataset.lang;
+  document.querySelectorAll('#langSwitch button').forEach(b => b.classList.toggle('active', b.dataset.lang === state.lang));
+  applyI18n();
+});
+document.getElementById('drawBtn').addEventListener('click', draw);
+document.getElementById('resetBtn').addEventListener('click', () => { reset(); });
+
+applyI18n();
+</script>
+</body>
+</html>
