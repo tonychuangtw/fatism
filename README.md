@@ -15,11 +15,16 @@
 ## 目錄
 
 ```
+index.html              ← 命運閣首頁（串接 3 個 widget）
 widgets/
   tarot/index.html      塔羅 · 78 張全 + 位置脈絡解讀 + 凱爾特對位 + 整體綜觀
   bazi/index.html       八字命盤 · 含六親 / 三分項 / 大運評分 / 四柱解讀 / 流年解讀
   ziwei/index.html      紫微斗數 · 12 宮位排盤 + 大限流年 + 命宮深度 + 12宮逐宮 + 格局判讀
 ```
+
+## 本機預覽首頁
+
+直接用瀏覽器打開 `index.html`。
 
 ## 在 CodePen 上跑
 

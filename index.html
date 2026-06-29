@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>命運閣 · Fatism — 塔羅、八字、紫微</title>
+<style>
+  :root {
+    --bg-1: #1a1340;
+    --bg-2: #2d1b5e;
+    --bg-3: #4a1a6e;
+    --gold: #d4af37;
+    --gold-dim: #8a7028;
+    --ivory: #f5e9c8;
+    --text: #ece4d3;
+    --text-dim: #b3a98c;
+    --shadow: 0 8px 32px rgba(0,0,0,0.5);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Serif TC', 'Noto Serif SC', 'Cormorant Garamond', Georgia, serif;
+    background: radial-gradient(ellipse at top, var(--bg-3) 0%, var(--bg-2) 40%, var(--bg-1) 100%);
+    min-height: 100vh;
+    color: var(--text);
+    padding: 32px 16px 48px;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.4), transparent),
+      radial-gradient(1px 1px at 60% 70%, rgba(255,255,255,0.3), transparent),
+      radial-gradient(1.5px 1.5px at 80% 20%, rgba(255,255,255,0.5), transparent),
+      radial-gradient(1px 1px at 30% 80%, rgba(255,255,255,0.3), transparent),
+      radial-gradient(2px 2px at 90% 50%, rgba(255,255,255,0.4), transparent);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .container { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+  header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+  h1 {
+    font-size: clamp(32px, 6vw, 52px);
+    color: var(--gold);
+    letter-spacing: 0.12em;
+    text-shadow: 0 2px 16px rgba(212,175,55,0.35);
+    line-height: 1.1;
+  }
+  h1 .sub { color: var(--text-dim); font-size: 0.42em; letter-spacing: 0.3em; display: block; margin-top: 8px; }
+  .lang-switch { display: flex; gap: 4px; border: 1px solid var(--gold-dim); border-radius: 999px; padding: 3px; }
+  .lang-switch button {
+    background: transparent; color: var(--text-dim); border: none;
+    padding: 6px 12px; border-radius: 999px; cursor: pointer;
+    font-family: inherit; font-size: 13px; transition: all 0.15s;
+  }
+  .lang-switch button.active { background: var(--gold); color: var(--bg-1); font-weight: 600; }
+
+  .tagline {
+    text-align: center;
+    color: var(--text-dim);
+    font-size: clamp(15px, 2vw, 18px);
+    line-height: 1.7;
+    max-width: 680px;
+    margin: 32px auto 56px;
+    font-style: italic;
+  }
+
+  .section-h {
+    color: var(--gold);
+    font-size: 14px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .section-h::before, .section-h::after {
+    content: '✦';
+    margin: 0 12px;
+    opacity: 0.5;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 22px;
+    margin-bottom: 48px;
+  }
+  .card {
+    background: rgba(0,0,0,0.35);
+    border: 1px solid var(--gold-dim);
+    border-radius: 16px;
+    padding: 28px 24px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    border-color: var(--gold);
+    box-shadow: 0 12px 40px rgba(212,175,55,0.2);
+  }
+  .card.disabled { opacity: 0.55; cursor: not-allowed; }
+  .card.disabled:hover { transform: none; border-color: var(--gold-dim); box-shadow: var(--shadow); }
+  .card-icon { font-size: 56px; line-height: 1; }
+  .card-title { color: var(--ivory); font-size: 22px; font-weight: 700; letter-spacing: 0.04em; }
+  .card-sub { color: var(--text-dim); font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; }
+  .card-desc { color: var(--text); font-size: 14px; line-height: 1.7; flex: 1; }
+  .card-meta { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 4px; }
+  .badge {
+    display: inline-block; padding: 3px 10px; border-radius: 10px;
+    background: rgba(212,175,55,0.12); color: var(--gold);
+    font-size: 11px; letter-spacing: 0.1em; border: 1px solid var(--gold-dim);
+  }
+  .badge.coming { color: var(--text-dim); border-color: rgba(212,175,55,0.2); background: transparent; }
+  .arrow { color: var(--gold); font-size: 18px; }
+  .card.disabled .arrow { display: none; }
+
+  .pricing-note {
+    background: rgba(212,175,55,0.06);
+    border: 1px dashed rgba(212,175,55,0.35);
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin-top: 12px;
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 14px;
+  }
+  .pricing-note strong { color: var(--gold); }
+
+  footer {
+    text-align: center;
+    margin-top: 56px;
+    color: var(--text-dim);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+  }
+  footer a { color: var(--gold-dim); text-decoration: none; }
+  footer a:hover { color: var(--gold); }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>✦ <span data-i18n="title">命運閣</span>
+      <span class="sub" data-i18n="subtitle">Fatism · 古典命理 · 現代版</span>
+    </h1>
+    <div class="lang-switch" id="langSwitch">
+      <button data-lang="tw" class="active">繁中</button>
+      <button data-lang="cn">简中</button>
+      <button data-lang="en">EN</button>
+    </div>
+  </header>
+
+  <p class="tagline" data-i18n="tagline">
+    三套東西方古老占卜系統，全部數位化、互動化、深度化。<br>
+    塔羅看當下、八字看本命、紫微看格局。
+  </p>
+
+  <div class="section-h" data-i18n="readyH">已開放</div>
+  <div class="grid">
+    <a class="card" href="widgets/tarot/index.html">
+      <div class="card-icon">🔮</div>
+      <div>
+        <div class="card-sub">Tarot</div>
+        <div class="card-title" data-i18n="tarotT">塔羅占卜</div>
+      </div>
+      <div class="card-desc" data-i18n="tarotD">78 張完整牌組、三種牌陣（單張／三張／凱爾特十字）。位置脈絡、對位關係、整體綜觀。</div>
+      <div class="card-meta">
+        <span class="badge" data-i18n="badgeReady">立即占卜</span>
+        <span class="arrow">→</span>
+      </div>
+    </a>
+
+    <a class="card" href="widgets/bazi/index.html">
+      <div class="card-icon">☯</div>
+      <div>
+        <div class="card-sub">BaZi</div>
+        <div class="card-title" data-i18n="baziT">八字命盤</div>
+      </div>
+      <div class="card-desc" data-i18n="baziD">四柱八字、六親十神、事業財運感情三分項、大運評分、當前流年解讀。</div>
+      <div class="card-meta">
+        <span class="badge" data-i18n="badgeReady">立即排盤</span>
+        <span class="arrow">→</span>
+      </div>
+    </a>
+
+    <a class="card" href="widgets/ziwei/index.html">
+      <div class="card-icon">✦</div>
+      <div>
+        <div class="card-sub">Zi Wei Dou Shu</div>
+        <div class="card-title" data-i18n="ziweiT">紫微斗數</div>
+      </div>
+      <div class="card-desc" data-i18n="ziweiD">12 宮位排盤、大限流年、命宮深度、12 宮逐宮、經典格局判讀。</div>
+      <div class="card-meta">
+        <span class="badge" data-i18n="badgeReady">立即排盤</span>
+        <span class="arrow">→</span>
+      </div>
+    </a>
+  </div>
+
+  <div class="section-h" data-i18n="planH">規劃中</div>
+  <div class="grid">
+    <div class="card disabled">
+      <div class="card-icon">🤲</div>
+      <div>
+        <div class="card-sub">Palmistry</div>
+        <div class="card-title" data-i18n="palmT">手相</div>
+      </div>
+      <div class="card-desc" data-i18n="palmD">上傳手掌照片，AI 辨識掌紋並解讀生命線、感情線、智慧線、事業線。</div>
+      <div class="card-meta"><span class="badge coming" data-i18n="badgeSoon">即將推出</span></div>
+    </div>
+
+    <div class="card disabled">
+      <div class="card-icon">👤</div>
+      <div>
+        <div class="card-sub">Physiognomy</div>
+        <div class="card-title" data-i18n="faceT">面相</div>
+      </div>
+      <div class="card-desc" data-i18n="faceD">上傳正面照片，AI 分析五官比例、十二宮位、流年部位。</div>
+      <div class="card-meta"><span class="badge coming" data-i18n="badgeSoon">即將推出</span></div>
+    </div>
+  </div>
+
+  <div class="pricing-note" data-i18n="pricingNote">
+    <strong>關於收費：</strong>基本排盤與簡要解讀永久免費。深度分析（如八字流年、紫微大限、塔羅十字綜觀等）將推出付費版，支援信用卡單次解鎖或月費訂閱。詳細收費方案籌備中。
+  </div>
+
+  <footer>
+    <p data-i18n="footer">© 2026 命運閣 · 僅供反思啟發，不構成任何決策建議。</p>
+  </footer>
+</div>
+
+<script>
+const I18N = {
+  tw: {
+    title: '命運閣',
+    subtitle: 'Fatism · 古典命理 · 現代版',
+    tagline: '三套東西方古老占卜系統，全部數位化、互動化、深度化。<br>塔羅看當下、八字看本命、紫微看格局。',
+    readyH: '已開放',
+    planH: '規劃中',
+    tarotT: '塔羅占卜',
+    tarotD: '78 張完整牌組、三種牌陣（單張／三張／凱爾特十字）。位置脈絡、對位關係、整體綜觀。',
+    baziT: '八字命盤',
+    baziD: '四柱八字、六親十神、事業財運感情三分項、大運評分、當前流年解讀。',
+    ziweiT: '紫微斗數',
+    ziweiD: '12 宮位排盤、大限流年、命宮深度、12 宮逐宮、經典格局判讀。',
+    palmT: '手相',
+    palmD: '上傳手掌照片，AI 辨識掌紋並解讀生命線、感情線、智慧線、事業線。',
+    faceT: '面相',
+    faceD: '上傳正面照片，AI 分析五官比例、十二宮位、流年部位。',
+    badgeReady: '立即使用',
+    badgeSoon: '即將推出',
+    pricingNote: '<strong>關於收費：</strong>基本排盤與簡要解讀永久免費。深度分析（如八字流年、紫微大限、塔羅十字綜觀等）將推出付費版，支援信用卡單次解鎖或月費訂閱。詳細收費方案籌備中。',
+    footer: '© 2026 命運閣 · 僅供反思啟發，不構成任何決策建議。',
+  },
+  cn: {
+    title: '命运阁',
+    subtitle: 'Fatism · 古典命理 · 现代版',
+    tagline: '三套东西方古老占卜系统，全部数位化、互动化、深度化。<br>塔罗看当下、八字看本命、紫微看格局。',
+    readyH: '已开放',
+    planH: '规划中',
+    tarotT: '塔罗占卜',
+    tarotD: '78 张完整牌组、三种牌阵（单张／三张／凯尔特十字）。位置脉络、对位关系、整体综观。',
+    baziT: '八字命盘',
+    baziD: '四柱八字、六亲十神、事业财运感情三分项、大运评分、当前流年解读。',
+    ziweiT: '紫微斗数',
+    ziweiD: '12 宫位排盘、大限流年、命宫深度、12 宫逐宫、经典格局判读。',
+    palmT: '手相',
+    palmD: '上传手掌照片，AI 辨识掌纹并解读生命线、感情线、智慧线、事业线。',
+    faceT: '面相',
+    faceD: '上传正面照片，AI 分析五官比例、十二宫位、流年部位。',
+    badgeReady: '立即使用',
+    badgeSoon: '即将推出',
+    pricingNote: '<strong>关于收费：</strong>基本排盘与简要解读永久免费。深度分析（如八字流年、紫微大限、塔罗十字综观等）将推出付费版，支持信用卡单次解锁或月费订阅。详细收费方案筹备中。',
+    footer: '© 2026 命运阁 · 仅供反思启发，不构成任何决策建议。',
+  },
+  en: {
+    title: 'Fatism',
+    subtitle: 'Classical Divination · Modern Reading',
+    tagline: 'Three ancient divination systems from East and West — digitized, interactive, and deep.<br>Tarot reads the moment. BaZi reads your nature. Zi Wei reads your blueprint.',
+    readyH: 'Available now',
+    planH: 'Coming soon',
+    tarotT: 'Tarot Reading',
+    tarotD: 'Full 78-card deck, three spreads (single / three-card / Celtic Cross). Position lens, paired dynamics, overall synthesis.',
+    baziT: 'BaZi Chart',
+    baziD: 'Four-Pillars chart with Ten Gods, three life domains (career / wealth / love), decadal scoring, current-year reading.',
+    ziweiT: 'Zi Wei Dou Shu',
+    ziweiD: '12-palace astrolabe with decadal/yearly cycles, deep self-palace, all-12-palace walkthrough, classical pattern detection.',
+    palmT: 'Palmistry',
+    palmD: 'Upload a hand photo. AI reads life, heart, head, and fate lines.',
+    faceT: 'Physiognomy',
+    faceD: 'Upload a front-facing portrait. AI analyzes proportions, the 12 facial palaces, and age-zone mapping.',
+    badgeReady: 'Open now',
+    badgeSoon: 'Coming soon',
+    pricingNote: '<strong>About pricing:</strong> Basic readings stay free forever. Deeper analysis (BaZi yearly cycles, Zi Wei decadal, full Celtic Cross synthesis, etc.) will go paid — one-time card unlock or monthly subscription. Pricing details in the works.',
+    footer: '© 2026 Fatism · For reflection only. Not advice.',
+  },
+};
+
+let lang = 'tw';
+function t(k) { return I18N[lang][k] || k; }
+
+function apply() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.dataset.i18n;
+    if (I18N[lang][k] != null) el.innerHTML = I18N[lang][k];
+  });
+  document.documentElement.lang = ({tw:'zh-TW',cn:'zh-CN',en:'en'})[lang];
+}
+
+document.getElementById('langSwitch').addEventListener('click', (e) => {
+  if (e.target.tagName !== 'BUTTON') return;
+  lang = e.target.dataset.lang;
+  document.querySelectorAll('#langSwitch button').forEach(b =>
+    b.classList.toggle('active', b.dataset.lang === lang));
+  apply();
+});
+apply();
+</script>
+</body>
+</html>
