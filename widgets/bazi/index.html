@@ -158,6 +158,29 @@
 
   .scroll-x { overflow-x: auto; }
 
+  .wx-comment { margin-top: 16px; padding-top: 14px; border-top: 1px solid rgba(212,175,55,0.15); color: var(--text); font-size: 14px; line-height: 1.7; }
+  .wx-comment .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-weight: 600; margin: 0 2px; }
+  .wx-comment .tag.most { background: rgba(212,175,55,0.18); color: var(--gold); }
+  .wx-comment .tag.least { background: rgba(214,84,84,0.15); color: var(--fire); }
+
+  .analysis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 720px) { .analysis-grid { grid-template-columns: 1fr; } }
+  .ana-block {
+    background: rgba(0,0,0,0.25); border: 1px solid rgba(212,175,55,0.25);
+    border-radius: 10px; padding: 14px 16px;
+  }
+  .ana-block.ana-wide { grid-column: 1 / -1; }
+  .ana-label { color: var(--gold); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
+  .ana-body { color: var(--text); font-size: 14px; line-height: 1.7; }
+  .ana-body .badge { display: inline-block; padding: 3px 10px; border-radius: 999px; font-weight: 600; font-size: 13px; margin-right: 6px; }
+  .ana-body .badge.strong { background: rgba(74,155,110,0.2); color: #5fbf8a; border: 1px solid #5fbf8a; }
+  .ana-body .badge.balanced { background: rgba(212,175,55,0.15); color: var(--gold); border: 1px solid var(--gold); }
+  .ana-body .badge.weak { background: rgba(74,123,176,0.2); color: #6aacd9; border: 1px solid #6aacd9; }
+  .ana-body .badge.kind { background: rgba(212,175,55,0.12); color: var(--ivory); border: 1px solid var(--gold-dim); }
+  .ana-body .pillar-tag { display: inline-block; padding: 1px 6px; border-radius: 4px; font-weight: 700; margin: 0 2px; background: rgba(245,233,200,0.08); }
+  .ana-body b { color: var(--ivory); }
+  .ana-meta { color: var(--text-dim); font-size: 12px; margin-top: 6px; }
+
   footer { text-align: center; margin-top: 40px; color: var(--text-dim); font-size: 13px; }
   .error { color: var(--fire); background: rgba(214,84,84,0.1); border: 1px solid var(--fire); padding: 12px; border-radius: 8px; margin-top: 12px; }
 </style>
@@ -224,6 +247,29 @@
     <div class="panel">
       <div class="panel-title" data-i18n="wuxingStat">五行分布</div>
       <div class="wuxing-bars" id="wxBars"></div>
+      <div class="wx-comment" id="wxComment"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title" data-i18n="analysis">命盤分析</div>
+      <div class="analysis-grid">
+        <div class="ana-block">
+          <div class="ana-label" data-i18n="strengthTitle">日主強弱</div>
+          <div class="ana-body" id="strengthBody"></div>
+        </div>
+        <div class="ana-block">
+          <div class="ana-label" data-i18n="gejuTitle">主導十神</div>
+          <div class="ana-body" id="gejuBody"></div>
+        </div>
+        <div class="ana-block ana-wide">
+          <div class="ana-label" data-i18n="dmTraitTitle">日主性格</div>
+          <div class="ana-body" id="dmTraitBody"></div>
+        </div>
+        <div class="ana-block ana-wide">
+          <div class="ana-label" data-i18n="yongshenTitle">用神建議</div>
+          <div class="ana-body" id="yongshenBody"></div>
+        </div>
+      </div>
     </div>
 
     <div class="panel">
@@ -256,11 +302,28 @@ const I18N = {
     leapMonth:'閏月', yes:'是', no:'否',
     calcBtn:'排盤', resetBtn:'重來',
     wuxingStat:'五行分布', daYun:'大運（10 年一運）', liuNian:'流年（當前大運內）',
+    analysis:'命盤分析',
+    strengthTitle:'日主強弱', gejuTitle:'主導十神', dmTraitTitle:'日主性格', yongshenTitle:'用神建議',
+    levelStrong:'身強', levelBalanced:'中和', levelWeak:'身弱',
+    strengthDesc:{
+      strong:'助力（比劫+印）多，自我意志旺盛、執行力強。優勢是自信獨立，注意過剛、自我中心。喜剋洩耗（食傷、財、官殺）來平衡。',
+      balanced:'助力與剋洩耗大致相當，命局較為平衡。能屈能伸，適應力佳。順其自然，五行流通即可。',
+      weak:'剋洩耗（食傷、財、官殺）多於助力，自我感較弱、容易受外境牽動。優勢是體察力強、易接受指導。喜印、比劫來扶身。',
+    },
+    yongshenDesc:{
+      strong:'宜「洩」與「剋」：取 <b>{drainWx}</b> 為用神方向。從事需要付出、消耗、開創的事更有助益。',
+      balanced:'命局平衡，無強烈偏頗。維持五行流通，順遊各方皆可。',
+      weak:'宜「補」與「助」：取 <b>{supportWx}</b> 為用神方向。多接近滋養型環境、貴人、學習資源。',
+    },
     footer:'命盤反映先天能量結構，後天努力仍為關鍵。本工具僅供參考，不構成決策建議。',
     pillarYear:'年柱', pillarMonth:'月柱', pillarDay:'日柱', pillarHour:'時柱',
     pillarYearSub:'祖上 · 童年', pillarMonthSub:'父母 · 青年', pillarDaySub:'自身 · 配偶', pillarHourSub:'子女 · 晚年',
     shishen:'十神', nayin:'納音', tibet:'藏干', ganzhi:'干支',
     age:'歲', startYear:'起運年', dayMaster:'日主',
+    wxMost:'最旺', wxLeast:'最弱', wxMissing:'缺',
+    wxCommentFull:'此命五行最旺為 <span class="tag most">{most}</span>，最弱為 <span class="tag least">{least}</span>。{missingText}',
+    wxMissingText:'命局完全缺 <b>{missing}</b>，宜後天補。',
+    wxNoMissing:'五行齊備。',
     summary:'<b>{name}</b>{gender}命，{solarStr}（農曆 {lunarStr}），日主為 <b>{dayMaster}</b>，五行屬 <b>{dayWx}</b>。',
     errInvalidDate:'日期不合法，請檢查。',
     errLib:'命理函式庫載入失敗，請檢查網路。',
@@ -274,11 +337,28 @@ const I18N = {
     leapMonth:'闰月', yes:'是', no:'否',
     calcBtn:'排盘', resetBtn:'重来',
     wuxingStat:'五行分布', daYun:'大运（10 年一运）', liuNian:'流年（当前大运内）',
+    analysis:'命盘分析',
+    strengthTitle:'日主强弱', gejuTitle:'主导十神', dmTraitTitle:'日主性格', yongshenTitle:'用神建议',
+    levelStrong:'身强', levelBalanced:'中和', levelWeak:'身弱',
+    strengthDesc:{
+      strong:'助力（比劫+印）多，自我意志旺盛、执行力强。优势是自信独立，注意过刚、自我中心。喜克泄耗（食伤、财、官杀）来平衡。',
+      balanced:'助力与克泄耗大致相当，命局较为平衡。能屈能伸，适应力佳。顺其自然，五行流通即可。',
+      weak:'克泄耗（食伤、财、官杀）多于助力，自我感较弱、容易受外境牵动。优势是体察力强、易接受指导。喜印、比劫来扶身。',
+    },
+    yongshenDesc:{
+      strong:'宜「泄」与「克」：取 <b>{drainWx}</b> 为用神方向。从事需要付出、消耗、开创的事更有助益。',
+      balanced:'命局平衡，无强烈偏颇。维持五行流通，顺游各方皆可。',
+      weak:'宜「补」与「助」：取 <b>{supportWx}</b> 为用神方向。多接近滋养型环境、贵人、学习资源。',
+    },
     footer:'命盘反映先天能量结构，后天努力仍为关键。本工具仅供参考，不构成决策建议。',
     pillarYear:'年柱', pillarMonth:'月柱', pillarDay:'日柱', pillarHour:'时柱',
     pillarYearSub:'祖上 · 童年', pillarMonthSub:'父母 · 青年', pillarDaySub:'自身 · 配偶', pillarHourSub:'子女 · 晚年',
     shishen:'十神', nayin:'纳音', tibet:'藏干', ganzhi:'干支',
     age:'岁', startYear:'起运年', dayMaster:'日主',
+    wxMost:'最旺', wxLeast:'最弱', wxMissing:'缺',
+    wxCommentFull:'此命五行最旺为 <span class="tag most">{most}</span>，最弱为 <span class="tag least">{least}</span>。{missingText}',
+    wxMissingText:'命局完全缺 <b>{missing}</b>，宜后天补。',
+    wxNoMissing:'五行齐备。',
     summary:'<b>{name}</b>{gender}命，{solarStr}（农历 {lunarStr}），日主为 <b>{dayMaster}</b>，五行属 <b>{dayWx}</b>。',
     errInvalidDate:'日期不合法，请检查。',
     errLib:'命理函式库载入失败，请检查网络。',
@@ -292,11 +372,28 @@ const I18N = {
     leapMonth:'Leap Month', yes:'Yes', no:'No',
     calcBtn:'Cast Chart', resetBtn:'Reset',
     wuxingStat:'Five Elements', daYun:'Major Cycles (10-yr)', liuNian:'Annual (Within Current Cycle)',
+    analysis:'Chart Analysis',
+    strengthTitle:'Day Master Strength', gejuTitle:'Dominant Ten God', dmTraitTitle:'Day Master Personality', yongshenTitle:'Useful Element',
+    levelStrong:'Strong', levelBalanced:'Balanced', levelWeak:'Weak',
+    strengthDesc:{
+      strong:'Support (peers + resource) outweighs drain. Strong will, decisive, self-reliant. Watch for rigidity and self-centeredness. Benefits from outputs that drain (output / wealth / officer).',
+      balanced:'Support and drain are roughly equal. Adaptive, neither rigid nor easily swayed. Maintain flow across the five elements.',
+      weak:'Drain (output / wealth / officer) outweighs support. More receptive, less self-asserting, attuned to surroundings. Benefits from nourishing elements (resource / peers).',
+    },
+    yongshenDesc:{
+      strong:'Favourable direction: <b>{drainWx}</b>. Activities that demand giving, output, and pioneering will suit you.',
+      balanced:'The chart is balanced. No strong bias. Keep the five-element flow healthy and follow what comes.',
+      weak:'Favourable direction: <b>{supportWx}</b>. Seek nourishing environments, mentors, and learning resources.',
+    },
     footer:'The chart shows innate structure; lived effort still shapes the outcome. For reflection only.',
     pillarYear:'Year', pillarMonth:'Month', pillarDay:'Day', pillarHour:'Hour',
     pillarYearSub:'Ancestors · Childhood', pillarMonthSub:'Parents · Youth', pillarDaySub:'Self · Spouse', pillarHourSub:'Children · Late life',
     shishen:'Ten Gods', nayin:'NaYin', tibet:'Hidden Stems', ganzhi:'GanZhi',
     age:'age', startYear:'start year', dayMaster:'Day Master',
+    wxMost:'strongest', wxLeast:'weakest', wxMissing:'missing',
+    wxCommentFull:'Strongest element: <span class="tag most">{most}</span>. Weakest: <span class="tag least">{least}</span>. {missingText}',
+    wxMissingText:'<b>{missing}</b> is entirely absent — consider supplementing it through environment and practice.',
+    wxNoMissing:'All five elements are present.',
     summary:'<b>{name}</b>{gender}, born {solarStr} (lunar {lunarStr}). Day Master: <b>{dayMaster}</b> ({dayWx}).',
     errInvalidDate:'Invalid date. Please check inputs.',
     errLib:'Calendar library failed to load. Check connection.',
@@ -315,6 +412,83 @@ const WX_NAME = {
   '金': { tw:'金', cn:'金', en:'Metal' },
   '水': { tw:'水', cn:'水', en:'Water' },
 };
+
+const WX_SHENG = { '木':'火','火':'土','土':'金','金':'水','水':'木' };
+const WX_KE = { '木':'土','土':'水','水':'火','火':'金','金':'木' };
+
+const DAY_MASTER = {
+  '甲': { nature:{tw:'甲木 · 棟梁參天',cn:'甲木 · 栋梁参天',en:'Jiǎ Wood · The Towering Tree'},
+    body:{tw:'正直、有擔當、目標感強。喜歡開創、定規則，是天生的領導型。缺點是固執、不擅變通，容易與人正面衝突。',cn:'正直、有担当、目标感强。喜欢开创、定规则，是天生的领导型。缺点是固执、不擅变通，容易与人正面冲突。',en:'Upright, responsible, goal-driven. Natural pioneer and rule-setter. Tends toward stubbornness, head-on confrontation.'}},
+  '乙': { nature:{tw:'乙木 · 花草藤蔓',cn:'乙木 · 花草藤蔓',en:'Yǐ Wood · Vines and Flowers'},
+    body:{tw:'柔韌靈活，懂得隨勢生長。人緣好、會迂迴解決問題。缺點是優柔寡斷，容易依附他人或被牽動。',cn:'柔韧灵活，懂得随势生长。人缘好、会迂回解决问题。缺点是优柔寡断，容易依附他人或被牵动。',en:'Flexible and adaptive, grows by following the terrain. Personable, skilled at indirect solutions. Can be indecisive and over-reliant on others.'}},
+  '丙': { nature:{tw:'丙火 · 太陽光明',cn:'丙火 · 太阳光明',en:'Bǐng Fire · The Sun'},
+    body:{tw:'熱情外放、坦率大方，能照亮周圍的人。表達力強、敢出頭。缺點是脾氣急、起伏大，有時不顧細節。',cn:'热情外放、坦率大方，能照亮周围的人。表达力强、敢出头。缺点是脾气急、起伏大，有时不顾细节。',en:'Warm, outward, generous — brightens the room. Expressive, bold to step up. Can run hot, swing in mood, and skip the details.'}},
+  '丁': { nature:{tw:'丁火 · 燭光燈火',cn:'丁火 · 烛光灯火',en:'Dīng Fire · The Lamp'},
+    body:{tw:'內斂溫暖、細膩體貼，能在小處給人溫度。專注力強、適合精細專業。缺點是敏感、容易內耗，依賴環境穩定。',cn:'内敛温暖、细腻体贴，能在小处给人温度。专注力强、适合精细专业。缺点是敏感、容易内耗，依赖环境稳定。',en:'Quiet warmth and care, gives heat in small spaces. Focused, suited to precision work. Sensitive — drains inwardly, needs a stable setting.'}},
+  '戊': { nature:{tw:'戊土 · 高山厚地',cn:'戊土 · 高山厚地',en:'Wù Earth · The Mountain'},
+    body:{tw:'穩重可靠、做事踏實，是天生的靠山與裁判。包容力強，能納百川。缺點是固守不變，反應較慢。',cn:'稳重可靠、做事踏实，是天生的靠山与裁判。包容力强，能纳百川。缺点是固守不变，反应较慢。',en:'Solid, dependable — the natural anchor and arbiter. Wide tolerance. Can be slow to change and overly conservative.'}},
+  '己': { nature:{tw:'己土 · 田園沃土',cn:'己土 · 田园沃土',en:'Jǐ Earth · The Fertile Field'},
+    body:{tw:'溫和務實、善於滋養人事物，做事細水長流。心思細密、會照顧他人。缺點是想太多、不易表達真實想法。',cn:'温和务实、善于滋养人事物，做事细水长流。心思细密、会照顾他人。缺点是想太多、不易表达真实想法。',en:'Gentle and practical — nurtures people and projects over time. Thoughtful, caring. Tends to overthink and withhold true feelings.'}},
+  '庚': { nature:{tw:'庚金 · 刀劍鋼鐵',cn:'庚金 · 刀剑钢铁',en:'Gēng Metal · Sword and Steel'},
+    body:{tw:'剛毅果決、講義氣、敢於行動。執行力強、適合需要破局的工作。缺點是過於直接、不留情面，易招衝突。',cn:'刚毅果决、讲义气、敢于行动。执行力强、适合需要破局的工作。缺点是过于直接、不留情面，易招冲突。',en:'Decisive, loyal, action-oriented. Cuts through obstacles. Can be too direct, blunt, and quick to provoke clashes.'}},
+  '辛': { nature:{tw:'辛金 · 珠寶利刃',cn:'辛金 · 珠宝利刃',en:'Xīn Metal · Jewel and Blade'},
+    body:{tw:'精緻敏銳、美感佳、追求品味。觀察入微、適合需要精準的領域。缺點是挑剔、心思重，易記恨。',cn:'精致敏锐、美感佳、追求品味。观察入微、适合需要精准的领域。缺点是挑剔、心思重，易记恨。',en:'Refined, perceptive, drawn to taste and beauty. Sharp observer, suited to precision fields. Can be picky and slow to forgive.'}},
+  '壬': { nature:{tw:'壬水 · 江河奔流',cn:'壬水 · 江河奔流',en:'Rén Water · The River'},
+    body:{tw:'氣度大、有智謀、流動性高。應變快、人脈廣，善於整合資源。缺點是不易定下、想法多變，易讓人捉摸不定。',cn:'气度大、有智谋、流动性高。应变快、人脉广，善于整合资源。缺点是不易定下、想法多变，易让人捉摸不定。',en:'Big-minded, strategic, fluid. Quick to adapt, well-connected, good at integrating resources. Can be hard to pin down, mercurial.'}},
+  '癸': { nature:{tw:'癸水 · 雨露潤物',cn:'癸水 · 雨露润物',en:'Guǐ Water · The Dew and Rain'},
+    body:{tw:'細膩柔和、富有同理、想像力強。直覺敏銳、適合創作與療癒。缺點是多愁善感、容易自我消耗、缺乏邊界。',cn:'细腻柔和、富有同理、想像力强。直觉敏锐、适合创作与疗愈。缺点是多愁善感、容易自我消耗、缺乏边界。',en:'Subtle, gentle, deeply empathic and imaginative. Strong intuition, suited to creative and healing work. Prone to melancholy and weak boundaries.'}},
+};
+
+const SHISHEN_GROUPS = {
+  '比劫': ['比肩','劫財','劫财'],
+  '食傷': ['食神','傷官','伤官'],
+  '財': ['偏財','正財','偏财','正财'],
+  '官殺': ['偏官','正官','七殺','七杀'],
+  '印': ['偏印','正印','梟神','枭神'],
+};
+
+const SHISHEN_GROUP_NAME = {
+  '比劫': { tw:'比劫', cn:'比劫', en:'Peers (Bi-Jie)' },
+  '食傷': { tw:'食傷', cn:'食伤', en:'Output (Shi-Shang)' },
+  '財': { tw:'財星', cn:'财星', en:'Wealth (Cai)' },
+  '官殺': { tw:'官殺', cn:'官杀', en:'Officer (Guan-Sha)' },
+  '印': { tw:'印星', cn:'印星', en:'Resource (Yin)' },
+};
+
+const SHISHEN_GROUP_DESC = {
+  '比劫': {
+    tw:'代表自我、兄弟姊妹、朋友、合夥人、競爭者。<b>偏多</b>者：意志強、好勝、容易固執與獨斷；適合創業或獨立工作，但要學會分享與授權。<b>偏少</b>者：較依賴外界、缺乏主見，可能在團隊中默默隨流。',
+    cn:'代表自我、兄弟姐妹、朋友、合伙人、竞争者。<b>偏多</b>者：意志强、好胜、容易固执与独断；适合创业或独立工作，但要学会分享与授权。<b>偏少</b>者：较依赖外界、缺乏主见，可能在团队中默默随流。',
+    en:'Self, siblings, peers, partners, rivals. <b>Excess</b>: strong-willed, competitive, can be stubborn and unilateral — suited to founding or independent work, but must learn to share and delegate. <b>Lack</b>: dependent on others, may drift in the group.',
+  },
+  '食傷': {
+    tw:'代表表達、創造、子女、口才、技藝、享受。<b>偏多</b>者：才華洋溢、表達慾強、不受拘束；要小心過度表現、口無遮攔、消耗精力。<b>偏少</b>者：含蓄內斂、不擅表達情感與創意，能量易堵塞。',
+    cn:'代表表达、创造、子女、口才、技艺、享受。<b>偏多</b>者：才华洋溢、表达欲强、不受拘束；要小心过度表现、口无遮拦、消耗精力。<b>偏少</b>者：含蓄内敛、不擅表达情感与创意，能量易堵塞。',
+    en:'Expression, creation, children, eloquence, skill, enjoyment. <b>Excess</b>: brimming with talent and expression, unbound — risk of over-display, loose tongue, energy leak. <b>Lack</b>: reserved, struggles to express creativity and feeling.',
+  },
+  '財': {
+    tw:'代表錢財、實質回報、配偶（男命）、慾望、控制權。<b>偏多</b>者：精於賺取與掌控、現實感強；但易為財所困、人際變交易化。<b>偏少</b>者：對金錢慾望低、不擅打理財務，但也不被物質綁架。',
+    cn:'代表钱财、实质回报、配偶（男命）、欲望、控制权。<b>偏多</b>者：精于赚取与掌控、现实感强；但易为财所困、人际变交易化。<b>偏少</b>者：对金钱欲望低、不擅打理财务，但也不被物质绑架。',
+    en:'Money, tangible reward, spouse (for males), desire, control. <b>Excess</b>: skilled at earning and managing, pragmatic — but may be trapped by money, treat relationships transactionally. <b>Lack</b>: low material drive, poor with finance, but not bound by stuff.',
+  },
+  '官殺': {
+    tw:'代表規範、責任、上司、配偶（女命）、名聲、壓力。<b>偏多</b>者：能承擔大責任、適合進入體制；但易壓力過大、被規範所困。<b>偏少</b>者：不愛被管、自由派，但缺乏紀律與權威感。',
+    cn:'代表规范、责任、上司、配偶（女命）、名声、压力。<b>偏多</b>者：能承担大责任、适合进入体制；但易压力过大、被规范所困。<b>偏少</b>者：不爱被管、自由派，但缺乏纪律与权威感。',
+    en:'Rules, responsibility, superiors, spouse (for females), reputation, pressure. <b>Excess</b>: shoulders heavy duty, fits institutional roles — but pressure mounts. <b>Lack</b>: free-spirited, dislikes authority, but undisciplined.',
+  },
+  '印': {
+    tw:'代表學習、母親、貴人、文書、保護、安全感。<b>偏多</b>者：愛學習、有福報、被照顧得好；但易依賴、不夠果決、行動力弱。<b>偏少</b>者：靠自己摸索、獨立但較辛苦，學習易斷續。',
+    cn:'代表学习、母亲、贵人、文书、保护、安全感。<b>偏多</b>者：爱学习、有福报、被照顾得好；但易依赖、不够果决、行动力弱。<b>偏少</b>者：靠自己摸索、独立但较辛苦，学习易断续。',
+    en:'Learning, mother, benefactors, documents, protection, safety. <b>Excess</b>: studious, fortunate, well-supported — but dependent, indecisive, low on action. <b>Lack</b>: self-taught, independent but with hardship, learning is patchy.',
+  },
+};
+
+function shishenGroupOf(ss) {
+  for (const [g, list] of Object.entries(SHISHEN_GROUPS)) {
+    if (list.includes(ss)) return g;
+  }
+  return null;
+}
 
 let state = { lang: 'tw', last: null };
 
@@ -401,10 +575,56 @@ function calculate() {
   ganList.forEach(g => { if (GAN_WX[g]) wxCount[GAN_WX[g]]++; });
   zhiList.forEach(z => { if (ZHI_WX[z]) wxCount[ZHI_WX[z]]++; });
 
+  const dm = ec.getDayGan();
+  const dmWx = GAN_WX[dm];
+  const supportWx = [dmWx, Object.keys(WX_SHENG).find(k => WX_SHENG[k] === dmWx)];
+  const drainWx = [
+    WX_SHENG[dmWx],
+    WX_KE[dmWx],
+    Object.keys(WX_KE).find(k => WX_KE[k] === dmWx),
+  ];
+  let supportScore = 0, drainScore = 0;
+  ganList.forEach((g, idx) => {
+    if (idx === 2) return;
+    const w = GAN_WX[g]; if (!w) return;
+    if (supportWx.includes(w)) supportScore += 1;
+    else drainScore += 1;
+  });
+  zhiList.forEach((z, idx) => {
+    const w = ZHI_WX[z]; if (!w) return;
+    const weight = idx === 1 ? 3 : (idx === 2 ? 2 : 1);
+    if (supportWx.includes(w)) supportScore += weight;
+    else drainScore += weight;
+  });
+  supportScore += 1;
+  const totalScore = supportScore + drainScore;
+  const ratio = supportScore / totalScore;
+  let strengthLevel;
+  if (ratio >= 0.55) strengthLevel = 'strong';
+  else if (ratio <= 0.38) strengthLevel = 'weak';
+  else strengthLevel = 'balanced';
+
+  const groupCount = { '比劫':0, '食傷':0, '財':0, '官殺':0, '印':0 };
+  [shishenGan[0], shishenGan[1], shishenGan[3]].forEach(ss => {
+    const g = shishenGroupOf(ss); if (g) groupCount[g] += 1;
+  });
+  [shishenZhi[0], shishenZhi[1], shishenZhi[2], shishenZhi[3]].forEach(arr => {
+    if (!Array.isArray(arr)) return;
+    arr.forEach((ss, i) => {
+      const g = shishenGroupOf(ss); if (g) groupCount[g] += (i === 0 ? 2 : 1);
+    });
+  });
+  let dominantGroup = '比劫', max = -1;
+  for (const [k, v] of Object.entries(groupCount)) {
+    if (v > max) { max = v; dominantGroup = k; }
+  }
+
   state.last = {
     input: i, solar, lunar, ec, yun, daYun,
     ganList, zhiList, shishenGan, shishenZhi, nayin, hideGan, wxCount,
-    dayMaster: ec.getDayGan(), dayWx: GAN_WX[ec.getDayGan()],
+    dayMaster: dm, dayWx: dmWx,
+    supportWx, drainWx, supportScore, drainScore, ratio, strengthLevel,
+    groupCount, dominantGroup,
   };
   render(state.last);
 }
@@ -462,6 +682,44 @@ function render(R) {
         <div class="count">${n}</div>
       </div>`);
   });
+
+  const entries = Object.entries(R.wxCount);
+  const maxE = entries.reduce((a,b) => b[1] > a[1] ? b : a);
+  const minE = entries.reduce((a,b) => b[1] < a[1] ? b : a);
+  const missing = entries.filter(([,c]) => c === 0).map(([w]) => WX_NAME[w][lang]);
+  const missingText = missing.length
+    ? t('wxMissingText').replace('{missing}', missing.join('、'))
+    : t('wxNoMissing');
+  document.getElementById('wxComment').innerHTML = t('wxCommentFull')
+    .replace('{most}', WX_NAME[maxE[0]][lang] + ' (' + maxE[1] + ')')
+    .replace('{least}', WX_NAME[minE[0]][lang] + ' (' + minE[1] + ')')
+    .replace('{missingText}', missingText);
+
+  const lvl = R.strengthLevel;
+  const lvlName = { strong: t('levelStrong'), balanced: t('levelBalanced'), weak: t('levelWeak') }[lvl];
+  document.getElementById('strengthBody').innerHTML = `
+    <span class="badge ${lvl}">${lvlName}</span>
+    <div class="ana-meta">${lang==='en'?'support':'扶身'} ${R.supportScore} · ${lang==='en'?'drain':'剋洩耗'} ${R.drainScore} (${(R.ratio*100).toFixed(0)}%)</div>
+    <div style="margin-top:8px;">${t('strengthDesc')[lvl]}</div>`;
+
+  const gName = SHISHEN_GROUP_NAME[R.dominantGroup][lang];
+  const gDesc = SHISHEN_GROUP_DESC[R.dominantGroup][lang];
+  document.getElementById('gejuBody').innerHTML = `
+    <span class="badge kind">${gName}</span>
+    <div class="ana-meta">${Object.entries(R.groupCount).map(([k,v]) => `${SHISHEN_GROUP_NAME[k][lang]}:${v}`).join(' · ')}</div>
+    <div style="margin-top:8px;">${gDesc}</div>`;
+
+  const dmInfo = DAY_MASTER[R.dayMaster];
+  document.getElementById('dmTraitBody').innerHTML = `
+    <div style="font-size:16px;color:var(--ivory);font-weight:600;margin-bottom:6px;">${dmInfo.nature[lang]}</div>
+    <div>${dmInfo.body[lang]}</div>`;
+
+  const ysKey = lvl;
+  const drainWxNames = R.drainWx.map(w => WX_NAME[w] ? WX_NAME[w][lang] : '').filter(Boolean).join('、');
+  const supportWxNames = R.supportWx.map(w => WX_NAME[w] ? WX_NAME[w][lang] : '').filter(Boolean).join('、');
+  document.getElementById('yongshenBody').innerHTML = t('yongshenDesc')[ysKey]
+    .replace('{drainWx}', drainWxNames)
+    .replace('{supportWx}', supportWxNames);
 
   const dyEl = document.getElementById('dyTable');
   dyEl.innerHTML = `
