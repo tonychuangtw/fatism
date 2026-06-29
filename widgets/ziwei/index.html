@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>紫微斗數 · Zi Wei Dou Shu</title>
+<script src="https://cdn.jsdelivr.net/npm/iztro@2.5.8/dist/iztro.min.js"></script>
+<style>
+  :root {
+    --bg-1: #0f0a2e;
+    --bg-2: #1d1450;
+    --bg-3: #3a1066;
+    --gold: #d4af37;
+    --gold-dim: #8a7028;
+    --ivory: #f5e9c8;
+    --text: #ece4d3;
+    --text-dim: #b3a98c;
+    --major: #f5e9c8;
+    --soft: #6aacd9;
+    --tough: #e77878;
+    --lucun: #f0c552;
+    --tianma: #5dd6d6;
+    --flower: #f08fbf;
+    --adj: #8a8278;
+    --soul-glow: rgba(212,175,55,0.5);
+    --decadal-glow: rgba(180,120,220,0.6);
+    --yearly-glow: rgba(100,200,220,0.6);
+    --shadow: 0 8px 32px rgba(0,0,0,0.6);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Serif TC', 'Noto Serif SC', 'Cormorant Garamond', Georgia, serif;
+    background: radial-gradient(ellipse at top, var(--bg-3) 0%, var(--bg-2) 40%, var(--bg-1) 100%);
+    min-height: 100vh; color: var(--text); padding: 24px 16px; overflow-x: hidden;
+  }
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background-image:
+      radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.4), transparent),
+      radial-gradient(1px 1px at 60% 70%, rgba(255,255,255,0.3), transparent),
+      radial-gradient(1.5px 1.5px at 80% 20%, rgba(255,255,255,0.5), transparent),
+      radial-gradient(1px 1px at 30% 80%, rgba(255,255,255,0.3), transparent),
+      radial-gradient(2px 2px at 90% 50%, rgba(255,255,255,0.4), transparent);
+    pointer-events: none; z-index: 0;
+  }
+  .container { max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
+  header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; flex-wrap: wrap; gap: 12px; }
+  h1 { font-size: clamp(28px, 5vw, 44px); color: var(--gold); letter-spacing: 0.08em; text-shadow: 0 2px 12px rgba(212,175,55,0.3); }
+  h1 .deco { color: var(--text-dim); font-size: 0.7em; margin: 0 8px; }
+  .lang-switch { display: flex; gap: 4px; background: rgba(0,0,0,0.3); border: 1px solid var(--gold-dim); border-radius: 999px; padding: 4px; }
+  .lang-switch button {
+    background: transparent; color: var(--text-dim); border: none;
+    padding: 6px 14px; border-radius: 999px; cursor: pointer;
+    font-size: 13px; font-family: inherit; transition: all 0.2s;
+  }
+  .lang-switch button.active { background: var(--gold); color: var(--bg-1); font-weight: 600; }
+  .lang-switch button:hover:not(.active) { color: var(--ivory); }
+
+  .intro { text-align: center; margin-bottom: 24px; color: var(--text-dim); font-style: italic; font-size: 15px; line-height: 1.7; }
+  .intro p { max-width: 680px; margin: 0 auto; }
+
+  .form-card {
+    background: rgba(0,0,0,0.3); border: 1px solid var(--gold-dim);
+    border-radius: 16px; padding: 24px; margin-bottom: 32px;
+  }
+  .section-label { color: var(--gold); font-size: 13px; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 12px; }
+  .form-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px; margin-bottom: 16px;
+  }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field label { color: var(--text-dim); font-size: 13px; }
+  .field input, .field select {
+    background: rgba(0,0,0,0.4); border: 1px solid var(--gold-dim);
+    border-radius: 8px; padding: 10px 12px; color: var(--text);
+    font-family: inherit; font-size: 15px;
+  }
+  .field input:focus, .field select:focus { outline: none; border-color: var(--gold); }
+  .radio-row { display: flex; gap: 10px; }
+  .radio-row label {
+    flex: 1; cursor: pointer;
+    background: rgba(0,0,0,0.4); border: 1px solid var(--gold-dim);
+    border-radius: 8px; padding: 10px; text-align: center; color: var(--text);
+    transition: all 0.2s;
+  }
+  .radio-row label.active { background: rgba(212,175,55,0.18); border-color: var(--gold); color: var(--gold); }
+  .radio-row input { display: none; }
+
+  .actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 8px; }
+  .btn {
+    background: linear-gradient(180deg, var(--gold) 0%, var(--gold-dim) 100%);
+    color: var(--bg-1); border: none; border-radius: 8px;
+    padding: 12px 28px; font-family: inherit; font-size: 15px; font-weight: 600;
+    letter-spacing: 0.05em; cursor: pointer; transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(212,175,55,0.3);
+  }
+  .btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(212,175,55,0.4); }
+  .btn.ghost { background: transparent; color: var(--gold); border: 1px solid var(--gold); box-shadow: none; }
+  .btn.ghost:hover:not(:disabled) { background: rgba(212,175,55,0.1); }
+
+  .result { display: none; }
+  .result.show { display: block; animation: fadeUp 0.5s; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  .summary {
+    background: rgba(0,0,0,0.3); border: 1px solid var(--gold-dim);
+    border-radius: 12px; padding: 16px 20px; margin-bottom: 20px;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+  }
+  .summary .si { display: flex; flex-direction: column; gap: 2px; }
+  .summary .si .lab { color: var(--gold); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; }
+  .summary .si .val { color: var(--ivory); font-size: 14px; font-weight: 500; }
+  .summary .si .val .small { color: var(--text-dim); font-size: 12px; margin-left: 4px; font-weight: 400; }
+
+  .chart-wrap {
+    background: rgba(0,0,0,0.3); border: 1px solid var(--gold-dim);
+    border-radius: 16px; padding: 14px; margin-bottom: 20px;
+    box-shadow: var(--shadow);
+  }
+  .chart {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, minmax(150px, 1fr));
+    gap: 6px;
+    aspect-ratio: 1.05 / 1;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  @media (max-width: 720px) {
+    .chart { grid-template-rows: repeat(4, minmax(110px, 1fr)); aspect-ratio: 0.85 / 1; }
+  }
+  .palace {
+    background: linear-gradient(160deg, rgba(74,26,110,0.25) 0%, rgba(26,19,64,0.45) 100%);
+    border: 1px solid rgba(212,175,55,0.25); border-radius: 8px;
+    padding: 6px 6px 22px;
+    position: relative; cursor: pointer; transition: all 0.2s;
+    overflow: hidden; min-height: 0;
+    font-size: 12px; line-height: 1.4;
+  }
+  .palace:hover { border-color: var(--gold); transform: translateY(-1px); }
+  .palace.soul { border-color: var(--gold); box-shadow: 0 0 12px var(--soul-glow); }
+  .palace.body::after {
+    content: '身'; position: absolute; top: 4px; right: 4px;
+    background: var(--gold); color: var(--bg-1); font-weight: 700;
+    padding: 0 5px; border-radius: 3px; font-size: 10px;
+  }
+  .palace.decadal { box-shadow: 0 0 0 2px var(--decadal-glow), 0 0 14px var(--decadal-glow); }
+  .palace.yearly { outline: 2px dashed var(--tianma); outline-offset: -3px; }
+  .palace.selected { background: linear-gradient(160deg, rgba(212,175,55,0.18) 0%, rgba(74,26,110,0.4) 100%); border-color: var(--gold); }
+  .palace.related { background: linear-gradient(160deg, rgba(106,172,217,0.12) 0%, rgba(26,19,64,0.4) 100%); border-color: var(--soft); }
+
+  .palace .stars {
+    display: flex; flex-wrap: wrap; gap: 2px 6px;
+    margin-top: 4px;
+  }
+  .palace .star {
+    display: inline-flex; align-items: baseline; gap: 1px;
+    white-space: nowrap;
+  }
+  .palace .star.major { color: var(--major); font-weight: 700; font-size: 14px; }
+  .palace .star.soft { color: var(--soft); }
+  .palace .star.tough { color: var(--tough); }
+  .palace .star.lucun { color: var(--lucun); font-weight: 600; }
+  .palace .star.tianma { color: var(--tianma); }
+  .palace .star.flower { color: var(--flower); }
+  .palace .star.helper { color: var(--text); }
+  .palace .star.adj { color: var(--adj); font-size: 11px; }
+  .palace .br { color: var(--text-dim); font-size: 9px; margin-left: 1px; }
+  .palace .mut {
+    display: inline-block; padding: 0 3px; margin-left: 2px;
+    border-radius: 3px; font-size: 9px; font-weight: 700; vertical-align: middle;
+  }
+  .palace .mut.lu { background: #2f7a4f; color: #fff; }
+  .palace .mut.quan { background: #2d557a; color: #fff; }
+  .palace .mut.ke { background: #8a6438; color: #fff; }
+  .palace .mut.ji { background: #a13838; color: #fff; }
+
+  .palace .footer {
+    position: absolute; bottom: 4px; left: 6px; right: 6px;
+    display: flex; justify-content: space-between; align-items: center;
+    color: var(--text-dim); font-size: 10px;
+    border-top: 1px solid rgba(212,175,55,0.15);
+    padding-top: 3px;
+  }
+  .palace .footer .hsb { color: var(--gold); font-weight: 600; }
+  .palace .footer .pname { color: var(--ivory); font-weight: 600; font-size: 11px; }
+
+  .palace .ages {
+    color: var(--text-dim); font-size: 9px; margin-top: 2px;
+    line-height: 1.2;
+  }
+
+  .center {
+    grid-column: 2 / 4; grid-row: 2 / 4;
+    background: linear-gradient(160deg, rgba(74,26,110,0.4) 0%, rgba(26,19,64,0.7) 100%);
+    border: 1px solid var(--gold-dim); border-radius: 8px;
+    padding: 14px;
+    display: flex; flex-direction: column; gap: 6px;
+    overflow: auto;
+    color: var(--text);
+  }
+  .center .name { color: var(--gold); font-size: 16px; letter-spacing: 0.08em; }
+  .center .row { display: flex; justify-content: space-between; font-size: 13px; gap: 8px; }
+  .center .row .lab { color: var(--text-dim); }
+  .center .row .val { color: var(--ivory); font-weight: 500; }
+  .center .selection {
+    margin-top: 4px; padding-top: 8px;
+    border-top: 1px solid rgba(212,175,55,0.2);
+    font-size: 12px; color: var(--text-dim);
+  }
+  .center .selection b { color: var(--ivory); font-weight: 600; }
+  .center .selection .hint { color: var(--text-dim); font-style: italic; font-size: 11px; }
+
+  .legend {
+    background: rgba(0,0,0,0.25); border: 1px solid rgba(212,175,55,0.2);
+    border-radius: 10px; padding: 12px 16px; margin-bottom: 20px;
+    display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px;
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; color: var(--text-dim); }
+  .legend-item .sw { width: 14px; height: 14px; border-radius: 3px; display: inline-block; border: 1px solid rgba(212,175,55,0.3); }
+  .legend-item .sw.soul { background: rgba(212,175,55,0.4); border-color: var(--gold); }
+  .legend-item .sw.decadal { box-shadow: 0 0 0 2px var(--decadal-glow); background: rgba(180,120,220,0.2); }
+  .legend-item .sw.yearly { outline: 2px dashed var(--tianma); outline-offset: -3px; background: rgba(93,214,214,0.1); }
+  .legend-item .sw.related { background: rgba(106,172,217,0.2); border-color: var(--soft); }
+  .legend-item .sw.major { background: var(--major); }
+  .legend-item .sw.soft { background: var(--soft); }
+  .legend-item .sw.tough { background: var(--tough); }
+  .legend-item .sw.flower { background: var(--flower); }
+
+  footer { text-align: center; margin-top: 40px; color: var(--text-dim); font-size: 13px; }
+  .error { color: var(--tough); background: rgba(231,120,120,0.1); border: 1px solid var(--tough); padding: 12px; border-radius: 8px; margin-top: 12px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>✦ <span data-i18n="title">紫微斗數</span> <span class="deco">·</span> <span style="font-size:0.6em;color:var(--text-dim)">Zi Wei</span></h1>
+    <div class="lang-switch" id="langSwitch">
+      <button data-lang="tw" class="active">繁中</button>
+      <button data-lang="cn">简中</button>
+      <button data-lang="en">EN</button>
+    </div>
+  </header>
+
+  <div class="intro">
+    <p data-i18n="intro">紫微斗數以十四主星配十二宮位，演繹一生命運格局。輸入正確的出生時間，看見你的星盤。</p>
+  </div>
+
+  <div class="form-card">
+    <div class="section-label" data-i18n="birthInfo">出生資訊</div>
+    <div class="form-grid">
+      <div class="field">
+        <label data-i18n="calendarType">曆法</label>
+        <div class="radio-row" data-group="cal">
+          <label class="active" data-val="solar"><input type="radio" name="cal" value="solar" checked><span data-i18n="solar">公曆</span></label>
+          <label data-val="lunar"><input type="radio" name="cal" value="lunar"><span data-i18n="lunar">農曆</span></label>
+        </div>
+      </div>
+      <div class="field">
+        <label data-i18n="gender">性別</label>
+        <div class="radio-row" data-group="g">
+          <label class="active" data-val="male"><input type="radio" name="g" value="male" checked><span data-i18n="male">男</span></label>
+          <label data-val="female"><input type="radio" name="g" value="female"><span data-i18n="female">女</span></label>
+        </div>
+      </div>
+    </div>
+    <div class="form-grid">
+      <div class="field"><label data-i18n="year">年</label><input id="y" type="number" min="1900" max="2100" value="1990"></div>
+      <div class="field"><label data-i18n="month">月</label><input id="m" type="number" min="1" max="12" value="6"></div>
+      <div class="field"><label data-i18n="day">日</label><input id="d" type="number" min="1" max="31" value="15"></div>
+      <div class="field">
+        <label data-i18n="hourSlot">時辰</label>
+        <select id="hi"></select>
+      </div>
+      <div class="field" id="leapField" style="display:none;">
+        <label data-i18n="leapMonth">閏月</label>
+        <div class="radio-row" data-group="leap">
+          <label class="active" data-val="0"><input type="radio" name="leap" value="0" checked><span data-i18n="no">否</span></label>
+          <label data-val="1"><input type="radio" name="leap" value="1"><span data-i18n="yes">是</span></label>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn" id="calcBtn" data-i18n="calcBtn">排盤</button>
+      <button class="btn ghost" id="resetBtn" data-i18n="resetBtn">重來</button>
+    </div>
+    <div class="error" id="err" style="display:none;"></div>
+  </div>
+
+  <div class="result" id="result">
+    <div class="summary" id="summary"></div>
+
+    <div class="legend">
+      <div class="legend-item"><span class="sw soul"></span><span data-i18n="legSoul">命宮</span></div>
+      <div class="legend-item"><span class="sw" style="background:var(--gold);color:var(--bg-1);text-align:center;font-size:9px;line-height:14px;font-weight:700;">身</span><span data-i18n="legBody">身宮</span></div>
+      <div class="legend-item"><span class="sw decadal"></span><span data-i18n="legDecadal">大限</span></div>
+      <div class="legend-item"><span class="sw yearly"></span><span data-i18n="legYearly">流年</span></div>
+      <div class="legend-item"><span class="sw related"></span><span data-i18n="legTriad">三方四正</span></div>
+      <div class="legend-item"><span class="sw major"></span><span data-i18n="legMajor">主星</span></div>
+      <div class="legend-item"><span class="sw soft"></span><span data-i18n="legSoft">吉星</span></div>
+      <div class="legend-item"><span class="sw tough"></span><span data-i18n="legTough">煞星</span></div>
+      <div class="legend-item"><span class="sw flower"></span><span data-i18n="legFlower">桃花</span></div>
+    </div>
+
+    <div class="chart-wrap">
+      <div class="chart" id="chart"></div>
+    </div>
+  </div>
+
+  <footer>
+    <p data-i18n="footer">星盤展示命局結構與運勢走向，僅供省思之用，不構成決策建議。</p>
+  </footer>
+</div>
+
+<script>
+const I18N = {
+  tw: {
+    title:'紫微斗數', intro:'紫微斗數以十四主星配十二宮位，演繹一生命運格局。輸入正確的出生時間，看見你的星盤。',
+    birthInfo:'出生資訊', calendarType:'曆法', solar:'公曆', lunar:'農曆',
+    gender:'性別', male:'男', female:'女',
+    year:'年', month:'月', day:'日', hourSlot:'時辰',
+    leapMonth:'閏月', yes:'是', no:'否',
+    calcBtn:'排盤', resetBtn:'重來',
+    sumSolar:'公曆', sumLunar:'農曆', sumChinese:'四柱',
+    sumSoul:'命主', sumBody:'身主', sumFive:'五行局', sumSign:'星座', sumZodiac:'生肖',
+    sumGender:'性別', sumTime:'時辰', sumNow:'當下',
+    sumDecadal:'大限', sumYearly:'流年',
+    legSoul:'命宮', legBody:'身宮', legDecadal:'大限', legYearly:'流年', legTriad:'三方四正',
+    legMajor:'主星', legSoft:'吉星', legTough:'煞星', legFlower:'桃花',
+    selectHint:'點擊任一宮位，可高亮三方四正（對宮 + 三合宮）。再點同宮取消。',
+    selectedTpl:'已選 <b>{name}</b>（{eb}宮）· 對宮 + 三合宮高亮中。',
+    ageRange:'歲', yearShort:'年',
+    footer:'星盤展示命局結構與運勢走向，僅供省思之用，不構成決策建議。',
+    errInvalidDate:'日期不合法，請檢查。',
+    errLib:'命理函式庫載入失敗，請檢查網路。',
+    hourSlots:['早子時 23-1','丑時 1-3','寅時 3-5','卯時 5-7','辰時 7-9','巳時 9-11','午時 11-13','未時 13-15','申時 15-17','酉時 17-19','戌時 19-21','亥時 21-23','晚子時 23-24'],
+  },
+  cn: {
+    title:'紫微斗数', intro:'紫微斗数以十四主星配十二宫位，演绎一生命运格局。输入正确的出生时间，看见你的星盘。',
+    birthInfo:'出生信息', calendarType:'历法', solar:'公历', lunar:'农历',
+    gender:'性别', male:'男', female:'女',
+    year:'年', month:'月', day:'日', hourSlot:'时辰',
+    leapMonth:'闰月', yes:'是', no:'否',
+    calcBtn:'排盘', resetBtn:'重来',
+    sumSolar:'公历', sumLunar:'农历', sumChinese:'四柱',
+    sumSoul:'命主', sumBody:'身主', sumFive:'五行局', sumSign:'星座', sumZodiac:'生肖',
+    sumGender:'性别', sumTime:'时辰', sumNow:'当下',
+    sumDecadal:'大限', sumYearly:'流年',
+    legSoul:'命宫', legBody:'身宫', legDecadal:'大限', legYearly:'流年', legTriad:'三方四正',
+    legMajor:'主星', legSoft:'吉星', legTough:'煞星', legFlower:'桃花',
+    selectHint:'点击任一宫位，可高亮三方四正（对宫 + 三合宫）。再点同宫取消。',
+    selectedTpl:'已选 <b>{name}</b>（{eb}宫）· 对宫 + 三合宫高亮中。',
+    ageRange:'岁', yearShort:'年',
+    footer:'星盘展示命局结构与运势走向，仅供省思之用，不构成决策建议。',
+    errInvalidDate:'日期不合法，请检查。',
+    errLib:'命理函式库载入失败，请检查网络。',
+    hourSlots:['早子时 23-1','丑时 1-3','寅时 3-5','卯时 5-7','辰时 7-9','巳时 9-11','午时 11-13','未时 13-15','申时 15-17','酉时 17-19','戌时 19-21','亥时 21-23','晚子时 23-24'],
+  },
+  en: {
+    title:'Zi Wei Dou Shu', intro:'Purple Star Astrology arranges 14 major stars across 12 palaces to depict the architecture of a life. Enter your accurate birth time to see the chart.',
+    birthInfo:'Birth Info', calendarType:'Calendar', solar:'Solar', lunar:'Lunar',
+    gender:'Gender', male:'Male', female:'Female',
+    year:'Year', month:'Month', day:'Day', hourSlot:'Hour',
+    leapMonth:'Leap Month', yes:'Yes', no:'No',
+    calcBtn:'Cast Chart', resetBtn:'Reset',
+    sumSolar:'Solar', sumLunar:'Lunar', sumChinese:'Four Pillars',
+    sumSoul:'Soul Star', sumBody:'Body Star', sumFive:'Five Elements', sumSign:'Sign', sumZodiac:'Zodiac',
+    sumGender:'Gender', sumTime:'Hour', sumNow:'Now',
+    sumDecadal:'Decadal', sumYearly:'Yearly',
+    legSoul:'Soul Palace', legBody:'Body Palace', legDecadal:'Decadal', legYearly:'Yearly', legTriad:'Triad',
+    legMajor:'Major', legSoft:'Soft', legTough:'Tough', legFlower:'Flower',
+    selectHint:'Click any palace to highlight its triad (opposite + 4-house trine). Click again to clear.',
+    selectedTpl:'Selected <b>{name}</b> ({eb}) · Triad highlighted.',
+    ageRange:'age', yearShort:'',
+    footer:'The chart shows the architecture and trajectory; treat it as reflection, not decision.',
+    errInvalidDate:'Invalid date. Please check inputs.',
+    errLib:'Library failed to load. Check connection.',
+    hourSlots:['Early Zi 23-1','Chou 1-3','Yin 3-5','Mao 5-7','Chen 7-9','Si 9-11','Wu 11-13','Wei 13-15','Shen 15-17','You 17-19','Xu 19-21','Hai 21-23','Late Zi 23-24'],
+  },
+};
+
+const LANG_MAP = { tw: 'zh-TW', cn: 'zh-CN', en: 'en-US' };
+
+const GRID_POS = {
+  3:  { col: 1, row: 1 },
+  4:  { col: 2, row: 1 },
+  5:  { col: 3, row: 1 },
+  6:  { col: 4, row: 1 },
+  7:  { col: 4, row: 2 },
+  8:  { col: 4, row: 3 },
+  9:  { col: 4, row: 4 },
+  10: { col: 3, row: 4 },
+  11: { col: 2, row: 4 },
+  0:  { col: 1, row: 4 },
+  1:  { col: 1, row: 3 },
+  2:  { col: 1, row: 2 },
+};
+
+const MUTAGEN_CLASS = {
+  '祿':'lu','禄':'lu','lu':'lu',
+  '權':'quan','权':'quan','quan':'quan',
+  '科':'ke','ke':'ke',
+  '忌':'ji','ji':'ji',
+};
+
+const MUTAGEN_LABEL = {
+  '祿':'祿','禄':'禄','lu':'L',
+  '權':'權','权':'权','quan':'Q',
+  '科':'科','ke':'K',
+  '忌':'忌','ji':'J',
+};
+
+let state = { lang: 'tw', input: null, astro: null, selectedIdx: null };
+
+function t(k) { return I18N[state.lang][k] || k; }
+
+function applyI18n() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.dataset.i18n;
+    if (I18N[state.lang][k] != null) el.textContent = I18N[state.lang][k];
+  });
+  document.documentElement.lang = ({tw:'zh-TW',cn:'zh-CN',en:'en'})[state.lang];
+  const hi = document.getElementById('hi');
+  const cur = hi.value || '6';
+  hi.innerHTML = I18N[state.lang].hourSlots.map((s, i) => `<option value="${i}">${s}</option>`).join('');
+  hi.value = cur;
+  if (state.input) calculate();
+}
+
+function initHourSlot() {
+  const hi = document.getElementById('hi');
+  hi.innerHTML = I18N.tw.hourSlots.map((s, i) => `<option value="${i}">${s}</option>`).join('');
+  hi.value = '6';
+}
+
+document.getElementById('langSwitch').addEventListener('click', (e) => {
+  if (e.target.tagName !== 'BUTTON') return;
+  state.lang = e.target.dataset.lang;
+  document.querySelectorAll('#langSwitch button').forEach(b => b.classList.toggle('active', b.dataset.lang === state.lang));
+  applyI18n();
+});
+
+document.querySelectorAll('.radio-row').forEach(row => {
+  row.addEventListener('click', (e) => {
+    const label = e.target.closest('label');
+    if (!label) return;
+    row.querySelectorAll('label').forEach(l => l.classList.remove('active'));
+    label.classList.add('active');
+    label.querySelector('input').checked = true;
+    if (row.dataset.group === 'cal') {
+      document.getElementById('leapField').style.display = label.dataset.val === 'lunar' ? 'flex' : 'none';
+    }
+  });
+});
+
+function getInput() {
+  return {
+    cal: document.querySelector('input[name=cal]:checked').value,
+    g: document.querySelector('input[name=g]:checked').value,
+    y: +document.getElementById('y').value,
+    m: +document.getElementById('m').value,
+    d: +document.getElementById('d').value,
+    hi: +document.getElementById('hi').value,
+    leap: +(document.querySelector('input[name=leap]:checked')?.value || 0) === 1,
+  };
+}
+
+function showError(msg) {
+  const e = document.getElementById('err');
+  e.textContent = msg; e.style.display = 'block';
+}
+function clearError() { document.getElementById('err').style.display = 'none'; }
+
+function calculate() {
+  clearError();
+  if (typeof iztro === 'undefined' || !iztro.astro) {
+    showError(t('errLib')); return;
+  }
+  const i = getInput();
+  state.input = i;
+  state.selectedIdx = null;
+  try {
+    const lang = LANG_MAP[state.lang];
+    let astro;
+    if (i.cal === 'solar') {
+      const dateStr = `${i.y}-${i.m}-${i.d}`;
+      astro = iztro.astro.astrolabeBySolarDate(dateStr, i.hi, i.g, true, lang);
+    } else {
+      const dateStr = `${i.y}-${i.m}-${i.d}`;
+      astro = iztro.astro.astrolabeByLunarDate(dateStr, i.hi, i.g, i.leap, true, lang);
+    }
+    state.astro = astro;
+    render();
+  } catch (e) {
+    showError(t('errInvalidDate') + ' ' + e.message);
+  }
+}
+
+function render() {
+  const a = state.astro;
+  if (!a) return;
+  document.getElementById('result').classList.add('show');
+
+  const todayStr = (() => {
+    const d = new Date();
+    return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
+  })();
+  let horo = null;
+  try { horo = a.horoscope(todayStr); } catch (e) { horo = null; }
+
+  renderSummary(a, horo);
+  renderChart(a, horo);
+}
+
+function renderSummary(a, horo) {
+  const items = [
+    { lab: t('sumSolar'), val: a.solarDate + ' <span class="small">' + (a.time || '') + '</span>' },
+    { lab: t('sumLunar'), val: a.lunarDate },
+    { lab: t('sumChinese'), val: a.chineseDate },
+    { lab: t('sumSoul') + ' / ' + t('sumBody'), val: `${a.soul} / ${a.body}` },
+    { lab: t('sumFive'), val: a.fiveElementsClass },
+    { lab: t('sumSign') + ' / ' + t('sumZodiac'), val: `${a.sign} · ${a.zodiac}` },
+  ];
+  if (horo) {
+    items.push({ lab: t('sumDecadal'), val: `${horo.decadal.heavenlyStem}${horo.decadal.earthlyBranch}` });
+    items.push({ lab: t('sumYearly'), val: `${horo.yearly.heavenlyStem}${horo.yearly.earthlyBranch}` });
+  }
+  document.getElementById('summary').innerHTML = items.map(x => `
+    <div class="si"><div class="lab">${x.lab}</div><div class="val">${x.val}</div></div>
+  `).join('');
+}
+
+function relatedIndices(idx) {
+  const opp = (idx + 6) % 12;
+  const tri1 = (idx + 4) % 12;
+  const tri2 = (idx + 8) % 12;
+  return new Set([opp, tri1, tri2]);
+}
+
+function renderChart(a, horo) {
+  const chartEl = document.getElementById('chart');
+  chartEl.innerHTML = '';
+  const decadalIdx = horo ? horo.decadal.index : -1;
+  const yearlyIdx = horo ? horo.yearly.index : -1;
+  const related = state.selectedIdx != null ? relatedIndices(state.selectedIdx) : null;
+
+  a.palaces.forEach((p, i) => {
+    const pos = GRID_POS[i];
+    if (!pos) return;
+    const isSoul = (p.name === '命宮' || p.name === '命宫' || p.name === 'soul');
+    const classes = ['palace'];
+    if (isSoul) classes.push('soul');
+    if (p.isBodyPalace) classes.push('body');
+    if (i === decadalIdx) classes.push('decadal');
+    if (i === yearlyIdx) classes.push('yearly');
+    if (state.selectedIdx === i) classes.push('selected');
+    else if (related && related.has(i)) classes.push('related');
+
+    const majorHtml = (p.majorStars || []).map(s => starHtml(s, 'major')).join('');
+    const minorHtml = (p.minorStars || []).map(s => starHtml(s, s.type || 'soft')).join('');
+    const adjHtml = (p.adjectiveStars || []).slice(0, 6).map(s => starHtml(s, s.type === 'flower' ? 'flower' : 'adj')).join('');
+    const decRange = p.decadal ? `${p.decadal.range[0]}-${p.decadal.range[1]}` : '';
+    const ages = (p.ages || []).slice(0, 5).join('·');
+
+    chartEl.insertAdjacentHTML('beforeend', `
+      <div class="palace ${classes.join(' ')}" style="grid-column:${pos.col};grid-row:${pos.row};" data-idx="${i}">
+        <div class="stars">${majorHtml}${minorHtml}${adjHtml}</div>
+        <div class="ages">${decRange ? decRange + t('ageRange') + ' · ' : ''}${ages}</div>
+        <div class="footer">
+          <span class="hsb">${p.heavenlyStem}${p.earthlyBranch}</span>
+          <span class="pname">${p.name}</span>
+        </div>
+      </div>`);
+  });
+
+  const center = document.createElement('div');
+  center.className = 'center';
+  let centerHtml = `
+    <div class="name">✦ ${t('title')}</div>
+    <div class="row"><span class="lab">${t('sumChinese')}</span><span class="val">${a.chineseDate}</span></div>
+    <div class="row"><span class="lab">${t('sumSoul')}</span><span class="val">${a.soul} · ${a.body}</span></div>
+    <div class="row"><span class="lab">${t('sumFive')}</span><span class="val">${a.fiveElementsClass}</span></div>
+    <div class="row"><span class="lab">${t('sumSign')}</span><span class="val">${a.sign} · ${a.zodiac}</span></div>
+    <div class="row"><span class="lab">${t('sumGender')}</span><span class="val">${a.gender}</span></div>`;
+  if (horo) {
+    centerHtml += `
+      <div class="row"><span class="lab">${t('sumDecadal')}</span><span class="val">${horo.decadal.heavenlyStem}${horo.decadal.earthlyBranch}</span></div>
+      <div class="row"><span class="lab">${t('sumYearly')}</span><span class="val">${horo.yearly.heavenlyStem}${horo.yearly.earthlyBranch}</span></div>`;
+  }
+  const sel = state.selectedIdx;
+  if (sel != null) {
+    const sp = a.palaces[sel];
+    centerHtml += `<div class="selection">${t('selectedTpl').replace('{name}', sp.name).replace('{eb}', sp.heavenlyStem + sp.earthlyBranch)}</div>`;
+  } else {
+    centerHtml += `<div class="selection hint">${t('selectHint')}</div>`;
+  }
+  center.innerHTML = centerHtml;
+  center.style.gridColumn = '2 / 4';
+  center.style.gridRow = '2 / 4';
+  chartEl.appendChild(center);
+
+  chartEl.querySelectorAll('.palace').forEach(el => {
+    el.addEventListener('click', () => {
+      const idx = +el.dataset.idx;
+      state.selectedIdx = state.selectedIdx === idx ? null : idx;
+      render();
+    });
+  });
+}
+
+function starHtml(s, klass) {
+  const mt = s.mutagen;
+  const mutClass = mt && MUTAGEN_CLASS[mt];
+  const mutLabel = mt && MUTAGEN_LABEL[mt];
+  const mutHtml = (mt && mutClass) ? `<span class="mut ${mutClass}">${mutLabel}</span>` : '';
+  const br = s.brightness ? `<span class="br">${s.brightness}</span>` : '';
+  const cls = ['star', klass].join(' ');
+  return `<span class="${cls}">${s.name}${br}${mutHtml}</span>`;
+}
+
+function reset() {
+  state.input = null;
+  state.astro = null;
+  state.selectedIdx = null;
+  document.getElementById('result').classList.remove('show');
+  clearError();
+}
+
+document.getElementById('calcBtn').addEventListener('click', calculate);
+document.getElementById('resetBtn').addEventListener('click', reset);
+
+initHourSlot();
+applyI18n();
+</script>
+</body>
+</html>

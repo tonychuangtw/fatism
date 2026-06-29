@@ -7,8 +7,8 @@
 | 項目 | 狀態 | 引擎 |
 |---|---|---|
 | 塔羅牌 Tarot | ✅ v2 (78 張完整) | 自製 |
-| 八字命盤 BaZi | ✅ v1 (四柱+大運+流年+五行) | `lunar-javascript` |
-| 紫微斗數 Zi Wei | 規劃中 | `iztro` |
+| 八字命盤 BaZi | ✅ v1.6 (含六親/三分項/大運評分) | `lunar-javascript` |
+| 紫微斗數 Zi Wei | ✅ v1 (12 宮位+大限流年+三方四正) | `iztro` |
 | 手相 Palmistry | 規劃中 | 照片上傳 → 人工 AI 解讀 |
 | 面相 Physiognomy | 規劃中 | 照片上傳 → 人工 AI 解讀 |
 
@@ -17,7 +17,8 @@
 ```
 widgets/
   tarot/index.html      塔羅 · 78 張全
-  bazi/index.html       八字命盤 · 含大運流年
+  bazi/index.html       八字命盤 · 含六親 / 三分項 / 大運評分
+  ziwei/index.html      紫微斗數 · 12 宮位排盤 + 大限流年
 ```
 
 ## 在 CodePen 上跑
