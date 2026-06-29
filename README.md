@@ -6,8 +6,8 @@
 
 | 項目 | 狀態 | 引擎 |
 |---|---|---|
-| 塔羅牌 Tarot | ✅ v1 (22 張大阿爾克那) | 自製 |
-| 八字命盤 BaZi | 規劃中 | `tyme4ts` |
+| 塔羅牌 Tarot | ✅ v2 (78 張完整) | 自製 |
+| 八字命盤 BaZi | ✅ v1 (四柱+大運+流年+五行) | `lunar-javascript` |
 | 紫微斗數 Zi Wei | 規劃中 | `iztro` |
 | 手相 Palmistry | 規劃中 | 照片上傳 → 人工 AI 解讀 |
 | 面相 Physiognomy | 規劃中 | 照片上傳 → 人工 AI 解讀 |
@@ -16,7 +16,8 @@
 
 ```
 widgets/
-  tarot/index.html      單檔可獨立運行
+  tarot/index.html      塔羅 · 78 張全
+  bazi/index.html       八字命盤 · 含大運流年
 ```
 
 ## 在 CodePen 上跑
