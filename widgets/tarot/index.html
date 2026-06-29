@@ -165,6 +165,31 @@
   .interp-name { font-size: 20px; color: var(--ivory); font-weight: 700; margin-bottom: 6px; }
   .interp-keywords { color: var(--gold); font-size: 13px; margin-bottom: 10px; letter-spacing: 0.05em; }
   .interp-body { color: var(--text); line-height: 1.7; font-size: 15px; }
+  .interp-arcana { display: inline-block; margin-left: 8px; padding: 2px 8px; border-radius: 10px;
+    background: rgba(212,175,55,0.12); color: var(--gold); font-size: 11px; letter-spacing: 0.08em;
+    border: 1px solid var(--gold-dim); }
+  .interp-block { margin-top: 12px; padding-top: 10px; border-top: 1px dashed rgba(212,175,55,0.25); }
+  .interp-block-lab { color: var(--gold); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 4px; }
+  .interp-block-body { color: var(--text); font-size: 14px; line-height: 1.6; }
+  .interp-block-body.italic { font-style: italic; color: var(--text-dim); }
+  .interp-pos-meaning { color: var(--text-dim); font-size: 13px; line-height: 1.6; margin-top: 8px; font-style: italic; }
+
+  .pairs, .synth { margin-top: 28px; display: flex; flex-direction: column; gap: 14px; }
+  .section-h { color: var(--gold); font-size: 14px; letter-spacing: 0.18em; text-transform: uppercase;
+    text-align: center; margin-bottom: 6px; }
+  .pair-card, .synth-card {
+    background: rgba(0,0,0,0.3); border: 1px solid rgba(212,175,55,0.35);
+    border-radius: 12px; padding: 16px 20px;
+  }
+  .pair-title, .synth-card-title { color: var(--gold); font-size: 13px; letter-spacing: 0.1em;
+    text-transform: uppercase; margin-bottom: 8px; }
+  .pair-body, .synth-card-body { color: var(--text); line-height: 1.7; font-size: 14px; }
+  .synth-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 8px; }
+  .synth-stat { background: rgba(212,175,55,0.06); padding: 10px 12px; border-radius: 8px;
+    border: 1px solid rgba(212,175,55,0.2); }
+  .synth-stat .k { color: var(--text-dim); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 4px; }
+  .synth-stat .v { color: var(--ivory); font-size: 15px; font-weight: 600; }
+  .empty-hint { color: var(--text-dim); font-style: italic; text-align: center; padding: 16px; font-size: 13px; }
 
   .celtic-grid {
     display: grid;
@@ -227,6 +252,9 @@
 
   <div class="interpretations" id="interp"></div>
 
+  <div class="pairs" id="pairs"></div>
+  <div class="synth" id="synth"></div>
+
   <footer>
     <p data-i18n="footer">塔羅僅供反思啟發，不構成決策建議。</p>
   </footer>
@@ -245,6 +273,28 @@ const I18N = {
     footer: '塔羅僅供反思啟發，不構成決策建議。',
     upright: '正位', reversed: '逆位',
     flipHint: '點擊卡片翻開',
+    posMeaningLab: '此位的意義',
+    posLensLab: '位置脈絡解讀',
+    posPromptLab: '讓你自問',
+    pairsTitle: '位置關係 · 兩兩對照',
+    synthTitle: '整體能量綜觀',
+    synthArcanaLab: '阿卡那組成',
+    synthDominantLab: '主導花色',
+    synthReversedLab: '逆位比例',
+    synthAdviceLab: '整體建議',
+    majorHeavy: '大阿卡那占多數 — 你正面對的不是日常瑣事，而是命運層級的轉折。慢下來，把它當作人生階段的轉場看待。',
+    majorLight: '大阿卡那不多 — 這是日常層級的問題，回到生活細節就能處理，不必上綱到「人生方向」。',
+    majorMid: '大阿卡那比例適中 — 既有日常事件，也有更深的主題在浮現，兩者並重。',
+    reversedHeavy: '逆位偏多 — 能量受阻、內在衝突明顯。先處理內在，再行動。',
+    reversedLight: '逆位很少 — 能量大致順流，可以正向行動。',
+    reversedMid: '逆位比例適中 — 有阻力但仍可推進，挑準方向。',
+    suitWandsDom: '權杖主導 — 重點在「行動／創造／熱情」。',
+    suitCupsDom: '聖杯主導 — 重點在「情感／關係／內在感受」。',
+    suitSwordsDom: '寶劍主導 — 重點在「思考／決策／溝通衝突」。',
+    suitPentaclesDom: '錢幣主導 — 重點在「物質／工作／實務資源」。',
+    suitMajorDom: '大阿卡那主導 — 重點在「人生主題／靈性課題」。',
+    suitNone: '花色分布平均，沒有單一主軸 — 此局是多面向的綜合議題。',
+    needMoreReveal: '翻開更多牌，才會看到位置間的對照。',
   },
   cn: {
     title: '塔罗占卜',
@@ -257,6 +307,28 @@ const I18N = {
     footer: '塔罗仅供反思启发，不构成决策建议。',
     upright: '正位', reversed: '逆位',
     flipHint: '点击卡片翻开',
+    posMeaningLab: '此位的意义',
+    posLensLab: '位置脉络解读',
+    posPromptLab: '让你自问',
+    pairsTitle: '位置关系 · 两两对照',
+    synthTitle: '整体能量综观',
+    synthArcanaLab: '阿卡那组成',
+    synthDominantLab: '主导花色',
+    synthReversedLab: '逆位比例',
+    synthAdviceLab: '整体建议',
+    majorHeavy: '大阿卡那占多数 — 你正面对的不是日常琐事，而是命运层级的转折。慢下来，把它当作人生阶段的转场看待。',
+    majorLight: '大阿卡那不多 — 这是日常层级的问题，回到生活细节就能处理，不必上纲到「人生方向」。',
+    majorMid: '大阿卡那比例适中 — 既有日常事件，也有更深的主题在浮现，两者并重。',
+    reversedHeavy: '逆位偏多 — 能量受阻、内在冲突明显。先处理内在，再行动。',
+    reversedLight: '逆位很少 — 能量大致顺流，可以正向行动。',
+    reversedMid: '逆位比例适中 — 有阻力但仍可推进，挑准方向。',
+    suitWandsDom: '权杖主导 — 重点在「行动／创造／热情」。',
+    suitCupsDom: '圣杯主导 — 重点在「情感／关系／内在感受」。',
+    suitSwordsDom: '宝剑主导 — 重点在「思考／决策／沟通冲突」。',
+    suitPentaclesDom: '钱币主导 — 重点在「物质／工作／实务资源」。',
+    suitMajorDom: '大阿卡那主导 — 重点在「人生主题／灵性课题」。',
+    suitNone: '花色分布平均，没有单一主轴 — 此局是多面向的综合议题。',
+    needMoreReveal: '翻开更多牌，才会看到位置间的对照。',
   },
   en: {
     title: 'Tarot Reading',
@@ -269,6 +341,28 @@ const I18N = {
     footer: 'Tarot is for reflection, not decision-making.',
     upright: 'Upright', reversed: 'Reversed',
     flipHint: 'Click card to reveal',
+    posMeaningLab: 'Meaning of this slot',
+    posLensLab: 'Position lens',
+    posPromptLab: 'Ask yourself',
+    pairsTitle: 'Position pairs · paired dynamics',
+    synthTitle: 'Overall energy synthesis',
+    synthArcanaLab: 'Arcana mix',
+    synthDominantLab: 'Dominant suit',
+    synthReversedLab: 'Reversed ratio',
+    synthAdviceLab: 'Overall counsel',
+    majorHeavy: 'Major Arcana dominate — this is not everyday noise but a fate-level inflection. Slow down and treat it as a chapter change in your life.',
+    majorLight: 'Few Major Arcana — this is a day-to-day matter. Handle it through small concrete steps; do not inflate it into a life-direction crisis.',
+    majorMid: 'Balanced Major/Minor mix — both ordinary events and deeper themes are surfacing. Hold both layers.',
+    reversedHeavy: 'Heavy reversals — energy is blocked, inner conflict is loud. Work the inner side first, then act.',
+    reversedLight: 'Few reversals — energy flows. You can act forward with confidence.',
+    reversedMid: 'Moderate reversals — there is resistance but you can still move; choose your direction with care.',
+    suitWandsDom: 'Wands dominate — the axis is action / creation / passion.',
+    suitCupsDom: 'Cups dominate — the axis is emotion / relationship / inner feeling.',
+    suitSwordsDom: 'Swords dominate — the axis is thought / decision / conflict and truth.',
+    suitPentaclesDom: 'Pentacles dominate — the axis is material / work / practical resource.',
+    suitMajorDom: 'Major Arcana dominate — the axis is life-theme and spiritual lesson.',
+    suitNone: 'No single dominant suit — this is a multi-dimensional issue, not a single-axis one.',
+    needMoreReveal: 'Reveal more cards to see the paired dynamics.',
   },
 };
 
@@ -278,7 +372,9 @@ const SPREADS = {
     name: { tw:'單張牌 · 今日指引', cn:'单张牌 · 今日指引', en:'Single Card · Daily Guidance' },
     desc: { tw:'一個簡潔的方向。', cn:'一个简洁的方向。', en:'One clear direction.' },
     positions: [
-      { tw:'今日訊息', cn:'今日讯息', en:'Today\'s Message' },
+      { tw:'今日訊息', cn:'今日讯息', en:"Today's Message",
+        meaning:{ tw:'此刻最該被你看見的能量。它不是預測，而是當下狀態的鏡子。', cn:'此刻最该被你看见的能量。它不是预测，而是当下状态的镜子。', en:'The energy you most need to see right now. Not a prediction — a mirror of this moment.' },
+        prompt:{ tw:'問問自己：這張牌的訊息，提醒了我什麼還沒處理的功課？', cn:'问问自己：这张牌的讯息，提醒了我什么还没处理的功课？', en:'Ask: what unfinished lesson is this card pointing to?' } },
     ],
   },
   three: {
@@ -286,9 +382,15 @@ const SPREADS = {
     name: { tw:'三張牌 · 過去現在未來', cn:'三张牌 · 过去现在未来', en:'Three Cards · Past · Present · Future' },
     desc: { tw:'時間軸上的能量流動。', cn:'时间轴上的能量流动。', en:'Flow of energy across time.' },
     positions: [
-      { tw:'過去', cn:'过去', en:'Past' },
-      { tw:'現在', cn:'现在', en:'Present' },
-      { tw:'未來', cn:'未来', en:'Future' },
+      { tw:'過去', cn:'过去', en:'Past',
+        meaning:{ tw:'過去帶到當下的能量、養分或包袱。已經發生但仍在影響你的事。', cn:'过去带到当下的能量、养分或包袱。已经发生但仍在影响你的事。', en:'Energy carried from the past into now — nourishment or baggage still shaping you.' },
+        prompt:{ tw:'這張提醒你：過去什麼還沒放下？', cn:'这张提醒你：过去什么还没放下？', en:'What from the past has not yet been released?' } },
+      { tw:'現在', cn:'现在', en:'Present',
+        meaning:{ tw:'此刻的核心能量、處境本質。目前最該誠實面對的事。', cn:'此刻的核心能量、处境本质。目前最该诚实面对的事。', en:'The core energy of now — the essence of your current situation.' },
+        prompt:{ tw:'這張要你看見：現在真實的狀態是什麼？', cn:'这张要你看见：现在真实的状态是什么？', en:'What is the honest truth of where you are now?' } },
+      { tw:'未來', cn:'未来', en:'Future',
+        meaning:{ tw:'若維持當前路徑會浮現的能量。不是定數，是趨勢。', cn:'若维持当前路径会浮现的能量。不是定数，是趋势。', en:'The energy emerging if you stay on this path — a trajectory, not fate.' },
+        prompt:{ tw:'這個未來吸引你還是警示你？是否需要轉向？', cn:'这个未来吸引你还是警示你？是否需要转向？', en:'Does this future call you or warn you? Do you want to pivot?' } },
     ],
   },
   celtic: {
@@ -296,19 +398,82 @@ const SPREADS = {
     name: { tw:'凱爾特十字 · 深度解讀', cn:'凯尔特十字 · 深度解读', en:'Celtic Cross · Deep Reading' },
     desc: { tw:'十張牌全面掃描處境與走向。', cn:'十张牌全面扫描处境与走向。', en:'Ten cards. A full scan of situation and trajectory.' },
     positions: [
-      { tw:'1.現況核心', cn:'1.现况核心', en:'1. Heart of the matter' },
-      { tw:'2.挑戰', cn:'2.挑战', en:'2. Challenge' },
-      { tw:'3.根源', cn:'3.根源', en:'3. Root cause' },
-      { tw:'4.近期過去', cn:'4.近期过去', en:'4. Recent past' },
-      { tw:'5.意識目標', cn:'5.意识目标', en:'5. Conscious goal' },
-      { tw:'6.近期未來', cn:'6.近期未来', en:'6. Near future' },
-      { tw:'7.你的處境', cn:'7.你的处境', en:'7. Your stance' },
-      { tw:'8.外部環境', cn:'8.外部环境', en:'8. Environment' },
-      { tw:'9.希望與恐懼', cn:'9.希望与恐惧', en:'9. Hopes & fears' },
-      { tw:'10.最終結果', cn:'10.最终结果', en:'10. Outcome' },
+      { tw:'1.現況核心', cn:'1.现况核心', en:'1. Heart of the matter',
+        meaning:{ tw:'問題或處境的中心。一切其他位置都圍繞著這張牌展開。', cn:'问题或处境的中心。一切其他位置都围绕着这张牌展开。', en:'The center of the question — every other position orbits this card.' },
+        prompt:{ tw:'這就是事情真正的本質，不是你以為的版本。', cn:'这就是事情真正的本质，不是你以为的版本。', en:'This is what is really at stake — not the version you tell yourself.' } },
+      { tw:'2.挑戰', cn:'2.挑战', en:'2. Challenge',
+        meaning:{ tw:'橫在核心上的對立力量。可能是阻力、也可能是必須整合的另一面。', cn:'横在核心上的对立力量。可能是阻力、也可能是必须整合的另一面。', en:'The force crossing the heart — obstacle, or the polarity you must integrate.' },
+        prompt:{ tw:'它要你對抗？還是要你接受？', cn:'它要你对抗？还是要你接受？', en:'Does it call you to resist, or to accept?' } },
+      { tw:'3.根源', cn:'3.根源', en:'3. Root cause',
+        meaning:{ tw:'潛意識的根。從遠處推動現況的深層原因。', cn:'潜意识的根。从远处推动现况的深层原因。', en:'The subconscious root — the deep cause pushing the situation from below.' },
+        prompt:{ tw:'這個根，你願意承認嗎？', cn:'这个根，你愿意承认吗？', en:'Are you willing to admit this root?' } },
+      { tw:'4.近期過去', cn:'4.近期过去', en:'4. Recent past',
+        meaning:{ tw:'剛剛離開、但能量還未散去的事件或階段。', cn:'刚刚离开、但能量还未散去的事件或阶段。', en:'What just left, but whose energy still lingers.' },
+        prompt:{ tw:'是否有未完成的告別？', cn:'是否有未完成的告别？', en:'Is there a goodbye still unfinished?' } },
+      { tw:'5.意識目標', cn:'5.意识目标', en:'5. Conscious goal',
+        meaning:{ tw:'你頭腦上想要的、明說的目標。可能與根源/結果不符。', cn:'你头脑上想要的、明说的目标。可能与根源/结果不符。', en:'What you consciously want and state — may not match the root or outcome.' },
+        prompt:{ tw:'這真的是你要的？還是別人要你要的？', cn:'这真的是你要的？还是别人要你要的？', en:'Is this what you want — or what others want for you?' } },
+      { tw:'6.近期未來', cn:'6.近期未来', en:'6. Near future',
+        meaning:{ tw:'未來幾週到幾個月內最可能浮現的能量。', cn:'未来几周到几个月内最可能浮现的能量。', en:'Energy most likely to surface in the coming weeks or months.' },
+        prompt:{ tw:'為這個能量做準備了嗎？', cn:'为这个能量做准备了吗？', en:'Are you preparing for this energy?' } },
+      { tw:'7.你的處境', cn:'7.你的处境', en:'7. Your stance',
+        meaning:{ tw:'你目前對這件事的態度、能量狀態。', cn:'你目前对这件事的态度、能量状态。', en:'Your current stance and energy toward this matter.' },
+        prompt:{ tw:'這個態度有幫助你嗎？', cn:'这个态度有帮助你吗？', en:'Is this stance serving you?' } },
+      { tw:'8.外部環境', cn:'8.外部环境', en:'8. Environment',
+        meaning:{ tw:'周圍人事物的態度、外在條件對你的影響。', cn:'周围人事物的态度、外在条件对你的影响。', en:'How others and circumstances around you are shaping this.' },
+        prompt:{ tw:'環境在推你還是擋你？', cn:'环境在推你还是挡你？', en:'Is the environment pushing you forward or blocking you?' } },
+      { tw:'9.希望與恐懼', cn:'9.希望与恐惧', en:'9. Hopes & fears',
+        meaning:{ tw:'內在最深的期待與最害怕的事，往往是同一張牌的兩面。', cn:'内在最深的期待与最害怕的事，往往是同一张牌的两面。', en:'Your deepest hope and deepest fear — often two faces of the same card.' },
+        prompt:{ tw:'這張牌，你既想要又害怕？', cn:'这张牌，你既想要又害怕？', en:'Do you both crave and fear what this card shows?' } },
+      { tw:'10.最終結果', cn:'10.最终结果', en:'10. Outcome',
+        meaning:{ tw:'若所有當前因素延續，最終會走到的方向。仍可改變。', cn:'若所有当前因素延续，最终会走到的方向。仍可改变。', en:'Where all current factors lead — if nothing shifts. Still changeable.' },
+        prompt:{ tw:'這個結果，你滿意嗎？', cn:'这个结果，你满意吗？', en:'Are you at peace with this outcome?' } },
     ],
   },
 };
+
+function arcanaOf(card) {
+  const id = card.id;
+  if (id <= 21) return 'major';
+  if (id <= 35) return 'wands';
+  if (id <= 49) return 'cups';
+  if (id <= 63) return 'swords';
+  return 'pentacles';
+}
+
+const ARCANA_T = {
+  major:   { tw:'大阿卡那', cn:'大阿卡那', en:'Major Arcana' },
+  wands:   { tw:'權杖', cn:'权杖', en:'Wands' },
+  cups:    { tw:'聖杯', cn:'圣杯', en:'Cups' },
+  swords:  { tw:'寶劍', cn:'宝剑', en:'Swords' },
+  pentacles:{ tw:'錢幣', cn:'钱币', en:'Pentacles' },
+};
+
+const SUIT_THEME = {
+  major: { tw:'人生重大主題與靈性課題。', cn:'人生重大主题与灵性课题。', en:'Major life themes and spiritual lessons.' },
+  wands: { tw:'行動、熱情、創造、事業火力。', cn:'行动、热情、创造、事业火力。', en:'Action, passion, creation, career fire.' },
+  cups:  { tw:'情感、關係、直覺、內在感受。', cn:'情感、关系、直觉、内在感受。', en:'Emotion, relationship, intuition, inner feeling.' },
+  swords:{ tw:'思考、決策、溝通、衝突與真相。', cn:'思考、决策、沟通、冲突与真相。', en:'Thought, decision, communication, conflict and truth.' },
+  pentacles:{ tw:'物質、工作、健康、實際資源。', cn:'物质、工作、健康、实际资源。', en:'Material, work, health, practical resource.' },
+};
+
+const POSITION_LENS_TPL = {
+  tw:'在「{pos}」這個位置上，<b>{card}</b>（{orient}）指向：{kw}。{body} 換到此位置的脈絡：{posMeaning}',
+  cn:'在「{pos}」这个位置上，<b>{card}</b>（{orient}）指向：{kw}。{body} 换到此位置的脉络：{posMeaning}',
+  en:'In the <b>{pos}</b> position, <b>{card}</b> ({orient}) points to: {kw}. {body} In this slot\'s context: {posMeaning}',
+};
+
+const CELTIC_PAIRS = [
+  { ids: [0, 1], key: 'situationVsChallenge',
+    title: { tw:'核心 ⨯ 挑戰', cn:'核心 ⨯ 挑战', en:'Heart ⨯ Challenge' },
+    tpl: { tw:'核心 <b>{a}</b> 被 <b>{b}</b> 橫越。事件的本質與你必須面對的反作用力同時浮現 — 整合，而非選邊。', cn:'核心 <b>{a}</b> 被 <b>{b}</b> 横越。事件的本质与你必须面对的反作用力同时浮现 — 整合，而非选边。', en:'Heart <b>{a}</b> is crossed by <b>{b}</b>. The essence and its counter-force surface together — integrate, do not pick a side.' } },
+  { ids: [4, 9], key: 'goalVsOutcome',
+    title: { tw:'意識目標 ⨯ 最終結果', cn:'意识目标 ⨯ 最终结果', en:'Conscious Goal ⨯ Outcome' },
+    tpl: { tw:'你說想要的是 <b>{a}</b>，但若不調整，路會走到 <b>{b}</b>。差距越大，越值得問：是否真的想往那裡走？', cn:'你说想要的是 <b>{a}</b>，但若不调整，路会走到 <b>{b}</b>。差距越大，越值得问：是否真的想往那里走？', en:'You say you want <b>{a}</b>, but unchanged the road ends at <b>{b}</b>. The bigger the gap, the louder the question.' } },
+  { ids: [6, 7], key: 'selfVsEnv',
+    title: { tw:'你的處境 ⨯ 外部環境', cn:'你的处境 ⨯ 外部环境', en:'Self ⨯ Environment' },
+    tpl: { tw:'你的狀態是 <b>{a}</b>，外境呈現 <b>{b}</b>。對比兩者：是你和環境同向，還是兩股力相抗？', cn:'你的状态是 <b>{a}</b>，外境呈现 <b>{b}</b>。对比两者：是你和环境同向，还是两股力相抗？', en:'Your state is <b>{a}</b>; the environment shows <b>{b}</b>. Are you and the world pulling together — or against each other?' } },
+];
 
 const DECK = [
   { id:0, num:'0', icon:'🌅', name:{tw:'愚者',cn:'愚者',en:'The Fool'},
@@ -574,6 +739,8 @@ function applyI18n() {
   renderSpreads();
   if (state.drawn.length) renderStage();
   renderInterps();
+  renderPairs();
+  renderSynth();
 }
 
 function renderSpreads() {
@@ -607,6 +774,8 @@ function draw() {
   state.revealed = 0;
   renderStage();
   renderInterps();
+  renderPairs();
+  renderSynth();
 }
 
 function renderStage() {
@@ -635,6 +804,8 @@ function renderStage() {
         state.revealed++;
         card.classList.add('flipped');
         renderInterps();
+        renderPairs();
+        renderSynth();
       }
     };
     slot.appendChild(label);
@@ -643,25 +814,140 @@ function renderStage() {
   });
 }
 
+function fillTpl(tpl, vars) {
+  return tpl.replace(/\{(\w+)\}/g, (_, k) => vars[k] != null ? vars[k] : '');
+}
+
 function renderInterps() {
   const el = document.getElementById('interp');
   el.innerHTML = '';
   const sp = SPREADS[state.spread];
   state.drawn.slice(0, state.revealed).forEach((d, idx) => {
     const o = d.reversed ? d.card.rev : d.card.up;
+    const pos = sp.positions[idx];
+    const arcanaKey = arcanaOf(d.card);
+    const arcanaName = ARCANA_T[arcanaKey][state.lang];
+    const lensTxt = fillTpl(POSITION_LENS_TPL[state.lang], {
+      pos: pos[state.lang],
+      card: d.card.name[state.lang],
+      orient: d.reversed ? t('reversed') : t('upright'),
+      kw: o.kw[state.lang],
+      body: o.body[state.lang],
+      posMeaning: pos.meaning ? pos.meaning[state.lang] : '',
+    });
     const div = document.createElement('div');
     div.className = 'interp-card';
     div.style.animationDelay = `${idx * 0.1}s`;
     div.innerHTML = `
       <div class="interp-head">
-        <span class="interp-position">${sp.positions[idx][state.lang]}</span>
+        <span class="interp-position">${pos[state.lang]}<span class="interp-arcana">${arcanaName}</span></span>
         <span class="interp-orient">${d.card.icon} ${d.card.name[state.lang]} · ${d.reversed ? t('reversed') : t('upright')}</span>
       </div>
       <div class="interp-name">${d.card.name[state.lang]}</div>
       <div class="interp-keywords">${o.kw[state.lang]}</div>
-      <div class="interp-body">${o.body[state.lang]}</div>`;
+      <div class="interp-body">${o.body[state.lang]}</div>
+      ${pos.meaning ? `<div class="interp-pos-meaning">「${pos[state.lang]}」 · ${pos.meaning[state.lang]}</div>` : ''}
+      <div class="interp-block">
+        <div class="interp-block-lab">${t('posLensLab')}</div>
+        <div class="interp-block-body">${lensTxt}</div>
+      </div>
+      ${pos.prompt ? `
+      <div class="interp-block">
+        <div class="interp-block-lab">${t('posPromptLab')}</div>
+        <div class="interp-block-body italic">${pos.prompt[state.lang]}</div>
+      </div>` : ''}`;
     el.appendChild(div);
   });
+}
+
+function renderPairs() {
+  const el = document.getElementById('pairs');
+  el.innerHTML = '';
+  if (state.spread !== 'celtic' || state.revealed === 0) return;
+  const visiblePairs = CELTIC_PAIRS.filter(p => p.ids.every(i => i < state.revealed));
+  if (!visiblePairs.length) {
+    el.innerHTML = `<div class="section-h">${t('pairsTitle')}</div><div class="empty-hint">${t('needMoreReveal')}</div>`;
+    return;
+  }
+  const h = document.createElement('div');
+  h.className = 'section-h';
+  h.textContent = t('pairsTitle');
+  el.appendChild(h);
+  visiblePairs.forEach(pair => {
+    const a = state.drawn[pair.ids[0]];
+    const b = state.drawn[pair.ids[1]];
+    if (!a || !b) return;
+    const txt = fillTpl(pair.tpl[state.lang], {
+      a: a.card.name[state.lang],
+      b: b.card.name[state.lang],
+    });
+    const div = document.createElement('div');
+    div.className = 'pair-card';
+    div.innerHTML = `
+      <div class="pair-title">${pair.title[state.lang]}</div>
+      <div class="pair-body">${txt}</div>`;
+    el.appendChild(div);
+  });
+}
+
+function renderSynth() {
+  const el = document.getElementById('synth');
+  el.innerHTML = '';
+  if (state.revealed < 2) return;
+  const visible = state.drawn.slice(0, state.revealed);
+  const total = visible.length;
+  const counts = { major:0, wands:0, cups:0, swords:0, pentacles:0 };
+  let reversedCount = 0;
+  visible.forEach(d => {
+    counts[arcanaOf(d.card)]++;
+    if (d.reversed) reversedCount++;
+  });
+  const majorRatio = counts.major / total;
+  const reversedRatio = reversedCount / total;
+
+  let dominant = null, dMax = 0;
+  for (const k of Object.keys(counts)) {
+    if (counts[k] > dMax) { dMax = counts[k]; dominant = k; }
+  }
+  const dominantHasLead = dMax * 2 >= total + 1;
+  const dominantTxt = dominantHasLead ? t('suit' + dominant[0].toUpperCase() + dominant.slice(1) + 'Dom') : t('suitNone');
+
+  let majorTxt;
+  if (majorRatio >= 0.5) majorTxt = t('majorHeavy');
+  else if (majorRatio <= 0.25) majorTxt = t('majorLight');
+  else majorTxt = t('majorMid');
+
+  let revTxt;
+  if (reversedRatio >= 0.6) revTxt = t('reversedHeavy');
+  else if (reversedRatio <= 0.25) revTxt = t('reversedLight');
+  else revTxt = t('reversedMid');
+
+  const sep = state.lang === 'en' ? ', ' : '、';
+  const arcanaMix = Object.entries(counts)
+    .filter(([, n]) => n > 0)
+    .map(([k, n]) => `${ARCANA_T[k][state.lang]}×${n}`)
+    .join(sep);
+
+  const h = document.createElement('div');
+  h.className = 'section-h';
+  h.textContent = t('synthTitle');
+  el.appendChild(h);
+
+  const card = document.createElement('div');
+  card.className = 'synth-card';
+  card.innerHTML = `
+    <div class="synth-grid">
+      <div class="synth-stat"><div class="k">${t('synthArcanaLab')}</div><div class="v">${arcanaMix}</div></div>
+      <div class="synth-stat"><div class="k">${t('synthDominantLab')}</div><div class="v">${dominantHasLead ? ARCANA_T[dominant][state.lang] : '—'}</div></div>
+      <div class="synth-stat"><div class="k">${t('synthReversedLab')}</div><div class="v">${reversedCount}/${total} · ${Math.round(reversedRatio*100)}%</div></div>
+    </div>
+    <div class="interp-block">
+      <div class="interp-block-lab">${t('synthAdviceLab')}</div>
+      <div class="interp-block-body">${majorTxt}</div>
+      <div class="interp-block-body" style="margin-top:8px">${dominantTxt}${dominantHasLead ? ' ' + (SUIT_THEME[dominant][state.lang]) : ''}</div>
+      <div class="interp-block-body" style="margin-top:8px">${revTxt}</div>
+    </div>`;
+  el.appendChild(card);
 }
 
 function reset() {
@@ -669,6 +955,8 @@ function reset() {
   state.revealed = 0;
   document.getElementById('deckArea').innerHTML = '';
   document.getElementById('interp').innerHTML = '';
+  document.getElementById('pairs').innerHTML = '';
+  document.getElementById('synth').innerHTML = '';
 }
 
 document.getElementById('langSwitch').addEventListener('click', (e) => {
