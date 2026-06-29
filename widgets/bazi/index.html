@@ -206,6 +206,34 @@
   .stars .dim { color: var(--gold-dim); opacity: 0.4; }
   .domain-body { color: var(--text); font-size: 13px; line-height: 1.7; }
 
+  .pillar-narr { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  @media (max-width: 720px) { .pillar-narr { grid-template-columns: repeat(2, 1fr); } }
+  .pn-card {
+    background: rgba(0,0,0,0.25); border: 1px solid rgba(212,175,55,0.25);
+    border-radius: 10px; padding: 14px;
+  }
+  .pn-card .pn-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+  .pn-card .pn-title { color: var(--gold); font-size: 13px; font-weight: 700; letter-spacing: 0.05em; }
+  .pn-card .pn-stage { color: var(--text-dim); font-size: 11px; }
+  .pn-card .pn-scope { color: var(--ivory); font-size: 12px; margin-bottom: 8px; font-style: italic; line-height: 1.5; }
+  .pn-card .pn-ss { display: inline-block; background: rgba(212,175,55,0.15); border: 1px solid var(--gold-dim); color: var(--gold); padding: 2px 8px; border-radius: 4px; font-size: 11px; margin-right: 4px; margin-bottom: 6px; }
+  .pn-card .pn-ss.dm { background: rgba(212,175,55,0.3); color: var(--ivory); }
+  .pn-card .pn-body { color: var(--text); font-size: 13px; line-height: 1.7; margin-top: 4px; }
+
+  .horo-narr { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 720px) { .horo-narr { grid-template-columns: 1fr; } }
+  .hn-card {
+    background: rgba(0,0,0,0.3); border: 1px solid var(--gold-dim);
+    border-radius: 10px; padding: 16px;
+  }
+  .hn-card.dy { border-color: rgba(180,120,220,0.5); }
+  .hn-card.ln { border-color: rgba(100,200,220,0.5); }
+  .hn-card .hn-lab { color: var(--gold); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
+  .hn-card .hn-gz { font-size: 24px; font-weight: 700; color: var(--ivory); margin: 4px 0 6px; letter-spacing: 0.1em; }
+  .hn-card .hn-meta { color: var(--text-dim); font-size: 12px; margin-bottom: 10px; }
+  .hn-card .hn-tag { display: inline-block; background: rgba(212,175,55,0.18); border: 1px solid var(--gold); color: var(--gold); padding: 2px 10px; border-radius: 4px; font-size: 12px; font-weight: 600; margin-bottom: 10px; }
+  .hn-card .hn-body { color: var(--text); font-size: 14px; line-height: 1.7; }
+
   .dy-rating { white-space: nowrap; }
   .dy-rating .stars { font-size: 14px; letter-spacing: 1px; }
   .dy-score { font-size: 11px; color: var(--text-dim); display: block; margin-top: 2px; }
@@ -277,6 +305,11 @@
     <div class="pillars" id="pillars"></div>
 
     <div class="panel">
+      <div class="panel-title" data-i18n="pillarNarrTitle">四柱逐柱解讀</div>
+      <div class="pillar-narr" id="pillarNarr"></div>
+    </div>
+
+    <div class="panel">
       <div class="panel-title" data-i18n="wuxingStat">五行分布</div>
       <div class="wuxing-bars" id="wxBars"></div>
       <div class="wx-comment" id="wxComment"></div>
@@ -312,6 +345,11 @@
     <div class="panel">
       <div class="panel-title" data-i18n="domainsTitle">事業 · 財運 · 桃花</div>
       <div class="domains" id="domainsBody"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title" data-i18n="horoNarrTitle">當前運勢解讀</div>
+      <div class="horo-narr" id="horoNarr"></div>
     </div>
 
     <div class="panel">
@@ -403,6 +441,21 @@ const I18N = {
     errInvalidDate:'日期不合法，請檢查。',
     errLib:'命理函式庫載入失敗，請檢查網路。',
     woman:'女', man:'男',
+    pillarNarrTitle:'四柱逐柱解讀',
+    horoNarrTitle:'當前運勢解讀',
+    pnStage:{ year:'童年 0-15 歲', month:'青年 16-30 歲', day:'中年 31-45 歲', hour:'晚年 46+ 歲' },
+    pnScope:{
+      year:'祖上根基、童年成長環境、父族長輩的影響。',
+      month:'父母手足、青年求學、人生格局與社會初登場。',
+      day:'本人個性、配偶緣分、中年家庭與事業核心。',
+      hour:'子女緣分、晚年事業成果、退休生活的色彩。',
+    },
+    pnDayMaster:'日主自身',
+    pnHint:'此柱主導能量：{ss} — {desc}',
+    dyNarrLab:'當前大運', lnNarrLab:'當前流年',
+    dyNarrMeta:'{from}-{to} 歲（{startYear} 起）',
+    lnNarrMeta:'{year} 年（{age} 歲）',
+    horoNarrNone:'尚未起運，暫無大運資料。',
   },
   cn: {
     title:'八字命盘', intro:'八字以出生年月日时推算四柱，揭示先天命局与大运流年。输入正确的出生时间，看见你的命盘。',
@@ -471,6 +524,21 @@ const I18N = {
     errInvalidDate:'日期不合法，请检查。',
     errLib:'命理函式库载入失败，请检查网络。',
     woman:'女', man:'男',
+    pillarNarrTitle:'四柱逐柱解读',
+    horoNarrTitle:'当前运势解读',
+    pnStage:{ year:'童年 0-15 岁', month:'青年 16-30 岁', day:'中年 31-45 岁', hour:'晚年 46+ 岁' },
+    pnScope:{
+      year:'祖上根基、童年成长环境、父族长辈的影响。',
+      month:'父母手足、青年求学、人生格局与社会初登场。',
+      day:'本人个性、配偶缘分、中年家庭与事业核心。',
+      hour:'子女缘分、晚年事业成果、退休生活的色彩。',
+    },
+    pnDayMaster:'日主自身',
+    pnHint:'此柱主导能量：{ss} — {desc}',
+    dyNarrLab:'当前大运', lnNarrLab:'当前流年',
+    dyNarrMeta:'{from}-{to} 岁（{startYear} 起）',
+    lnNarrMeta:'{year} 年（{age} 岁）',
+    horoNarrNone:'尚未起运，暂无大运资料。',
   },
   en: {
     title:'BaZi Chart', intro:'BaZi derives four pillars from your birth year, month, day, and hour, revealing the innate energy map and life cycles. Enter your accurate birth time to see your chart.',
@@ -539,6 +607,21 @@ const I18N = {
     errInvalidDate:'Invalid date. Please check inputs.',
     errLib:'Calendar library failed to load. Check connection.',
     woman:'F', man:'M',
+    pillarNarrTitle:'Per-Pillar Reading',
+    horoNarrTitle:'Current Cycle Reading',
+    pnStage:{ year:'Childhood 0-15', month:'Youth 16-30', day:'Midlife 31-45', hour:'Later 46+' },
+    pnScope:{
+      year:'Ancestral root, childhood environment, paternal elders.',
+      month:'Parents and siblings, education, the entrance to society — the most decisive pillar.',
+      day:'Your own nature, spouse, midlife family and career core.',
+      hour:'Children, late-career fruits, the texture of retirement.',
+    },
+    pnDayMaster:'Day Master (self)',
+    pnHint:'Pillar energy: {ss} — {desc}',
+    dyNarrLab:'Current Decadal', lnNarrLab:'Current Year',
+    dyNarrMeta:'age {from}-{to} (since {startYear})',
+    lnNarrMeta:'{year} (age {age})',
+    horoNarrNone:'Not yet in cycle. No decadal data.',
   },
 };
 
@@ -658,6 +741,83 @@ const PEACH_BLOSSOM = {
 const REL_KEYS = ['father','mother','siblings','spouse','children'];
 const REL_I18N_KEY = { father:'relFather', mother:'relMother', siblings:'relSiblings', spouse:'relSpouse', children:'relChildren' };
 const REL_LOC_KEY = ['relAtY','relAtM','relAtD','relAtH'];
+
+const GAN_POLARITY = { '甲':1,'丙':1,'戊':1,'庚':1,'壬':1, '乙':0,'丁':0,'己':0,'辛':0,'癸':0 };
+
+function shishenOfGan(dayGan, otherGan) {
+  const dWx = GAN_WX[dayGan], oWx = GAN_WX[otherGan];
+  if (!dWx || !oWx) return null;
+  const sameP = GAN_POLARITY[dayGan] === GAN_POLARITY[otherGan];
+  if (dWx === oWx) return sameP ? '比肩' : '劫財';
+  if (WX_SHENG[dWx] === oWx) return sameP ? '食神' : '傷官';
+  if (WX_KE[dWx] === oWx) return sameP ? '偏財' : '正財';
+  if (WX_KE[oWx] === dWx) return sameP ? '七殺' : '正官';
+  if (WX_SHENG[oWx] === dWx) return sameP ? '偏印' : '正印';
+  return null;
+}
+
+const SHISHEN_NARRATIVE = {
+  '比肩': { tw:'自立、競爭、合夥；獨立行動的能量。', cn:'自立、竞争、合伙；独立行动的能量。', en:'Independence, rivalry, partnership; energy of self-directed action.' },
+  '劫財': { tw:'分財、奪利、衝動；爆發力強但易破耗。', cn:'分财、夺利、冲动；爆发力强但易破耗。', en:'Wealth-splitting, impulsive force; high burst, prone to loss.' },
+  '劫财': { tw:'分財、奪利、衝動；爆發力強但易破耗。', cn:'分财、夺利、冲动；爆发力强但易破耗。', en:'Wealth-splitting, impulsive force; high burst, prone to loss.' },
+  '食神': { tw:'享受、才華、表達；溫和的創造能量。', cn:'享受、才华、表达；温和的创造能量。', en:'Enjoyment, talent, expression; gentle creative force.' },
+  '傷官': { tw:'才藝、叛逆、批判；外放的表現慾與創新。', cn:'才艺、叛逆、批判；外放的表现欲与创新。', en:'Talent, rebellion, critique; outward expression and innovation.' },
+  '伤官': { tw:'才藝、叛逆、批判；外放的表現慾與創新。', cn:'才艺、叛逆、批判；外放的表现欲与创新。', en:'Talent, rebellion, critique; outward expression and innovation.' },
+  '偏財': { tw:'流動財、外財、機會財；偏向動態的賺錢方式。', cn:'流动财、外财、机会财；偏向动态的赚钱方式。', en:'Flowing wealth, outside money, opportunity money; dynamic earning style.' },
+  '偏财': { tw:'流動財、外財、機會財；偏向動態的賺錢方式。', cn:'流动财、外财、机会财；偏向动态的赚钱方式。', en:'Flowing wealth, outside money, opportunity money; dynamic earning style.' },
+  '正財': { tw:'固定財、薪資、節儉；踏實累積的財運。', cn:'固定财、薪资、节俭；踏实累积的财运。', en:'Fixed wealth, salary, frugality; steady accumulation.' },
+  '正财': { tw:'固定財、薪資、節儉；踏實累積的財運。', cn:'固定财、薪资、节俭；踏实累积的财运。', en:'Fixed wealth, salary, frugality; steady accumulation.' },
+  '七殺': { tw:'壓力、權威、突破；嚴厲的壓力與挑戰。', cn:'压力、权威、突破；严厉的压力与挑战。', en:'Pressure, authority, breakthrough; severe demand and challenge.' },
+  '七杀': { tw:'壓力、權威、突破；嚴厲的壓力與挑戰。', cn:'压力、权威、突破；严厉的压力与挑战。', en:'Pressure, authority, breakthrough; severe demand and challenge.' },
+  '偏官': { tw:'壓力、權威、突破；嚴厲的壓力與挑戰。', cn:'压力、权威、突破；严厉的压力与挑战。', en:'Pressure, authority, breakthrough; severe demand and challenge.' },
+  '正官': { tw:'名譽、規範、責任；正統的權威與地位。', cn:'名誉、规范、责任；正统的权威与地位。', en:'Reputation, rules, duty; legitimate authority and standing.' },
+  '偏印': { tw:'學習、技藝、孤獨；偏門的學問與靈感。', cn:'学习、技艺、孤独；偏门的学问与灵感。', en:'Learning, craft, solitude; offbeat knowledge and inspiration.' },
+  '梟神': { tw:'學習、技藝、孤獨；偏門的學問與靈感。', cn:'学习、技艺、孤独；偏门的学问与灵感。', en:'Learning, craft, solitude; offbeat knowledge and inspiration.' },
+  '枭神': { tw:'學習、技藝、孤獨；偏門的學問與靈感。', cn:'学习、技艺、孤独；偏门的学问与灵感。', en:'Learning, craft, solitude; offbeat knowledge and inspiration.' },
+  '正印': { tw:'母愛、保護、學業；正統的滋養與庇護。', cn:'母爱、保护、学业；正统的滋养与庇护。', en:'Maternal care, protection, study; legitimate nourishment and shelter.' },
+};
+
+const SHISHEN_DECADE_THEME = {
+  '比肩': { tw:'這 10 年自我與兄弟朋友的能量強，宜獨立工作或合夥；要小心爭執與分財。', cn:'这 10 年自我与兄弟朋友的能量强，宜独立工作或合伙；要小心争执与分财。', en:'A decade of strong self-energy with peers and siblings — good for independent work or partnership, watch for disputes and wealth-splitting.' },
+  '劫財': { tw:'變動大、爆發力強；易有破財或合夥糾紛，宜謹慎理財。', cn:'变动大、爆发力强；易有破财或合伙纠纷，宜谨慎理财。', en:'High volatility and burst energy; risk of financial loss or partnership conflict — manage money carefully.' },
+  '劫财': { tw:'變動大、爆發力強；易有破財或合夥糾紛，宜謹慎理財。', cn:'变动大、爆发力强；易有破财或合伙纠纷，宜谨慎理财。', en:'High volatility and burst energy; risk of financial loss or partnership conflict — manage money carefully.' },
+  '食神': { tw:'享受期、創意湧現，適合表達與培養興趣；女命利子女。', cn:'享受期、创意涌现，适合表达与培养兴趣；女命利子女。', en:'Enjoyment phase, creativity surges; great for expression and cultivating interests. Favorable for children (female chart).' },
+  '傷官': { tw:'才華外放、突破舊規；男命不利官運，女命不利夫運，但極利轉型。', cn:'才华外放、突破旧规；男命不利官运，女命不利夫运，但极利转型。', en:'Talent breaks out, conventions broken; tough on career (male) and marriage (female), but ideal for transformation.' },
+  '伤官': { tw:'才華外放、突破舊規；男命不利官運，女命不利夫運，但極利轉型。', cn:'才华外放、突破旧规；男命不利官运，女命不利夫运，但极利转型。', en:'Talent breaks out, conventions broken; tough on career (male) and marriage (female), but ideal for transformation.' },
+  '偏財': { tw:'偏財路出現、機會多；商機與貴人接踵，宜把握。', cn:'偏财路出现、机会多；商机与贵人接踵，宜把握。', en:'Side-wealth channels open, many opportunities; business and benefactors arrive — seize them.' },
+  '偏财': { tw:'偏財路出現、機會多；商機與貴人接踵，宜把握。', cn:'偏财路出现、机会多；商机与贵人接踵，宜把握。', en:'Side-wealth channels open, many opportunities; business and benefactors arrive — seize them.' },
+  '正財': { tw:'穩定累積期，適合扎根本業、置產儲蓄；男命婚姻運佳。', cn:'稳定累积期，适合扎根本业、置产储蓄；男命婚姻运佳。', en:'Stable accumulation — ground in your core work, buy property, save. Favorable marriage prospects (male chart).' },
+  '正财': { tw:'穩定累積期，適合扎根本業、置產儲蓄；男命婚姻運佳。', cn:'稳定累积期，适合扎根本业、置产储蓄；男命婚姻运佳。', en:'Stable accumulation — ground in your core work, buy property, save. Favorable marriage prospects (male chart).' },
+  '七殺': { tw:'壓力期、責任重；考驗與挑戰多，挺過則晉升大用。', cn:'压力期、责任重；考验与挑战多，挺过则晋升大用。', en:'Pressure phase, heavy responsibility; many tests — survive them and rise to major use.' },
+  '七杀': { tw:'壓力期、責任重；考驗與挑戰多，挺過則晉升大用。', cn:'压力期、责任重；考验与挑战多，挺过则晋升大用。', en:'Pressure phase, heavy responsibility; many tests — survive them and rise to major use.' },
+  '偏官': { tw:'壓力期、責任重；考驗與挑戰多，挺過則晉升大用。', cn:'压力期、责任重；考验与挑战多，挺过则晋升大用。', en:'Pressure phase, heavy responsibility; many tests — survive them and rise to major use.' },
+  '正官': { tw:'升遷期、地位有立；事業正向發展，女命有正緣。', cn:'升迁期、地位有立；事业正向发展，女命有正缘。', en:'Promotion phase, standing established; career on positive arc, true romance for female chart.' },
+  '偏印': { tw:'學習轉折、技藝精進；易有偏門才華但易孤獨。', cn:'学习转折、技艺精进；易有偏门才华但易孤独。', en:'Learning pivot, craft deepens; offbeat talents emerge but isolation common.' },
+  '梟神': { tw:'學習轉折、技藝精進；易有偏門才華但易孤獨。', cn:'学习转折、技艺精进；易有偏门才华但易孤独。', en:'Learning pivot, craft deepens; offbeat talents emerge but isolation common.' },
+  '枭神': { tw:'學習轉折、技藝精進；易有偏門才華但易孤獨。', cn:'学习转折、技艺精进；易有偏门才华但易孤独。', en:'Learning pivot, craft deepens; offbeat talents emerge but isolation common.' },
+  '正印': { tw:'受庇護期、學業文書順遂；母緣強、有貴人扶持。', cn:'受庇护期、学业文书顺遂；母缘强、有贵人扶持。', en:'Sheltered phase, study and paperwork flow; strong mother bond and benefactor support.' },
+};
+
+const SHISHEN_YEAR_THEME = {
+  '比肩': { tw:'今年自我能量強，宜獨立行動；注意與兄弟同事的競爭關係。', cn:'今年自我能量强，宜独立行动；注意与兄弟同事的竞争关系。', en:'Self-energy strong this year — act independently; watch peer/sibling rivalry.' },
+  '劫財': { tw:'變動年，要謹慎財務與合夥；不宜大舉投資。', cn:'变动年，要谨慎财务与合伙；不宜大举投资。', en:'A year of swings — be careful with money and partnerships; avoid large investments.' },
+  '劫财': { tw:'變動年，要謹慎財務與合夥；不宜大舉投資。', cn:'变动年，要谨慎财务与合伙；不宜大举投资。', en:'A year of swings — be careful with money and partnerships; avoid large investments.' },
+  '食神': { tw:'享受年，適合學習新興趣、培養嗜好；身體狀態佳。', cn:'享受年，适合学习新兴趣、培养嗜好；身体状态佳。', en:'A year of enjoyment — pick up new hobbies, cultivate interests; physical condition is good.' },
+  '傷官': { tw:'突破年，敢於跳脫框架；女命懷孕機率高，男命要避口舌。', cn:'突破年，敢于跳脱框架；女命怀孕机率高，男命要避口舌。', en:'A breakthrough year — dare to leave the frame; pregnancy more likely (female), guard your words (male).' },
+  '伤官': { tw:'突破年，敢於跳脫框架；女命懷孕機率高，男命要避口舌。', cn:'突破年，敢于跳脱框架；女命怀孕机率高，男命要避口舌。', en:'A breakthrough year — dare to leave the frame; pregnancy more likely (female), guard your words (male).' },
+  '偏財': { tw:'偏財年，留意機會與外財；可投資但勿過貪。', cn:'偏财年，留意机会与外财；可投资但勿过贪。', en:'A side-wealth year — watch for opportunities; invest with restraint.' },
+  '偏财': { tw:'偏財年，留意機會與外財；可投資但勿過貪。', cn:'偏财年，留意机会与外财；可投资但勿过贪。', en:'A side-wealth year — watch for opportunities; invest with restraint.' },
+  '正財': { tw:'穩定收益年，適合做長期規劃；男命有桃花。', cn:'稳定收益年，适合做长期规划；男命有桃花。', en:'A year of steady income — good for long-term planning; romance prospects for male chart.' },
+  '正财': { tw:'穩定收益年，適合做長期規劃；男命有桃花。', cn:'稳定收益年，适合做长期规划；男命有桃花。', en:'A year of steady income — good for long-term planning; romance prospects for male chart.' },
+  '七殺': { tw:'壓力年，工作挑戰大；挺過則躍升，撐不住則受傷。', cn:'压力年，工作挑战大；挺过则跃升，撑不住则受伤。', en:'A pressure year — work challenges intense; push through and rise, give in and get hurt.' },
+  '七杀': { tw:'壓力年，工作挑戰大；挺過則躍升，撐不住則受傷。', cn:'压力年，工作挑战大；挺过则跃升，撑不住则受伤。', en:'A pressure year — work challenges intense; push through and rise, give in and get hurt.' },
+  '偏官': { tw:'壓力年，工作挑戰大；挺過則躍升，撐不住則受傷。', cn:'压力年，工作挑战大；挺过则跃升，撑不住则受伤。', en:'A pressure year — work challenges intense; push through and rise, give in and get hurt.' },
+  '正官': { tw:'升遷年，工作受認可；女命有姻緣機會。', cn:'升迁年，工作受认可；女命有姻缘机会。', en:'A promotion year — recognition at work; marriage opportunities for female chart.' },
+  '偏印': { tw:'學業精進年，但易孤獨；適合自學或進修偏門。', cn:'学业精进年，但易孤独；适合自学或进修偏门。', en:'A learning year — solitary but productive; ideal for self-study or unusual subjects.' },
+  '梟神': { tw:'學業精進年，但易孤獨；適合自學或進修偏門。', cn:'学业精进年，但易孤独；适合自学或进修偏门。', en:'A learning year — solitary but productive; ideal for self-study or unusual subjects.' },
+  '枭神': { tw:'學業精進年，但易孤獨；適合自學或進修偏門。', cn:'学业精进年，但易孤独；适合自学或进修偏门。', en:'A learning year — solitary but productive; ideal for self-study or unusual subjects.' },
+  '正印': { tw:'貴人年，有人扶持；學業文書順、母親關係好。', cn:'贵人年，有人扶持；学业文书顺、母亲关系好。', en:'A benefactor year — people support you; study and paperwork flow, good bond with mother.' },
+};
 
 let state = { lang: 'tw', last: null };
 
@@ -1092,6 +1252,111 @@ function render(R) {
         <td>—</td>
       </tr>`);
   });
+
+  renderPillarNarr(R);
+  renderHoroNarr(R);
+}
+
+function renderPillarNarr(R) {
+  const el = document.getElementById('pillarNarr');
+  if (!el) return;
+  const lang = state.lang;
+  const keys = ['year','month','day','hour'];
+  const titles = ['pillarYear','pillarMonth','pillarDay','pillarHour'];
+  const html = keys.map((key, k) => {
+    const gan = R.ganList[k];
+    const ss = k === 2 ? null : R.shishenGan[k];
+    const stage = t('pnStage')[key];
+    const scope = t('pnScope')[key];
+    let ssChip, body;
+    if (k === 2) {
+      ssChip = `<span class="pn-ss dm">${t('pnDayMaster')}</span>`;
+      const dmInfo = DAY_MASTER[gan];
+      body = dmInfo ? `<b>${dmInfo.nature[lang]}</b> · ${dmInfo.body[lang]}` : '';
+    } else {
+      const desc = (SHISHEN_NARRATIVE[ss] || { [lang]: '' })[lang];
+      const ssTxt = ss || '—';
+      ssChip = `<span class="pn-ss">${ssTxt}</span>`;
+      body = desc ? t('pnHint').replace('{ss}', ssTxt).replace('{desc}', desc) : scope;
+    }
+    return `
+      <div class="pn-card">
+        <div class="pn-head">
+          <span class="pn-title">${t(titles[k])}</span>
+          <span class="pn-stage">${stage}</span>
+        </div>
+        <div class="pn-scope">${scope}</div>
+        <div>${ssChip}</div>
+        <div class="pn-body">${body}</div>
+      </div>`;
+  }).join('');
+  el.innerHTML = html;
+}
+
+function renderHoroNarr(R) {
+  const el = document.getElementById('horoNarr');
+  if (!el) return;
+  const lang = state.lang;
+  const currentYear = new Date().getFullYear();
+  const dayGan = R.dayMaster;
+
+  let curDy = null;
+  for (const dy of R.daYun) {
+    if (currentYear >= dy.getStartYear() && currentYear <= dy.getEndYear()) { curDy = dy; break; }
+  }
+
+  if (!curDy) {
+    el.innerHTML = `<div class="hn-card"><div class="hn-body">${t('horoNarrNone')}</div></div>`;
+    return;
+  }
+
+  const dyGz = curDy.getGanZhi();
+  const dyGan = dyGz[0], dyZhi = dyGz[1];
+  const dyGanWx = GAN_WX[dyGan] || '';
+  const dyZhiWx = ZHI_WX[dyZhi] || '';
+  const dySs = shishenOfGan(dayGan, dyGan);
+  const dyTheme = (SHISHEN_DECADE_THEME[dySs] || { [lang]: '' })[lang];
+  const dyMeta = t('dyNarrMeta')
+    .replace('{from}', curDy.getStartAge())
+    .replace('{to}', curDy.getEndAge())
+    .replace('{startYear}', curDy.getStartYear());
+
+  let curLn = null;
+  try {
+    const lnList = curDy.getLiuNian();
+    curLn = lnList.find(ln => ln.getYear() === currentYear) || null;
+  } catch (e) { curLn = null; }
+
+  let lnHtml = '';
+  if (curLn) {
+    const lnGz = curLn.getGanZhi();
+    const lnGan = lnGz[0], lnZhi = lnGz[1];
+    const lnGanWx = GAN_WX[lnGan] || '';
+    const lnZhiWx = ZHI_WX[lnZhi] || '';
+    const lnSs = shishenOfGan(dayGan, lnGan);
+    const lnTheme = (SHISHEN_YEAR_THEME[lnSs] || { [lang]: '' })[lang];
+    const lnMeta = t('lnNarrMeta')
+      .replace('{year}', curLn.getYear())
+      .replace('{age}', curLn.getAge());
+    lnHtml = `
+      <div class="hn-card ln">
+        <div class="hn-lab">${t('lnNarrLab')}</div>
+        <div class="hn-gz"><span class="wx-${lnGanWx}">${lnGan}</span><span class="wx-${lnZhiWx}">${lnZhi}</span></div>
+        <div class="hn-meta">${lnMeta}</div>
+        ${lnSs ? `<div><span class="hn-tag">${lnSs}</span></div>` : ''}
+        <div class="hn-body">${lnTheme}</div>
+      </div>`;
+  }
+
+  el.innerHTML = `
+    <div class="hn-card dy">
+      <div class="hn-lab">${t('dyNarrLab')}</div>
+      <div class="hn-gz"><span class="wx-${dyGanWx}">${dyGan}</span><span class="wx-${dyZhiWx}">${dyZhi}</span></div>
+      <div class="hn-meta">${dyMeta}</div>
+      ${dySs ? `<div><span class="hn-tag">${dySs}</span></div>` : ''}
+      <div class="hn-body">${dyTheme}</div>
+    </div>
+    ${lnHtml}`;
 }
 
 function reset() {
