@@ -228,6 +228,79 @@
   .legend-item .sw.tough { background: var(--tough); }
   .legend-item .sw.flower { background: var(--flower); }
 
+  .ana-panel {
+    background: rgba(0,0,0,0.3); border: 1px solid var(--gold-dim);
+    border-radius: 12px; padding: 20px; margin-bottom: 20px;
+  }
+  .ana-panel-title { color: var(--gold); font-size: 14px; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 14px; }
+
+  .soul-profile { display: flex; flex-direction: column; gap: 16px; }
+  .soul-card {
+    background: rgba(212,175,55,0.06); border: 1px solid rgba(212,175,55,0.25);
+    border-radius: 10px; padding: 14px 16px;
+  }
+  .soul-card .star-name { color: var(--gold); font-size: 18px; font-weight: 700; margin-bottom: 6px; letter-spacing: 0.05em; }
+  .soul-card .star-name .br { font-size: 12px; color: var(--text-dim); margin-left: 6px; font-weight: 400; }
+  .soul-card .star-nature { color: var(--ivory); font-size: 14px; margin-bottom: 10px; font-style: italic; }
+  .soul-card .star-sect { margin-top: 10px; }
+  .soul-card .star-sect .lab { color: var(--gold); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .soul-card .star-sect .txt { color: var(--text); font-size: 13px; line-height: 1.7; }
+  .soul-card.empty .star-name { color: var(--text-dim); }
+  .soul-card.empty .star-sect .txt { color: var(--text-dim); font-style: italic; }
+
+  .palace-walk { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+  .pw-card {
+    background: rgba(0,0,0,0.25); border: 1px solid rgba(212,175,55,0.2);
+    border-radius: 10px; padding: 12px 14px;
+  }
+  .pw-card .pw-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+  .pw-card .pw-name { color: var(--gold); font-size: 14px; font-weight: 700; letter-spacing: 0.05em; }
+  .pw-card .pw-eb { color: var(--text-dim); font-size: 11px; }
+  .pw-card .pw-theme { color: var(--text-dim); font-size: 12px; margin-bottom: 6px; font-style: italic; line-height: 1.5; }
+  .pw-card .pw-stars { margin: 6px 0; }
+  .pw-card .pw-stars .s {
+    display: inline-block; padding: 2px 7px; margin: 1px 3px 1px 0;
+    background: rgba(245,233,200,0.08); border: 1px solid rgba(245,233,200,0.2);
+    border-radius: 4px; color: var(--ivory); font-size: 12px; font-weight: 600;
+  }
+  .pw-card .pw-stars .s.empty { background: none; border: 1px dashed rgba(212,175,55,0.15); color: var(--text-dim); font-style: italic; font-weight: 400; }
+  .pw-card .pw-narr { color: var(--text); font-size: 13px; line-height: 1.7; margin-top: 4px; }
+
+  .horo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 720px) { .horo-grid { grid-template-columns: 1fr; } }
+  .horo-card {
+    background: rgba(0,0,0,0.25); border: 1px solid rgba(212,175,55,0.25);
+    border-radius: 10px; padding: 14px 16px;
+  }
+  .horo-card.decadal { border-color: rgba(180,120,220,0.5); }
+  .horo-card.yearly { border-color: rgba(100,200,220,0.5); }
+  .horo-card .hc-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+  .horo-card .hc-lab { color: var(--gold); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; }
+  .horo-card .hc-meta { color: var(--text-dim); font-size: 11px; }
+  .horo-card .hc-headline { color: var(--ivory); font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+  .horo-card .hc-body { color: var(--text); font-size: 13px; line-height: 1.7; }
+  .horo-card .hc-mut { margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(212,175,55,0.15); color: var(--text-dim); font-size: 12px; line-height: 1.6; }
+  .horo-card .hc-mut b { color: var(--ivory); }
+  .horo-card .hc-mut .tag { display: inline-block; padding: 1px 6px; border-radius: 3px; margin: 0 2px; font-size: 11px; font-weight: 700; color: #fff; }
+  .horo-card .hc-mut .tag.lu { background: #2f7a4f; }
+  .horo-card .hc-mut .tag.quan { background: #2d557a; }
+  .horo-card .hc-mut .tag.ke { background: #8a6438; }
+  .horo-card .hc-mut .tag.ji { background: #a13838; }
+
+  .patterns { display: flex; flex-direction: column; gap: 10px; }
+  .pat-card {
+    background: rgba(0,0,0,0.25); border: 1px solid rgba(212,175,55,0.25);
+    border-radius: 10px; padding: 12px 14px;
+  }
+  .pat-card .pat-name { color: var(--gold); font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .pat-card .pat-name .badge { display: inline-block; padding: 1px 7px; margin-left: 6px; border-radius: 999px; font-size: 10px; font-weight: 700; vertical-align: middle; }
+  .pat-card .pat-name .badge.good { background: rgba(74,155,110,0.2); color: #5fbf8a; border: 1px solid #5fbf8a; }
+  .pat-card .pat-name .badge.neutral { background: rgba(212,175,55,0.15); color: var(--gold); border: 1px solid var(--gold-dim); }
+  .pat-card .pat-name .badge.warn { background: rgba(231,120,120,0.15); color: var(--tough); border: 1px solid var(--tough); }
+  .pat-card .pat-body { color: var(--text); font-size: 13px; line-height: 1.7; }
+  .pat-card .pat-where { color: var(--text-dim); font-size: 11px; margin-top: 4px; }
+  .pat-empty { color: var(--text-dim); font-style: italic; font-size: 13px; }
+
   footer { text-align: center; margin-top: 40px; color: var(--text-dim); font-size: 13px; }
   .error { color: var(--tough); background: rgba(231,120,120,0.1); border: 1px solid var(--tough); padding: 12px; border-radius: 8px; margin-top: 12px; }
 </style>
@@ -306,6 +379,26 @@
     <div class="chart-wrap">
       <div class="chart" id="chart"></div>
     </div>
+
+    <div class="ana-panel">
+      <div class="ana-panel-title" data-i18n="anaSoulTitle">命宮深度解析</div>
+      <div class="soul-profile" id="anaSoul"></div>
+    </div>
+
+    <div class="ana-panel">
+      <div class="ana-panel-title" data-i18n="anaWalkTitle">12 宮位逐宮解讀</div>
+      <div class="palace-walk" id="anaWalk"></div>
+    </div>
+
+    <div class="ana-panel">
+      <div class="ana-panel-title" data-i18n="anaHoroTitle">當前運勢解讀</div>
+      <div class="horo-grid" id="anaHoro"></div>
+    </div>
+
+    <div class="ana-panel">
+      <div class="ana-panel-title" data-i18n="anaPatTitle">格局判讀</div>
+      <div class="patterns" id="anaPat"></div>
+    </div>
   </div>
 
   <footer>
@@ -335,6 +428,19 @@ const I18N = {
     errInvalidDate:'日期不合法，請檢查。',
     errLib:'命理函式庫載入失敗，請檢查網路。',
     hourSlots:['早子時 23-1','丑時 1-3','寅時 3-5','卯時 5-7','辰時 7-9','巳時 9-11','午時 11-13','未時 13-15','申時 15-17','酉時 17-19','戌時 19-21','亥時 21-23','晚子時 23-24'],
+    anaSoulTitle:'命宮深度解析', anaWalkTitle:'12 宮位逐宮解讀', anaHoroTitle:'當前運勢解讀', anaPatTitle:'格局判讀',
+    secNature:'本性', secStrength:'優勢', secBlindspot:'盲點', secPath:'適合方向',
+    soulEmptyTitle:'命宮無主星', soulEmptyBody:'命宮無十四主星坐守，需借對宮（遷移宮）主星論命。本性較不固定，受外境影響大，但也更具彈性。對宮的主星即為性格參考。',
+    decadalLab:'大限', yearlyLab:'流年',
+    decadalAgeRange:'{from}-{to} 歲', yearlyYearLab:'{year} 年',
+    horoMutLab:'本{period}四化',
+    horoDecadeNarrTpl:'這 10 年運程進入 <b>{palace}</b> 宮（{stars}）。{theme}',
+    horoYearNarrTpl:'{year} 年的能量主題落在 <b>{palace}</b> 宮（{stars}）。{theme}',
+    palaceStarsLab:'主星', palaceEmpty:'無主星（借對宮論）',
+    pwNarrTpl:'{palaceTheme}{starNote}',
+    pwStarNote:'此宮主星 {stars}，{combined}',
+    patEmpty:'未檢出明顯格局。',
+    badgeGood:'吉', badgeNeutral:'中', badgeWarn:'需留意',
   },
   cn: {
     title:'紫微斗数', intro:'紫微斗数以十四主星配十二宫位，演绎一生命运格局。输入正确的出生时间，看见你的星盘。',
@@ -356,6 +462,19 @@ const I18N = {
     errInvalidDate:'日期不合法，请检查。',
     errLib:'命理函式库载入失败，请检查网络。',
     hourSlots:['早子时 23-1','丑时 1-3','寅时 3-5','卯时 5-7','辰时 7-9','巳时 9-11','午时 11-13','未时 13-15','申时 15-17','酉时 17-19','戌时 19-21','亥时 21-23','晚子时 23-24'],
+    anaSoulTitle:'命宫深度解析', anaWalkTitle:'12 宫位逐宫解读', anaHoroTitle:'当前运势解读', anaPatTitle:'格局判读',
+    secNature:'本性', secStrength:'优势', secBlindspot:'盲点', secPath:'适合方向',
+    soulEmptyTitle:'命宫无主星', soulEmptyBody:'命宫无十四主星坐守，需借对宫（迁移宫）主星论命。本性较不固定，受外境影响大，但也更具弹性。对宫的主星即为性格参考。',
+    decadalLab:'大限', yearlyLab:'流年',
+    decadalAgeRange:'{from}-{to} 岁', yearlyYearLab:'{year} 年',
+    horoMutLab:'本{period}四化',
+    horoDecadeNarrTpl:'这 10 年运程进入 <b>{palace}</b> 宫（{stars}）。{theme}',
+    horoYearNarrTpl:'{year} 年的能量主题落在 <b>{palace}</b> 宫（{stars}）。{theme}',
+    palaceStarsLab:'主星', palaceEmpty:'无主星（借对宫论）',
+    pwNarrTpl:'{palaceTheme}{starNote}',
+    pwStarNote:'此宫主星 {stars}，{combined}',
+    patEmpty:'未检出明显格局。',
+    badgeGood:'吉', badgeNeutral:'中', badgeWarn:'需留意',
   },
   en: {
     title:'Zi Wei Dou Shu', intro:'Purple Star Astrology arranges 14 major stars across 12 palaces to depict the architecture of a life. Enter your accurate birth time to see the chart.',
@@ -377,6 +496,19 @@ const I18N = {
     errInvalidDate:'Invalid date. Please check inputs.',
     errLib:'Library failed to load. Check connection.',
     hourSlots:['Early Zi 23-1','Chou 1-3','Yin 3-5','Mao 5-7','Chen 7-9','Si 9-11','Wu 11-13','Wei 13-15','Shen 15-17','You 17-19','Xu 19-21','Hai 21-23','Late Zi 23-24'],
+    anaSoulTitle:'Soul Palace Deep Dive', anaWalkTitle:'12 Palaces Walkthrough', anaHoroTitle:'Current Cycle Reading', anaPatTitle:'Patterns Detected',
+    secNature:'Nature', secStrength:'Strengths', secBlindspot:'Blindspots', secPath:'Suited Path',
+    soulEmptyTitle:'Soul Palace Vacant', soulEmptyBody:'No major star sits in the Soul Palace. Read via the opposite (Travel) palace. Nature is less fixed and more shaped by environment, but also more adaptive.',
+    decadalLab:'Decadal', yearlyLab:'Yearly',
+    decadalAgeRange:'age {from}-{to}', yearlyYearLab:'{year}',
+    horoMutLab:'{period} mutagens',
+    horoDecadeNarrTpl:'This 10-year cycle enters the <b>{palace}</b> palace ({stars}). {theme}',
+    horoYearNarrTpl:'{year}\'s energy theme sits in the <b>{palace}</b> palace ({stars}). {theme}',
+    palaceStarsLab:'Major Stars', palaceEmpty:'No major (read via opposite)',
+    pwNarrTpl:'{palaceTheme}{starNote}',
+    pwStarNote:'Major stars: {stars} — {combined}',
+    patEmpty:'No prominent pattern detected.',
+    badgeGood:'Favorable', badgeNeutral:'Neutral', badgeWarn:'Watch',
   },
 };
 
@@ -410,6 +542,285 @@ const MUTAGEN_LABEL = {
   '科':'科','ke':'K',
   '忌':'忌','ji':'J',
 };
+
+const MUTAGEN_T = {
+  '祿': { tw:'祿', cn:'禄', en:'Lu (Wealth)' },
+  '權': { tw:'權', cn:'权', en:'Quan (Power)' },
+  '科': { tw:'科', cn:'科', en:'Ke (Fame)' },
+  '忌': { tw:'忌', cn:'忌', en:'Ji (Affliction)' },
+};
+
+const PALACE_T = {
+  '命宮':   { tw:'命宮', cn:'命宫', en:'Self' },
+  '兄弟':   { tw:'兄弟', cn:'兄弟', en:'Siblings' },
+  '夫妻':   { tw:'夫妻', cn:'夫妻', en:'Spouse' },
+  '子女':   { tw:'子女', cn:'子女', en:'Children' },
+  '財帛':   { tw:'財帛', cn:'财帛', en:'Wealth' },
+  '疾厄':   { tw:'疾厄', cn:'疾厄', en:'Health' },
+  '遷移':   { tw:'遷移', cn:'迁移', en:'Travel' },
+  '僕役':   { tw:'僕役', cn:'仆役', en:'Friends' },
+  '官祿':   { tw:'官祿', cn:'官禄', en:'Career' },
+  '田宅':   { tw:'田宅', cn:'田宅', en:'Property' },
+  '福德':   { tw:'福德', cn:'福德', en:'Fortune' },
+  '父母':   { tw:'父母', cn:'父母', en:'Parents' },
+};
+
+const STAR_T = {
+  '紫微': { tw:'紫微', cn:'紫微', en:'Ziwei (Emperor)' },
+  '天機': { tw:'天機', cn:'天机', en:'Tianji (Strategist)' },
+  '太陽': { tw:'太陽', cn:'太阳', en:'Sun' },
+  '武曲': { tw:'武曲', cn:'武曲', en:'Wuqu (General)' },
+  '天同': { tw:'天同', cn:'天同', en:'Tiantong (Easy-going)' },
+  '廉貞': { tw:'廉貞', cn:'廉贞', en:'Lianzhen (Principled)' },
+  '天府': { tw:'天府', cn:'天府', en:'Tianfu (Treasury)' },
+  '太陰': { tw:'太陰', cn:'太阴', en:'Moon' },
+  '貪狼': { tw:'貪狼', cn:'贪狼', en:'Tanlang (Desirous)' },
+  '巨門': { tw:'巨門', cn:'巨门', en:'Jumen (Speaker)' },
+  '天相': { tw:'天相', cn:'天相', en:'Tianxiang (Minister)' },
+  '天梁': { tw:'天梁', cn:'天梁', en:'Tianliang (Mentor)' },
+  '七殺': { tw:'七殺', cn:'七杀', en:'Qisha (Warrior)' },
+  '破軍': { tw:'破軍', cn:'破军', en:'Pojun (Pioneer)' },
+  '文昌': { tw:'文昌', cn:'文昌', en:'Wenchang' },
+  '文曲': { tw:'文曲', cn:'文曲', en:'Wenqu' },
+  '左輔': { tw:'左輔', cn:'左辅', en:'Zuofu' },
+  '右弼': { tw:'右弼', cn:'右弼', en:'Youbi' },
+  '天魁': { tw:'天魁', cn:'天魁', en:'Tiankui' },
+  '天鉞': { tw:'天鉞', cn:'天钺', en:'Tianyue' },
+  '祿存': { tw:'祿存', cn:'禄存', en:'Lucun' },
+  '天馬': { tw:'天馬', cn:'天马', en:'Tianma' },
+  '擎羊': { tw:'擎羊', cn:'擎羊', en:'Qingyang' },
+  '陀羅': { tw:'陀羅', cn:'陀罗', en:'Tuoluo' },
+  '火星': { tw:'火星', cn:'火星', en:'Huoxing' },
+  '鈴星': { tw:'鈴星', cn:'铃星', en:'Lingxing' },
+  '地空': { tw:'地空', cn:'地空', en:'Dikong' },
+  '地劫': { tw:'地劫', cn:'地劫', en:'Dijie' },
+};
+
+const MAJOR_STAR_PROFILE = {
+  '紫微': {
+    nature: { tw:'帝王之星，主尊貴與統御', cn:'帝王之星，主尊贵与统御', en:'The Emperor Star — dignity, command, leadership' },
+    strength: { tw:'天生有領導氣場、做事有規格、能定大事。重視名譽，不甘屈居人下。有貴人運，能聚集追隨者。', cn:'天生有领导气场、做事有规格、能定大事。重视名誉，不甘屈居人下。有贵人运，能聚集追随者。', en:'Natural authority, scale-minded, capable of weighty decisions. Values reputation, will not sit beneath others. Attracts allies and followers.' },
+    blindspot: { tw:'易自視過高、固執己見、聽不進諫言。獨坐時若無左輔右弼為助則易孤君，名聲大但實權虛。', cn:'易自视过高、固执己见、听不进谏言。独坐时若无左辅右弼为助则易孤君，名声大但实权虚。', en:'Prone to pride, stubborn, dismissive of counsel. Without Zuofu/Youbi support, can be a "lone king" — famous but hollow.' },
+    path: { tw:'適合創業老闆、高階主管、政界要職、品牌經營、需要拿主意定方向的工作。最怕屈居於中階執行。', cn:'适合创业老板、高阶主管、政界要职、品牌经营、需要拿主意定方向的工作。最怕屈居于中阶执行。', en:'Suits founder, senior executive, political office, brand leadership. Roles that set direction. Mid-rank execution drains them.' },
+  },
+  '天機': {
+    nature: { tw:'智多星，主謀略與變通', cn:'智多星，主谋略与变通', en:'The Strategist — intelligence, agility, adaptability' },
+    strength: { tw:'頭腦靈活、應變快、學什麼像什麼。善於分析、規劃、研究。心思細膩，能察言觀色。', cn:'头脑灵活、应变快、学什么像什么。善于分析、规划、研究。心思细腻，能察言观色。', en:'Quick-witted, adaptive, learns anything fast. Analytical, plans well, perceptive — reads people.' },
+    blindspot: { tw:'想太多、變動性大、難定下來。易心思複雜、自尋煩惱。情感波動，需穩定環境。', cn:'想太多、变动性大、难定下来。易心思复杂、自寻烦恼。情感波动，需稳定环境。', en:'Overthinks, volatile, hard to settle. Mental complexity breeds self-made worry. Emotionally unsteady — needs anchored surroundings.' },
+    path: { tw:'適合企劃、顧問、研究、教育、軟體、AI、心理學等需要動腦的領域。不適合死板、重複性高的工作。', cn:'适合企划、顾问、研究、教育、软件、AI、心理学等需要动脑的领域。不适合死板、重复性高的工作。', en:'Suits strategy, consulting, research, education, software, AI, psychology. Avoid rigid, repetitive work.' },
+  },
+  '太陽': {
+    nature: { tw:'光明之星，主博愛與名聲', cn:'光明之星，主博爱与名声', en:'The Sun — radiance, fairness, public presence' },
+    strength: { tw:'熱情開朗、樂於助人、為人正直。有公益心、博愛、不計較。在團體中能照亮他人，自帶名聲。', cn:'热情开朗、乐于助人、为人正直。有公益心、博爱、不计较。在团体中能照亮他人，自带名声。', en:'Warm, generous, upright. Public-minded, fair, willing to give without keeping score. Lights up groups, attracts a name.' },
+    blindspot: { tw:'付出多、易耗能。在意他人眼光，男命父子緣較薄，女命夫運需謹慎。落陷時辛苦操勞、易勞而無功。', cn:'付出多、易耗能。在意他人眼光，男命父子缘较薄，女命夫运需谨慎。落陷时辛苦操劳、易劳而无功。', en:'Gives too much, depletes self. Cares about appearances. Males: father-son ties strained; females: be careful in marriage. When dim, hard work without return.' },
+    path: { tw:'適合公職、教育、媒體、公益、需要公眾面對的工作。男命適合對外、女命可從事服務或代言。', cn:'适合公职、教育、媒体、公益、需要公众面对的工作。男命适合对外、女命可从事服务或代言。', en:'Suits public service, education, media, charity, public-facing roles. Males: outward; females: service or representation.' },
+  },
+  '武曲': {
+    nature: { tw:'財將軍，主剛毅與實業', cn:'财将军，主刚毅与实业', en:'The Wealth General — grit, execution, material build' },
+    strength: { tw:'意志堅定、執行力強、做事踏實。理財能力佳，能白手起家。剛直果決、說一不二、敢於承擔。', cn:'意志坚定、执行力强、做事踏实。理财能力佳，能白手起家。刚直果决、说一不二、敢于承担。', en:'Iron will, decisive execution, grounded. Strong with money, can build from scratch. Direct, takes responsibility, no nonsense.' },
+    blindspot: { tw:'個性過剛、不善表達、人際容易僵化。婚姻運較難，特別女命武曲坐命，需主動柔軟。', cn:'个性过刚、不善表达、人际容易僵化。婚姻运较难，特别女命武曲坐命，需主动柔软。', en:'Too rigid, poor emotional expression, relationships stiffen. Marriage difficult — especially for females with Wuqu in Self palace; must soften deliberately.' },
+    path: { tw:'適合金融、製造、工程、軍警、實業、財務、需要硬實力與紀律的領域。不適合純創意或情感類工作。', cn:'适合金融、制造、工程、军警、实业、财务、需要硬实力与纪律的领域。不适合纯创意或情感类工作。', en:'Suits finance, manufacturing, engineering, military/police, industry. Hard-skill, disciplined roles. Avoid pure creative/emotional fields.' },
+  },
+  '天同': {
+    nature: { tw:'福星，主享樂與人緣', cn:'福星，主享乐与人缘', en:'The Joy Star — ease, warmth, fortune' },
+    strength: { tw:'性情溫和、人緣極佳、樂觀知足。有福氣、衣食無憂、能享生活。心思單純、不易計較。', cn:'性情温和、人缘极佳、乐观知足。有福气、衣食无忧、能享生活。心思单纯、不易计较。', en:'Gentle nature, well-liked, optimistic, content. Naturally fortunate — life rarely lacks. Simple-hearted, doesn\'t carry grudges.' },
+    blindspot: { tw:'易安逸怠惰、缺乏鬥志、不善承壓。需要煞星或挫折激發才能成大事。情感上易依賴他人。', cn:'易安逸怠惰、缺乏斗志、不善承压。需要煞星或挫折激发才能成大事。情感上易依赖他人。', en:'Coasts easily, low drive, weak under pressure. Needs hardship or "tough star" to spark achievement. Emotionally over-dependent.' },
+    path: { tw:'適合服務業、餐飲、心理、療癒、藝術、需要溫和氣質與人緣的工作。不適合高壓對抗型職場。', cn:'适合服务业、餐饮、心理、疗愈、艺术、需要温和气质与人缘的工作。不适合高压对抗型职场。', en:'Suits service, hospitality, counseling, healing, the arts. Warmth-driven roles. Avoid high-pressure adversarial environments.' },
+  },
+  '廉貞': {
+    nature: { tw:'囚星 / 次桃花，主原則與情感', cn:'囚星 / 次桃花，主原则与情感', en:'The Principled — discipline, integrity, with passion' },
+    strength: { tw:'重感情、有原則、講義氣。能制度化做事，講究規矩與細節。聰明且有藝術品味，能在制度中找出彈性。', cn:'重感情、有原则、讲义气。能制度化做事，讲究规矩与细节。聪明且有艺术品味，能在制度中找出弹性。', en:'Strong feelings, principled, loyal. Operates by rules and detail. Smart and aesthetic — finds flex within systems.' },
+    blindspot: { tw:'情緒起伏、易陷感情糾葛或司法是非。性格內外不一，外冷內熱。化忌時易遇官非或情困。', cn:'情绪起伏、易陷感情纠葛或司法是非。性格内外不一，外冷内热。化忌时易遇官非或情困。', en:'Mood swings, prone to romantic entanglement or legal trouble. Outwardly cool, inwardly hot — incongruent. With Ji mutagen, faces lawsuits or heartache.' },
+    path: { tw:'適合法律、公務員、設計、行銷、IT、心理諮詢、需要原則與感性兼具的工作。', cn:'适合法律、公务员、设计、行销、IT、心理咨询、需要原则与感性兼具的工作。', en:'Suits law, civil service, design, marketing, IT, counseling. Roles needing principle with sensitivity.' },
+  },
+  '天府': {
+    nature: { tw:'庫房之星，主穩重與保守', cn:'库房之星，主稳重与保守', en:'The Treasury — stability, accumulation, conservation' },
+    strength: { tw:'穩重可靠、為人寬厚、做事有條理。有理財能力、會儲蓄、能守住財富。處事圓融、有領導格但不爭。', cn:'稳重可靠、为人宽厚、做事有条理。有理财能力、会储蓄、能守住财富。处事圆融、有领导格但不争。', en:'Solid, broad-minded, organized. Skilled with money — saves, protects what\'s built. Diplomatic; can lead without grasping.' },
+    blindspot: { tw:'過於保守、缺乏冒險精神，容易錯失大機會。喜歡安穩，不喜變動。獨守時格局較小，需主星輔助。', cn:'过于保守、缺乏冒险精神，容易错失大机会。喜欢安稳，不喜变动。独守时格局较小，需主星辅助。', en:'Too cautious — misses bold opportunities. Loves stability, resists change. Alone, the scale is small; needs supporting stars.' },
+    path: { tw:'適合銀行、會計、財務、不動產、公務員、傳產經營，需穩健規劃的領域。不適合純創新冒險型工作。', cn:'适合银行、会计、财务、不动产、公务员、传产经营，需稳健规划的领域。不适合纯创新冒险型工作。', en:'Suits banking, accounting, finance, real estate, civil service, traditional industries. Stable planning roles. Avoid pure innovation/venture work.' },
+  },
+  '太陰': {
+    nature: { tw:'月光之星，主柔美與內斂', cn:'月光之星，主柔美与内敛', en:'The Moon — softness, intuition, inwardness' },
+    strength: { tw:'溫柔細膩、有藝術氣質、感受敏銳。重視家庭、有母性 / 包容氣質。理財有耐心、能積少成多。', cn:'温柔细腻、有艺术气质、感受敏锐。重视家庭、有母性 / 包容气质。理财有耐心、能积少成多。', en:'Tender, artistic, deeply perceptive. Family-oriented, nurturing. Patient with money — grows wealth slowly.' },
+    blindspot: { tw:'易內向、情緒化、自我消耗。男命太陰主感情細膩但易陰柔，女命主貌美但易多愁。落陷時更甚。', cn:'易内向、情绪化、自我消耗。男命太阴主感情细腻但易阴柔，女命主貌美但易多愁。落陷时更甚。', en:'Introverted, moody, self-depleting. Males: tender feelings but yin-soft; females: beauty paired with melancholy. Worse when dim.' },
+    path: { tw:'適合設計、藝術、心理、不動產、女性導向的服務、需要美感與情感細膩的工作。', cn:'适合设计、艺术、心理、不动产、女性导向的服务、需要美感与情感细腻的工作。', en:'Suits design, the arts, counseling, real estate, female-oriented services. Roles needing aesthetic and emotional finesse.' },
+  },
+  '貪狼': {
+    nature: { tw:'欲望 / 才藝之星，主多元與慾念', cn:'欲望 / 才艺之星，主多元与欲念', en:'The Desirous — multifaceted talent, hunger for experience' },
+    strength: { tw:'多才多藝、人緣好、應酬交際手腕高。有強烈企圖心、敢追求自己想要的。對美感、品味、社交場合敏銳。', cn:'多才多艺、人缘好、应酬交际手腕高。有强烈企图心、敢追求自己想要的。对美感、品味、社交场合敏锐。', en:'Multi-talented, popular, masterful at social maneuvers. Strong ambition — chases what they want. Sharp aesthetic and social radar.' },
+    blindspot: { tw:'欲望過多、易沉迷物質享樂或感情。桃花重、容易招惹是非。心思難定、興趣廣但深度不足。', cn:'欲望过多、易沉迷物质享乐或感情。桃花重、容易招惹是非。心思难定、兴趣广但深度不足。', en:'Desire-driven, can sink into pleasure or romance. Heavy peach blossom — attracts entanglement. Restless mind: wide interests, shallow depth.' },
+    path: { tw:'適合業務、公關、娛樂、藝術、餐飲、行銷、需要交際與多元才能的工作。化權化祿時可成大器。', cn:'适合业务、公关、娱乐、艺术、餐饮、行销、需要交际与多元才能的工作。化权化禄时可成大器。', en:'Suits sales, PR, entertainment, the arts, hospitality, marketing. Multi-talent social roles. With Quan/Lu, can reach great scale.' },
+  },
+  '巨門': {
+    nature: { tw:'口舌 / 暗曜，主言語與思辨', cn:'口舌 / 暗曜，主言语与思辨', en:'The Speaker (Dark Star) — words, scrutiny, debate' },
+    strength: { tw:'口才好、能說善道、善於分析與質疑。研究力強、能挖掘真相。在專業領域能深入鑽研。', cn:'口才好、能说善道、善于分析与质疑。研究力强、能挖掘真相。在专业领域能深入钻研。', en:'Eloquent, analytical, naturally questioning. Strong researcher — digs to the truth. Goes deep in chosen fields.' },
+    blindspot: { tw:'易招口舌是非、易猜忌、人際易生嫌隙。化忌時易得罪人或捲入謠言。需要培養同理心。', cn:'易招口舌是非、易猜忌、人际易生嫌隙。化忌时易得罪人或卷入谣言。需要培养同理心。', en:'Magnet for verbal trouble, suspicion, friction. With Ji mutagen, offends easily or gets caught in rumor. Must cultivate empathy.' },
+    path: { tw:'適合律師、教師、主播、研究、心理諮商、業務、靠嘴吃飯的專業。不適合需團隊和諧的工作。', cn:'适合律师、教师、主播、研究、心理咨商、业务、靠嘴吃饭的专业。不适合需团队和谐的工作。', en:'Suits law, teaching, broadcasting, research, counseling, sales — professions that earn by speech. Avoid harmony-dependent team roles.' },
+  },
+  '天相': {
+    nature: { tw:'印星 / 宰相，主輔佐與服務', cn:'印星 / 宰相，主辅佐与服务', en:'The Minister — service, balance, support' },
+    strength: { tw:'忠誠正直、為人公正、樂於助人。有審美與品味、衣著得體。能在重要位置扮演輔佐與協調角色。', cn:'忠诚正直、为人公正、乐于助人。有审美与品味、衣着得体。能在重要位置扮演辅佐与协调角色。', en:'Loyal, fair, helpful. Cultivated taste, well-presented. Excellent at second-in-command — adviser and coordinator.' },
+    blindspot: { tw:'過於配合他人、缺乏主見、易隨波逐流。獨立挑大樑時較吃力。怕遇煞，遇煞則受人連累。', cn:'过于配合他人、缺乏主见、易随波逐流。独立挑大梁时较吃力。怕遇煞，遇煞则受人连累。', en:'Over-accommodating, weak in own opinion, drifts. Struggles when forced to front. Vulnerable to tough stars — gets dragged into others\' troubles.' },
+    path: { tw:'適合祕書、幕僚、行政、設計、服飾、餐飲、公關、輔佐型管理。不適合需主導決策的純創業。', cn:'适合秘书、幕僚、行政、设计、服饰、餐饮、公关、辅佐型管理。不适合需主导决策的纯创业。', en:'Suits secretary, chief of staff, admin, design, fashion, hospitality, PR. Supporting management. Avoid solo founder roles requiring decisive leadership.' },
+  },
+  '天梁': {
+    nature: { tw:'蔭星，主庇佑與長者', cn:'荫星，主庇佑与长者', en:'The Mentor — protection, wisdom, principle' },
+    strength: { tw:'正直善良、有原則、能照顧他人。喜助人解難、有長者風範。逢凶化吉的能量強，能在危機中保命。', cn:'正直善良、有原则、能照顾他人。喜助人解难、有长者风范。逢凶化吉的能量强，能在危机中保命。', en:'Upright, principled, caring. Loves resolving others\' troubles, carries elder energy. Strong "turn-bad-to-good" — survives crises.' },
+    blindspot: { tw:'愛管閒事、有清高傾向、自命不凡。婚姻易晚成，年少時較孤獨。需學會放手不過度介入他人。', cn:'爱管闲事、有清高倾向、自命不凡。婚姻易晚成，年少时较孤独。需学会放手不过度介入他人。', en:'Meddles, can be aloof and self-important. Late marriage, lonely youth. Must learn to step back from others\' lives.' },
+    path: { tw:'適合醫療、法律、教育、宗教、社工、保險、需要照顧他人與承擔責任的工作。', cn:'适合医疗、法律、教育、宗教、社工、保险、需要照顾他人与承担责任的工作。', en:'Suits medicine, law, education, religion, social work, insurance. Roles caring for others, bearing responsibility.' },
+  },
+  '七殺': {
+    nature: { tw:'將軍之星，主開創與冒險', cn:'将军之星，主开创与冒险', en:'The Warrior — venture, command, breakthrough' },
+    strength: { tw:'果決勇敢、行動力強、不畏挑戰。能在亂局中殺出血路、開創新局。獨立性強、領導氣場足。', cn:'果决勇敢、行动力强、不畏挑战。能在乱局中杀出血路、开创新局。独立性强、领导气场足。', en:'Decisive, brave, action-driven. Cuts paths through chaos, opens new territory. Independent, commanding presence.' },
+    blindspot: { tw:'個性剛烈、容易孤獨、人際關係難維持。婚姻波折大，特別七殺女命，需找剛者。一生變動大、忌平淡。', cn:'个性刚烈、容易孤独、人际关系难维持。婚姻波折大，特别七杀女命，需找刚者。一生变动大、忌平淡。', en:'Fierce, isolated, struggles to keep relationships. Marriage turbulent — Qisha females need a strong partner. Life full of change; flat life is intolerable.' },
+    path: { tw:'適合創業、軍警、業務、開拓性工作、需獨當一面的領域。最不適合純依附體制的穩定工作。', cn:'适合创业、军警、业务、开拓性工作、需独当一面的领域。最不适合纯依附体制的稳定工作。', en:'Suits founding, military/police, sales, frontier roles. Standalone leadership. Avoid purely institutional stable jobs.' },
+  },
+  '破軍': {
+    nature: { tw:'消耗 / 革新之星，主破壞重建', cn:'消耗 / 革新之星，主破坏重建', en:'The Pioneer — destruction and renewal' },
+    strength: { tw:'勇於改變現狀、創新力強、敢破舊立新。性格獨特、不從眾、能突破慣性。一旦投入、能徹底執行。', cn:'勇于改变现状、创新力强、敢破旧立新。性格独特、不从众、能突破惯性。一旦投入、能彻底执行。', en:'Tears down the old to build new, highly innovative, breaks conventions. Distinct personality, contrarian, sees through inertia. When committed, executes fully.' },
+    blindspot: { tw:'破壞性強、易與環境衝突。情緒起伏大、易毀掉自己建立的成果。婚姻、感情、財運都易有大起大落。', cn:'破坏性强、易与环境冲突。情绪起伏大、易毁掉自己建立的成果。婚姻、感情、财运都易有大起大落。', en:'Destructive impulse, clashes with surroundings. Mood swings can demolish what was built. Marriage, romance, wealth all swing wildly.' },
+    path: { tw:'適合創業 (從零開始)、變革管理、藝術、軍警、需要打破舊局的工作。最不適合維護現狀型職位。', cn:'适合创业 (从零开始)、变革管理、艺术、军警、需要打破旧局的工作。最不适合维护现状型职位。', en:'Suits zero-to-one founding, change management, the arts, military/police. Disruption work. Avoid status-quo roles.' },
+  },
+};
+
+const STAR_KEYWORDS = {
+  '紫微': { tw:'尊貴、領導', cn:'尊贵、领导', en:'dignity, leadership' },
+  '天機': { tw:'智謀、變動', cn:'智谋、变动', en:'strategy, change' },
+  '太陽': { tw:'熱情、博愛', cn:'热情、博爱', en:'warmth, fairness' },
+  '武曲': { tw:'剛毅、財富', cn:'刚毅、财富', en:'grit, wealth' },
+  '天同': { tw:'享受、人緣', cn:'享受、人缘', en:'ease, charm' },
+  '廉貞': { tw:'原則、情感', cn:'原则、情感', en:'principle, passion' },
+  '天府': { tw:'穩重、累積', cn:'稳重、累积', en:'stability, accumulation' },
+  '太陰': { tw:'柔美、內斂', cn:'柔美、内敛', en:'softness, inwardness' },
+  '貪狼': { tw:'才藝、欲望', cn:'才艺、欲望', en:'talent, desire' },
+  '巨門': { tw:'口才、思辨', cn:'口才、思辨', en:'words, scrutiny' },
+  '天相': { tw:'輔佐、公正', cn:'辅佐、公正', en:'support, fairness' },
+  '天梁': { tw:'庇佑、原則', cn:'荫佑、原则', en:'protection, wisdom' },
+  '七殺': { tw:'開創、果決', cn:'开创、果决', en:'venture, decision' },
+  '破軍': { tw:'革新、破舊', cn:'革新、破旧', en:'renewal, disruption' },
+};
+
+const PALACE_THEME_DESC = {
+  '命宮': { tw:'代表自我、性格、人生整體格局，是命盤的核心。', cn:'代表自我、性格、人生整体格局，是命盘的核心。', en:'Self, personality, overall life pattern — the chart\'s core.' },
+  '兄弟': { tw:'代表兄弟姐妹、平輩朋友、合作對象的緣分與品質。', cn:'代表兄弟姐妹、平辈朋友、合作对象的缘分与品质。', en:'Siblings, peers, collaborators — quality of horizontal ties.' },
+  '夫妻': { tw:'代表配偶、感情、婚姻狀況與互動模式。', cn:'代表配偶、感情、婚姻状况与互动模式。', en:'Spouse, romance, marriage dynamics.' },
+  '子女': { tw:'代表子女、學生、創造力與下屬，也象徵投資孵化的事物。', cn:'代表子女、学生、创造力与下属，也象征投资孵化的事物。', en:'Children, students, creativity, subordinates — what you nurture.' },
+  '財帛': { tw:'代表金錢觀念、賺錢方式、流動資金的進出。', cn:'代表金钱观念、赚钱方式、流动资金的进出。', en:'Money mindset, earning style, cash flow.' },
+  '疾厄': { tw:'代表體質、健康狀況、易發疾病的部位與情緒模式。', cn:'代表体质、健康状况、易发疾病的部位与情绪模式。', en:'Constitution, health, illness tendencies, emotional patterns.' },
+  '遷移': { tw:'代表外出、遠行、出國、社會競爭、與陌生環境的互動。', cn:'代表外出、远行、出国、社会竞争、与陌生环境的互动。', en:'Travel, going abroad, public competition, dealings with new environments.' },
+  '僕役': { tw:'代表朋友、同事、下屬、社交圈的廣度與品質。', cn:'代表朋友、同事、下属、社交圈的广度与品质。', en:'Friends, colleagues, subordinates — social network breadth and quality.' },
+  '官祿': { tw:'代表事業、工作、職位、社會角色與成就。', cn:'代表事业、工作、职位、社会角色与成就。', en:'Career, work, position, social role and achievement.' },
+  '田宅': { tw:'代表不動產、家庭、家運、固定資產的累積。', cn:'代表不动产、家庭、家运、固定资产的累积。', en:'Real estate, home, family fortune, fixed asset accumulation.' },
+  '福德': { tw:'代表內心世界、精神享受、興趣嗜好、潛意識與福氣。', cn:'代表内心世界、精神享受、兴趣嗜好、潜意识与福气。', en:'Inner world, mental enjoyment, hobbies, subconscious, fortune.' },
+  '父母': { tw:'代表父母緣分、長輩貴人、上司關係、文書與學業。', cn:'代表父母缘分、长辈贵人、上司关系、文书与学业。', en:'Parents, elders, superiors, documents and academic affairs.' },
+};
+
+const PALACE_STAR_HINT = {
+  '命宮': { tw:'你的人生主軸帶有 {kw} 的特質。', cn:'你的人生主轴带有 {kw} 的特质。', en:'Your life axis carries {kw}.' },
+  '兄弟': { tw:'兄弟朋友間呈現 {kw} 的調性，互動以此為主。', cn:'兄弟朋友间呈现 {kw} 的调性，互动以此为主。', en:'Sibling and peer ties take on a {kw} tone.' },
+  '夫妻': { tw:'配偶或感情對象具有 {kw} 的特徵，相處模式偏此。', cn:'配偶或感情对象具有 {kw} 的特征，相处模式偏此。', en:'Your spouse or partner shows {kw}; the dynamic leans that way.' },
+  '子女': { tw:'子女、創造力與投資孵化的事物帶有 {kw} 的特質。', cn:'子女、创造力与投资孵化的事物带有 {kw} 的特质。', en:'Children, creativity and nurtured projects carry {kw}.' },
+  '財帛': { tw:'賺錢模式帶有 {kw} 的色彩，財運走此路徑。', cn:'赚钱模式带有 {kw} 的色彩，财运走此路径。', en:'Earning style has a {kw} flavor — wealth flows that way.' },
+  '疾厄': { tw:'體質與情緒模式偏 {kw}，相關部位需留意。', cn:'体质与情绪模式偏 {kw}，相关部位需留意。', en:'Constitution and emotional pattern lean {kw}; mind the related areas.' },
+  '遷移': { tw:'外出、競爭、社會舞台帶有 {kw} 的能量。', cn:'外出、竞争、社会舞台带有 {kw} 的能量。', en:'Travel, competition and public stage carry {kw} energy.' },
+  '僕役': { tw:'朋友圈與下屬呈 {kw} 特質，社交網以此為核心。', cn:'朋友圈与下属呈 {kw} 特质，社交网以此为核心。', en:'Your friend circle and subordinates carry {kw}.' },
+  '官祿': { tw:'事業道路強調 {kw}，工作中此能量最易發揮。', cn:'事业道路强调 {kw}，工作中此能量最易发挥。', en:'Career path emphasizes {kw}; this energy expresses best at work.' },
+  '田宅': { tw:'家庭與不動產層面呈現 {kw} 特徵，財產累積亦同。', cn:'家庭与不动产层面呈现 {kw} 特征，财产累积亦同。', en:'Home and property carry {kw}; asset growth follows that pattern.' },
+  '福德': { tw:'內心世界與興趣偏好走 {kw} 路線，精神能量在此。', cn:'内心世界与兴趣偏好走 {kw} 路线，精神能量在此。', en:'Inner world and hobbies lean {kw}; this is where the spirit lives.' },
+  '父母': { tw:'父母、長輩、上司緣分帶有 {kw} 的特質。', cn:'父母、长辈、上司缘分带有 {kw} 的特质。', en:'Parents, elders and superiors carry {kw}.' },
+};
+
+const PATTERNS = [
+  {
+    id:'ziwei_tianfu_tonggong',
+    name: { tw:'紫府同宮', cn:'紫府同宫', en:'Ziwei-Tianfu Conjunction' },
+    badge: 'good',
+    desc: { tw:'紫微與天府同坐命宮（限寅、申宮）。帝王配庫房，主一生格局大、有領導又有財，安穩中見尊貴。', cn:'紫微与天府同坐命宫（限寅、申宫）。帝王配库房，主一生格局大、有领导又有财，安稳中见尊贵。', en:'Ziwei and Tianfu share Soul Palace (only in Yin/Shen). Emperor with Treasury — large-scale life, leadership and wealth, dignified stability.' },
+    check: (p) => p.name === '命宮' && hasStar(p, '紫微') && hasStar(p, '天府'),
+  },
+  {
+    id:'ziwei_xianggong',
+    name: { tw:'紫府朝垣 / 君臣慶會', cn:'紫府朝垣 / 君臣庆会', en:'Imperial Audience' },
+    badge: 'good',
+    desc: { tw:'紫微在命，三方四正有天府、左輔、右弼、文昌、文曲拱照。主一生有貴人扶持、能成大業。', cn:'紫微在命，三方四正有天府、左辅、右弼、文昌、文曲拱照。主一生有贵人扶持、能成大业。', en:'Ziwei in Soul Palace surrounded by Tianfu, Zuofu, Youbi, Wenchang, Wenqu in triad. Lifelong benefactors and capacity for great achievement.' },
+    check: (p, all) => p.name === '命宮' && hasStar(p, '紫微') && countSurroundingStars(p, all, ['左輔','右弼','文昌','文曲','天府']) >= 2,
+  },
+  {
+    id:'shapowolang',
+    name: { tw:'殺破狼', cn:'杀破狼', en:'Sha-Po-Lang (Warrior-Pioneer-Wolf)' },
+    badge: 'neutral',
+    desc: { tw:'七殺、破軍、貪狼三星互成三合，命局必走動盪變革之路。一生大起大落、適合主動開創，最忌求穩。', cn:'七杀、破军、贪狼三星互成三合，命局必走动荡变革之路。一生大起大落、适合主动开创，最忌求稳。', en:'Qisha, Pojun, Tanlang form a trine. A life of upheaval and transformation — big swings, suited to active venture. Static safety is its worst trap.' },
+    check: (p, all) => {
+      if (p.name !== '命宮') return false;
+      const triad = [p, all[(p._idx + 4) % 12], all[(p._idx + 8) % 12]];
+      const stars = new Set();
+      triad.forEach(q => (q.majorStars || []).forEach(s => stars.add(s.name)));
+      return stars.has('七殺') && stars.has('破軍') && stars.has('貪狼');
+    },
+  },
+  {
+    id:'jiyuetongliang',
+    name: { tw:'機月同梁', cn:'机月同梁', en:'Tianji-Taiyin-Tiantong-Tianliang' },
+    badge: 'good',
+    desc: { tw:'天機、太陰、天同、天梁四星互照命宮。主溫和踏實型，適合公職、教育、研究、行政等穩定發展的工作。', cn:'天机、太阴、天同、天梁四星互照命宫。主温和踏实型，适合公职、教育、研究、行政等稳定发展的工作。', en:'Tianji, Taiyin, Tiantong, Tianliang surround the Soul Palace. Gentle, grounded type — suits civil service, education, research, administration.' },
+    check: (p, all) => {
+      if (p.name !== '命宮') return false;
+      const triad = [p, all[(p._idx + 4) % 12], all[(p._idx + 8) % 12], all[(p._idx + 6) % 12]];
+      const stars = new Set();
+      triad.forEach(q => (q.majorStars || []).forEach(s => stars.add(s.name)));
+      let hit = 0;
+      ['天機','太陰','天同','天梁'].forEach(n => { if (stars.has(n)) hit++; });
+      return hit >= 3;
+    },
+  },
+  {
+    id:'wuqu_tanlang',
+    name: { tw:'武貪同行 / 武貪格', cn:'武贪同行 / 武贪格', en:'Wuqu-Tanlang' },
+    badge: 'good',
+    desc: { tw:'武曲與貪狼相會（同宮或三方）。財將軍配多才欲望，主中晚年發跡，常見「先困後發」的命格。', cn:'武曲与贪狼相会（同宫或三方）。财将军配多才欲望，主中晚年发迹，常见「先困后发」的命格。', en:'Wuqu meets Tanlang (conjunction or trine). Wealth-General with multi-talent desire — typically a "late bloom after hardship" pattern.' },
+    check: (p, all) => {
+      if (p.name !== '命宮') return false;
+      const triad = [p, all[(p._idx + 4) % 12], all[(p._idx + 8) % 12]];
+      const stars = new Set();
+      triad.forEach(q => (q.majorStars || []).forEach(s => stars.add(s.name)));
+      return stars.has('武曲') && stars.has('貪狼');
+    },
+  },
+  {
+    id:'no_major_in_soul',
+    name: { tw:'命無主星', cn:'命无主星', en:'Vacant Soul Palace' },
+    badge: 'neutral',
+    desc: { tw:'命宮無十四主星坐守，借對宮（遷移宮）論命。本性不固定、隨環境變化大，適應力強但自我較難定位。', cn:'命宫无十四主星坐守，借对宫（迁移宫）论命。本性不固定、随环境变化大，适应力强但自我较难定位。', en:'Soul Palace has no main star. Read via the Travel palace. Identity is fluid, highly adaptive but harder to anchor a sense of self.' },
+    check: (p) => p.name === '命宮' && (!p.majorStars || p.majorStars.length === 0),
+  },
+];
+
+function hasStar(palace, starName) {
+  return (palace.majorStars || []).some(s => s.name === starName);
+}
+function countSurroundingStars(palace, all, names) {
+  const idx = palace._idx;
+  const surrounding = [all[(idx + 4) % 12], all[(idx + 8) % 12], all[(idx + 6) % 12]];
+  let n = 0;
+  surrounding.forEach(p => {
+    const ms = (p.majorStars || []).concat(p.minorStars || []);
+    ms.forEach(s => { if (names.includes(s.name)) n++; });
+  });
+  return n;
+}
+
+function trStar(name) {
+  if (STAR_T[name]) return STAR_T[name][state.lang];
+  return name;
+}
+function trPalace(name) {
+  if (PALACE_T[name]) return PALACE_T[name][state.lang];
+  return name;
+}
+function trMutagen(name) {
+  if (MUTAGEN_T[name]) return MUTAGEN_T[name][state.lang];
+  return name;
+}
 
 let state = { lang: 'tw', input: null, astro: null, selectedIdx: null };
 
@@ -481,15 +892,15 @@ function calculate() {
   state.input = i;
   state.selectedIdx = null;
   try {
-    const lang = LANG_MAP[state.lang];
     let astro;
     if (i.cal === 'solar') {
       const dateStr = `${i.y}-${i.m}-${i.d}`;
-      astro = iztro.astro.astrolabeBySolarDate(dateStr, i.hi, i.g, true, lang);
+      astro = iztro.astro.astrolabeBySolarDate(dateStr, i.hi, i.g, true, 'zh-TW');
     } else {
       const dateStr = `${i.y}-${i.m}-${i.d}`;
-      astro = iztro.astro.astrolabeByLunarDate(dateStr, i.hi, i.g, i.leap, true, lang);
+      astro = iztro.astro.astrolabeByLunarDate(dateStr, i.hi, i.g, i.leap, true, 'zh-TW');
     }
+    astro.palaces.forEach((p, idx) => { p._idx = idx; });
     state.astro = astro;
     render();
   } catch (e) {
@@ -511,6 +922,10 @@ function render() {
 
   renderSummary(a, horo);
   renderChart(a, horo);
+  renderSoulAnalysis(a);
+  renderPalaceWalk(a);
+  renderHoroAnalysis(a, horo);
+  renderPatterns(a);
 }
 
 function renderSummary(a, horo) {
@@ -518,7 +933,7 @@ function renderSummary(a, horo) {
     { lab: t('sumSolar'), val: a.solarDate + ' <span class="small">' + (a.time || '') + '</span>' },
     { lab: t('sumLunar'), val: a.lunarDate },
     { lab: t('sumChinese'), val: a.chineseDate },
-    { lab: t('sumSoul') + ' / ' + t('sumBody'), val: `${a.soul} / ${a.body}` },
+    { lab: t('sumSoul') + ' / ' + t('sumBody'), val: `${trStar(a.soul)} / ${trStar(a.body)}` },
     { lab: t('sumFive'), val: a.fiveElementsClass },
     { lab: t('sumSign') + ' / ' + t('sumZodiac'), val: `${a.sign} · ${a.zodiac}` },
   ];
@@ -569,7 +984,7 @@ function renderChart(a, horo) {
         <div class="ages">${decRange ? decRange + t('ageRange') + ' · ' : ''}${ages}</div>
         <div class="footer">
           <span class="hsb">${p.heavenlyStem}${p.earthlyBranch}</span>
-          <span class="pname">${p.name}</span>
+          <span class="pname">${trPalace(p.name)}</span>
         </div>
       </div>`);
   });
@@ -579,7 +994,7 @@ function renderChart(a, horo) {
   let centerHtml = `
     <div class="name">✦ ${t('title')}</div>
     <div class="row"><span class="lab">${t('sumChinese')}</span><span class="val">${a.chineseDate}</span></div>
-    <div class="row"><span class="lab">${t('sumSoul')}</span><span class="val">${a.soul} · ${a.body}</span></div>
+    <div class="row"><span class="lab">${t('sumSoul')}</span><span class="val">${trStar(a.soul)} · ${trStar(a.body)}</span></div>
     <div class="row"><span class="lab">${t('sumFive')}</span><span class="val">${a.fiveElementsClass}</span></div>
     <div class="row"><span class="lab">${t('sumSign')}</span><span class="val">${a.sign} · ${a.zodiac}</span></div>
     <div class="row"><span class="lab">${t('sumGender')}</span><span class="val">${a.gender}</span></div>`;
@@ -591,7 +1006,7 @@ function renderChart(a, horo) {
   const sel = state.selectedIdx;
   if (sel != null) {
     const sp = a.palaces[sel];
-    centerHtml += `<div class="selection">${t('selectedTpl').replace('{name}', sp.name).replace('{eb}', sp.heavenlyStem + sp.earthlyBranch)}</div>`;
+    centerHtml += `<div class="selection">${t('selectedTpl').replace('{name}', trPalace(sp.name)).replace('{eb}', sp.heavenlyStem + sp.earthlyBranch)}</div>`;
   } else {
     centerHtml += `<div class="selection hint">${t('selectHint')}</div>`;
   }
@@ -607,6 +1022,171 @@ function renderChart(a, horo) {
       render();
     });
   });
+}
+
+function renderSoulAnalysis(a) {
+  const el = document.getElementById('anaSoul');
+  if (!el) return;
+  const soulPal = a.palaces.find(p => p.name === '命宮');
+  const lang = state.lang;
+  const majors = (soulPal && soulPal.majorStars) || [];
+  const cards = [];
+  if (majors.length === 0) {
+    cards.push(`
+      <div class="soul-card empty">
+        <div class="star-name">${t('soulEmptyTitle')}</div>
+        <div class="star-sect"><span class="txt">${t('soulEmptyBody')}</span></div>
+      </div>`);
+    const oppPal = a.palaces[(soulPal._idx + 6) % 12];
+    (oppPal.majorStars || []).forEach(s => {
+      const prof = MAJOR_STAR_PROFILE[s.name];
+      if (!prof) return;
+      const br = s.brightness ? `<span class="br">${s.brightness}</span>` : '';
+      cards.push(`
+        <div class="soul-card">
+          <div class="star-name">${trStar(s.name)}${br}</div>
+          <div class="star-nature">${prof.nature[lang]}</div>
+          <div class="star-sect"><span class="lab">${t('secStrength')}</span><span class="txt">${prof.strength[lang]}</span></div>
+          <div class="star-sect"><span class="lab">${t('secBlindspot')}</span><span class="txt">${prof.blindspot[lang]}</span></div>
+          <div class="star-sect"><span class="lab">${t('secPath')}</span><span class="txt">${prof.path[lang]}</span></div>
+        </div>`);
+    });
+  } else {
+    majors.forEach(s => {
+      const prof = MAJOR_STAR_PROFILE[s.name];
+      if (!prof) return;
+      const br = s.brightness ? `<span class="br">${s.brightness}</span>` : '';
+      const mt = s.mutagen;
+      const mutClass = mt && MUTAGEN_CLASS[mt];
+      const mutLabel = mt && MUTAGEN_LABEL[mt];
+      const mutHtml = (mt && mutClass) ? ` <span class="mut ${mutClass}">${mutLabel}</span>` : '';
+      cards.push(`
+        <div class="soul-card">
+          <div class="star-name">${trStar(s.name)}${br}${mutHtml}</div>
+          <div class="star-nature">${prof.nature[lang]}</div>
+          <div class="star-sect"><span class="lab">${t('secStrength')}</span><span class="txt">${prof.strength[lang]}</span></div>
+          <div class="star-sect"><span class="lab">${t('secBlindspot')}</span><span class="txt">${prof.blindspot[lang]}</span></div>
+          <div class="star-sect"><span class="lab">${t('secPath')}</span><span class="txt">${prof.path[lang]}</span></div>
+        </div>`);
+    });
+  }
+  el.innerHTML = cards.join('');
+}
+
+const PALACE_ORDER = ['命宮','兄弟','夫妻','子女','財帛','疾厄','遷移','僕役','官祿','田宅','福德','父母'];
+
+function renderPalaceWalk(a) {
+  const el = document.getElementById('anaWalk');
+  if (!el) return;
+  const lang = state.lang;
+  const html = PALACE_ORDER.map(pname => {
+    const p = a.palaces.find(q => q.name === pname);
+    if (!p) return '';
+    const theme = (PALACE_THEME_DESC[pname] || {})[lang] || '';
+    const majors = p.majorStars || [];
+    let starsHtml, narr;
+    if (majors.length === 0) {
+      starsHtml = `<span class="s empty">${t('palaceEmpty')}</span>`;
+      narr = theme;
+    } else {
+      starsHtml = majors.map(s => {
+        const br = s.brightness ? `<span class="br">${s.brightness}</span>` : '';
+        return `<span class="s">${trStar(s.name)}${br}</span>`;
+      }).join(' ');
+      const sep = lang === 'en' ? '; ' : '、';
+      const kwList = majors.map(s => (STAR_KEYWORDS[s.name] || { [lang]: s.name })[lang]).join(sep);
+      const hint = (PALACE_STAR_HINT[pname] || { [lang]: '' })[lang].replace('{kw}', kwList);
+      narr = `${theme} ${hint}`;
+    }
+    return `
+      <div class="pw-card">
+        <div class="pw-head">
+          <span class="pw-name">${trPalace(pname)}</span>
+          <span class="pw-eb">${p.heavenlyStem}${p.earthlyBranch}</span>
+        </div>
+        <div class="pw-stars">${starsHtml}</div>
+        <div class="pw-narr">${narr}</div>
+      </div>`;
+  }).join('');
+  el.innerHTML = html;
+}
+
+function renderHoroAnalysis(a, horo) {
+  const el = document.getElementById('anaHoro');
+  if (!el) return;
+  if (!horo) { el.innerHTML = ''; return; }
+  const lang = state.lang;
+  const cards = [];
+
+  const buildCard = (kind, info) => {
+    const pal = a.palaces[info.index];
+    if (!pal) return '';
+    const palName = pal.name;
+    const palDisp = trPalace(palName);
+    const theme = (PALACE_THEME_DESC[palName] || { [lang]: '' })[lang];
+    const majors = pal.majorStars || [];
+    const starSep = lang === 'en' ? ', ' : '、';
+    const starsList = majors.length
+      ? majors.map(s => trStar(s.name)).join(starSep)
+      : t('palaceEmpty');
+    const tpl = kind === 'decadal' ? t('horoDecadeNarrTpl') : t('horoYearNarrTpl');
+    const meta = kind === 'yearly' ? t('yearlyYearLab').replace('{year}', new Date().getFullYear()) : '';
+    const headline = tpl
+      .replace('{palace}', palDisp)
+      .replace('{stars}', starsList)
+      .replace('{theme}', theme)
+      .replace('{year}', new Date().getFullYear());
+    const muts = info.mutagen || [];
+    const tagFor = (n) => {
+      const labels = ['lu','quan','ke','ji'];
+      const names = MUTAGEN_LABEL;
+      const code = ['祿','權','科','忌'][n];
+      return `<span class="tag ${labels[n]}">${(MUTAGEN_T[code] || { [lang]: code })[lang]}</span>`;
+    };
+    let mutHtml = '';
+    if (muts.length) {
+      const period = kind === 'decadal' ? t('decadalLab') : t('yearlyLab');
+      const items = muts.map((star, i) => `${tagFor(i)} <b>${trStar(star)}</b>`).join('　');
+      mutHtml = `<div class="hc-mut">${t('horoMutLab').replace('{period}', period)}： ${items}</div>`;
+    }
+    const stemBranch = `${info.heavenlyStem || ''}${info.earthlyBranch || ''}`;
+    return `
+      <div class="horo-card ${kind}">
+        <div class="hc-head">
+          <span class="hc-lab">${kind === 'decadal' ? t('decadalLab') : t('yearlyLab')} · ${stemBranch}</span>
+          <span class="hc-meta">${meta}</span>
+        </div>
+        <div class="hc-headline">${headline}</div>
+        ${mutHtml}
+      </div>`;
+  };
+
+  cards.push(buildCard('decadal', horo.decadal));
+  cards.push(buildCard('yearly', horo.yearly));
+  el.innerHTML = cards.join('');
+}
+
+function renderPatterns(a) {
+  const el = document.getElementById('anaPat');
+  if (!el) return;
+  const lang = state.lang;
+  const soulPal = a.palaces.find(p => p.name === '命宮');
+  if (!soulPal) { el.innerHTML = `<div class="pat-card"><div class="pat-body">${t('patEmpty')}</div></div>`; return; }
+  const matched = PATTERNS.filter(pat => {
+    try { return pat.check(soulPal, a.palaces); } catch (e) { return false; }
+  });
+  if (matched.length === 0) {
+    el.innerHTML = `<div class="pat-card"><div class="pat-body">${t('patEmpty')}</div></div>`;
+    return;
+  }
+  el.innerHTML = matched.map(pat => {
+    const badgeLab = pat.badge === 'good' ? t('badgeGood') : pat.badge === 'warn' ? t('badgeWarn') : t('badgeNeutral');
+    return `
+      <div class="pat-card">
+        <div class="pat-name">${pat.name[lang]}<span class="badge ${pat.badge}">${badgeLab}</span></div>
+        <div class="pat-body">${pat.desc[lang]}</div>
+      </div>`;
+  }).join('');
 }
 
 function starHtml(s, klass) {
