@@ -336,13 +336,20 @@
 <div class="modal-overlay" id="paywallModal">
   <div class="modal">
     <button class="x-close" onclick="closePaywall()">×</button>
-    <h2 data-i18n="paywallTitle">深度解讀需付費解鎖</h2>
-    <p data-i18n="paywallBody">基本牌義永久免費。深度解讀（位置脈絡、對位關係、整體綜觀）需要 1 點解鎖一次完整占卜。</p>
+    <h2 data-i18n="paywallTitle">點數不足</h2>
+    <p data-i18n="paywallBody">深度解讀需要 1 點。你目前沒有點數。</p>
     <p data-i18n="paywallSoon">付費系統開發中。即將支援 Stripe（信用卡 / 微信支付 / 支付寶）。</p>
     <p data-i18n="paywallDev" style="color:var(--text-dim);font-size:12px">開發者：網址加 <code style="background:rgba(212,175,55,0.1);padding:1px 6px;border-radius:4px;color:var(--gold)">?premium=1</code> 可預覽完整版。</p>
     <div class="modal-actions">
       <button class="acct-btn" onclick="closePaywall()" data-i18n="paywallClose">先看看</button>
     </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="acctModal">
+  <div class="modal">
+    <button class="x-close" onclick="closeAccountModal()">×</button>
+    <div id="acctModalBody"></div>
   </div>
 </div>
 
@@ -394,11 +401,23 @@ const I18N = {
     lockedSynthTeaser: '阿卡那比例、主導花色、逆位分析與整體建議。',
     unlockOne: '1 點解鎖此局',
     unlockHint: '解鎖',
-    paywallTitle: '深度解讀需付費解鎖',
-    paywallBody: '基本牌義永久免費。深度解讀（位置脈絡、對位關係、整體綜觀）需要 1 點解鎖一次完整占卜。',
+    paywallTitle: '點數不足',
+    paywallBody: '深度解讀需要 1 點。你目前沒有點數。',
     paywallSoon: '付費系統開發中。即將支援 Stripe（信用卡 / 微信支付 / 支付寶）。',
     paywallDev: '開發者：網址加 <code style="background:rgba(212,175,55,0.1);padding:1px 6px;border-radius:4px;color:var(--gold)">?premium=1</code> 可預覽完整版。',
     paywallClose: '先看看',
+    acctLoginTitle: '登入 / 註冊',
+    acctLoginBody: '用信箱建立帳號，點數會在三個 widget 共用。',
+    acctLoginBtn: '送出',
+    acctEmailPh: '你的信箱',
+    acctEmailErr: '請輸入有效的信箱地址',
+    acctFirstBonus: '首次註冊送 1 點，可立即解鎖一次完整解讀。',
+    acctStubNote: '開發中：目前只儲存在你的瀏覽器，不會寄信。',
+    acctMemberTitle: '我的帳號',
+    acctEmailLab: '信箱',
+    acctCreditsLab: '剩餘點數',
+    acctBuyNote: '購買點數即將開放（Stripe / 微信支付 / 支付寶）。',
+    acctLogout: '登出',
   },
   cn: {
     title: '塔罗占卜',
@@ -446,11 +465,23 @@ const I18N = {
     lockedSynthTeaser: '阿卡那比例、主导花色、逆位分析与整体建议。',
     unlockOne: '1 点解锁此局',
     unlockHint: '解锁',
-    paywallTitle: '深度解读需付费解锁',
-    paywallBody: '基本牌义永久免费。深度解读（位置脉络、对位关系、整体综观）需要 1 点解锁一次完整占卜。',
+    paywallTitle: '点数不足',
+    paywallBody: '深度解读需要 1 点。你目前没有点数。',
     paywallSoon: '付费系统开发中。即将支持 Stripe（信用卡 / 微信支付 / 支付宝）。',
     paywallDev: '开发者：网址加 <code style="background:rgba(212,175,55,0.1);padding:1px 6px;border-radius:4px;color:var(--gold)">?premium=1</code> 可预览完整版。',
     paywallClose: '先看看',
+    acctLoginTitle: '登入 / 注册',
+    acctLoginBody: '用信箱建立帐号，点数会在三个 widget 共用。',
+    acctLoginBtn: '送出',
+    acctEmailPh: '你的信箱',
+    acctEmailErr: '请输入有效的信箱地址',
+    acctFirstBonus: '首次注册送 1 点，可立即解锁一次完整解读。',
+    acctStubNote: '开发中：目前只储存在你的浏览器，不会寄信。',
+    acctMemberTitle: '我的帐号',
+    acctEmailLab: '信箱',
+    acctCreditsLab: '剩余点数',
+    acctBuyNote: '购买点数即将开放（Stripe / 微信支付 / 支付宝）。',
+    acctLogout: '登出',
   },
   en: {
     title: 'Tarot Reading',
@@ -498,11 +529,23 @@ const I18N = {
     lockedSynthTeaser: 'Arcana mix, dominant suit, reversed ratio, and overall counsel.',
     unlockOne: 'Unlock for 1 credit',
     unlockHint: 'Unlock',
-    paywallTitle: 'Premium reading required',
-    paywallBody: 'Basic card meanings are always free. Premium analysis (position lens, paired dynamics, overall synthesis) costs 1 credit per full reading.',
+    paywallTitle: 'No credits left',
+    paywallBody: 'Premium reading costs 1 credit. You have none.',
     paywallSoon: 'Payment system is in the works. Coming soon with Stripe (cards / WeChat Pay / Alipay).',
     paywallDev: 'For devs: append <code style="background:rgba(212,175,55,0.1);padding:1px 6px;border-radius:4px;color:var(--gold)">?premium=1</code> to the URL to preview the full version.',
     paywallClose: 'Maybe later',
+    acctLoginTitle: 'Sign in / sign up',
+    acctLoginBody: 'Create an account with your email — credits are shared across all three widgets.',
+    acctLoginBtn: 'Submit',
+    acctEmailPh: 'Your email',
+    acctEmailErr: 'Please enter a valid email address',
+    acctFirstBonus: 'First sign-up grants 1 free credit — enough for one full reading.',
+    acctStubNote: 'Dev preview: stored only in your browser. No email is sent.',
+    acctMemberTitle: 'My account',
+    acctEmailLab: 'Email',
+    acctCreditsLab: 'Credits',
+    acctBuyNote: 'Credit packs coming soon (Stripe / WeChat Pay / Alipay).',
+    acctLogout: 'Sign out',
   },
 };
 
@@ -860,27 +903,111 @@ const DECK = [
     rev:{kw:{tw:'貪婪·保守·物質至上',cn:'贪婪·保守·物质至上',en:'Greedy · overly conservative · material-obsessed'}, body:{tw:'錢變成了目的不是工具。檢查你的初心。',cn:'钱变成了目的不是工具。检查你的初心。',en:'Money has become the goal, not the tool. Check your original intent.'}}},
 ];
 
+function loadUser() {
+  try { return JSON.parse(localStorage.getItem('fatism_user') || 'null'); } catch (e) { return null; }
+}
+
 let state = {
   lang: 'tw',
   spread: 'three',
   drawn: [],
   revealed: 0,
-  premium: (new URLSearchParams(location.search).get('premium') === '1'),
+  user: loadUser(),
   credits: parseInt(localStorage.getItem('fatism_credits') || '0', 10),
+  sessionUnlocked: false,
 };
 
-function isPremium() { return state.premium; }
+function isLoggedIn() { return !!state.user; }
+function isPremium() {
+  const urlOverride = (new URLSearchParams(location.search).get('premium') === '1');
+  return urlOverride || state.sessionUnlocked;
+}
 
 function openPaywall() { document.getElementById('paywallModal').classList.add('open'); }
 function closePaywall() { document.getElementById('paywallModal').classList.remove('open'); }
+function openAccountModal() { renderAccountModal(); document.getElementById('acctModal').classList.add('open'); }
+function closeAccountModal() { document.getElementById('acctModal').classList.remove('open'); }
+
+function login(email) {
+  email = (email || '').trim().toLowerCase();
+  if (!email || !email.includes('@') || email.length < 5) return false;
+  const isFirstTime = !state.user;
+  state.user = { email };
+  localStorage.setItem('fatism_user', JSON.stringify(state.user));
+  if (isFirstTime && state.credits === 0) {
+    state.credits = 1;
+    localStorage.setItem('fatism_credits', '1');
+  }
+  renderAccountBar();
+  renderAccountModal();
+  return true;
+}
+
+function logout() {
+  state.user = null;
+  localStorage.removeItem('fatism_user');
+  state.sessionUnlocked = false;
+  renderAccountBar();
+  renderAccountModal();
+}
+
+function spendCredit() {
+  if (state.credits < 1) return false;
+  state.credits -= 1;
+  localStorage.setItem('fatism_credits', String(state.credits));
+  state.sessionUnlocked = true;
+  return true;
+}
+
+function tryUnlock() {
+  if (isPremium()) return;
+  if (!isLoggedIn()) { openAccountModal(); return; }
+  if (state.credits < 1) { openPaywall(); return; }
+  spendCredit();
+  renderAccountBar();
+  applyI18n();
+}
+
+function handleLoginSubmit() {
+  const v = document.getElementById('acctEmailInput').value;
+  if (!login(v)) alert(t('acctEmailErr'));
+}
 
 function renderAccountBar() {
   const cEl = document.getElementById('acctCredits');
   if (cEl) cEl.textContent = state.credits + ' ' + t('creditsUnit');
   const btn = document.getElementById('acctBtn');
-  if (btn) btn.textContent = state.premium ? t('acctMember') : t('acctLogin');
+  if (btn) btn.textContent = isLoggedIn() ? t('acctMember') : t('acctLogin');
   const hint = document.getElementById('devHint');
-  if (hint) hint.style.display = state.premium ? 'none' : '';
+  if (hint) hint.style.display = isPremium() ? 'none' : '';
+}
+
+function renderAccountModal() {
+  const body = document.getElementById('acctModalBody');
+  if (!body) return;
+  if (isLoggedIn()) {
+    body.innerHTML = `
+      <h2>${t('acctMemberTitle')}</h2>
+      <p>${t('acctEmailLab')}: <strong style="color:var(--gold)">${state.user.email}</strong></p>
+      <p>${t('acctCreditsLab')}: <strong style="color:var(--gold)">${state.credits} ${t('creditsUnit')}</strong></p>
+      <p style="color:var(--text-dim);font-size:12px">${t('acctBuyNote')}</p>
+      <div class="modal-actions">
+        <button class="acct-btn" onclick="logout()">${t('acctLogout')}</button>
+        <button class="acct-btn primary" onclick="closeAccountModal()">${t('paywallClose')}</button>
+      </div>`;
+  } else {
+    body.innerHTML = `
+      <h2>${t('acctLoginTitle')}</h2>
+      <p>${t('acctLoginBody')}</p>
+      <input id="acctEmailInput" type="email" placeholder="${t('acctEmailPh')}" style="width:100%;padding:10px 12px;background:rgba(0,0,0,0.3);border:1px solid var(--gold-dim);border-radius:8px;color:var(--text);font-family:inherit;font-size:14px;margin:10px 0 4px" />
+      <p style="color:var(--text-dim);font-size:11px;margin:6px 0 2px">${t('acctFirstBonus')}</p>
+      <p style="color:var(--text-dim);font-size:11px;margin-top:2px">${t('acctStubNote')}</p>
+      <div class="modal-actions">
+        <button class="acct-btn" onclick="closeAccountModal()">${t('paywallClose')}</button>
+        <button class="acct-btn primary" onclick="handleLoginSubmit()">${t('acctLoginBtn')}</button>
+      </div>`;
+    setTimeout(() => { const e = document.getElementById('acctEmailInput'); if (e) { e.focus(); e.addEventListener('keydown', ev => { if (ev.key === 'Enter') handleLoginSubmit(); }); } }, 50);
+  }
 }
 
 function lockedSection(titleKey, teaserKey) {
@@ -888,14 +1015,14 @@ function lockedSection(titleKey, teaserKey) {
     <div class="lock-ico">🔒</div>
     <div class="lock-title">${t(titleKey)}</div>
     <div class="lock-teaser">${t(teaserKey)}</div>
-    <button class="unlock-btn" onclick="openPaywall()">${t('unlockOne')}</button>
+    <button class="unlock-btn" onclick="tryUnlock()">${t('unlockOne')}</button>
   </div>`;
 }
 
 function lockedInlineBlock(titleKey) {
   return `<div class="interp-block locked">
     <div class="interp-block-lab">${t(titleKey)}</div>
-    <div class="interp-block-body"><span>🔒</span> <span class="lock-pill" onclick="openPaywall()">${t('unlockHint')} · 1 ${t('creditsUnit')}</span></div>
+    <div class="interp-block-body"><span>🔒</span> <span class="lock-pill" onclick="tryUnlock()">${t('unlockHint')} · 1 ${t('creditsUnit')}</span></div>
   </div>`;
 }
 
@@ -1156,9 +1283,12 @@ document.getElementById('langSwitch').addEventListener('click', (e) => {
 });
 document.getElementById('drawBtn').addEventListener('click', draw);
 document.getElementById('resetBtn').addEventListener('click', () => { reset(); });
-document.getElementById('acctBtn').addEventListener('click', openPaywall);
+document.getElementById('acctBtn').addEventListener('click', openAccountModal);
 document.getElementById('paywallModal').addEventListener('click', (e) => {
   if (e.target.id === 'paywallModal') closePaywall();
+});
+document.getElementById('acctModal').addEventListener('click', (e) => {
+  if (e.target.id === 'acctModal') closeAccountModal();
 });
 
 applyI18n();

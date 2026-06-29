@@ -457,13 +457,20 @@
 <div class="modal-overlay" id="paywallModal">
   <div class="modal">
     <button class="x-close" onclick="closePaywall()">×</button>
-    <h2 data-i18n="paywallTitle">深度解讀需付費解鎖</h2>
-    <p data-i18n="paywallBody">免費版顯示完整 12 宮排盤。深度解析（命宮深度、12 宮逐宮、當前運勢、格局判讀）需要 1 點解鎖。</p>
+    <h2 data-i18n="paywallTitle">點數不足</h2>
+    <p data-i18n="paywallBody">深度解讀需要 1 點。你目前沒有點數。</p>
     <p data-i18n="paywallSoon">付費系統開發中。即將支援 Stripe（信用卡 / 微信支付 / 支付寶）。</p>
     <p data-i18n="paywallDev" style="color:var(--text-dim);font-size:12px">開發者：網址加 <code style="background:rgba(212,175,55,0.1);padding:1px 6px;border-radius:4px;color:var(--gold)">?premium=1</code> 可預覽完整版。</p>
     <div class="modal-actions">
       <button class="acct-btn" onclick="closePaywall()" data-i18n="paywallClose">先看看</button>
     </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="acctModal">
+  <div class="modal">
+    <button class="x-close" onclick="closeAccountModal()">×</button>
+    <div id="acctModalBody"></div>
   </div>
 </div>
 
@@ -513,11 +520,23 @@ const I18N = {
     lockedHoroTeaser:'你目前所在的大限與流年 — 含化祿/化權/化科/化忌四化分析。',
     lockedPatTitle:'格局判讀 · 深度版',
     lockedPatTeaser:'紫府同宮、機月同梁、武府相、殺破狼等經典格局自動檢測。',
-    paywallTitle:'深度解讀需付費解鎖',
-    paywallBody:'免費版顯示完整 12 宮排盤。深度解析（命宮深度、12 宮逐宮、當前運勢、格局判讀）需要 1 點解鎖。',
+    paywallTitle:'點數不足',
+    paywallBody:'深度解讀需要 1 點。你目前沒有點數。',
     paywallSoon:'付費系統開發中。即將支援 Stripe（信用卡 / 微信支付 / 支付寶）。',
     paywallDev:'開發者：網址加 <code style="background:rgba(212,175,55,0.1);padding:1px 6px;border-radius:4px;color:var(--gold)">?premium=1</code> 可預覽完整版。',
     paywallClose:'先看看',
+    acctLoginTitle:'登入 / 註冊',
+    acctLoginBody:'用信箱建立帳號，點數會在三個 widget 共用。',
+    acctLoginBtn:'送出',
+    acctEmailPh:'你的信箱',
+    acctEmailErr:'請輸入有效的信箱地址',
+    acctFirstBonus:'首次註冊送 1 點，可立即解鎖一次完整星盤。',
+    acctStubNote:'開發中：目前只儲存在你的瀏覽器，不會寄信。',
+    acctMemberTitle:'我的帳號',
+    acctEmailLab:'信箱',
+    acctCreditsLab:'剩餘點數',
+    acctBuyNote:'購買點數即將開放（Stripe / 微信支付 / 支付寶）。',
+    acctLogout:'登出',
   },
   cn: {
     title:'紫微斗数', intro:'紫微斗数以十四主星配十二宫位，演绎一生命运格局。输入正确的出生时间，看见你的星盘。',
@@ -563,11 +582,23 @@ const I18N = {
     lockedHoroTeaser:'你目前所在的大限与流年 — 含化禄/化权/化科/化忌四化分析。',
     lockedPatTitle:'格局判读 · 深度版',
     lockedPatTeaser:'紫府同宫、机月同梁、武府相、杀破狼等经典格局自动检测。',
-    paywallTitle:'深度解读需付费解锁',
-    paywallBody:'免费版显示完整 12 宫排盘。深度解析（命宫深度、12 宫逐宫、当前运势、格局判读）需要 1 点解锁。',
+    paywallTitle:'点数不足',
+    paywallBody:'深度解读需要 1 点。你目前没有点数。',
     paywallSoon:'付费系统开发中。即将支持 Stripe（信用卡 / 微信支付 / 支付宝）。',
     paywallDev:'开发者：网址加 <code style="background:rgba(212,175,55,0.1);padding:1px 6px;border-radius:4px;color:var(--gold)">?premium=1</code> 可预览完整版。',
     paywallClose:'先看看',
+    acctLoginTitle:'登入 / 注册',
+    acctLoginBody:'用信箱建立帐号，点数会在三个 widget 共用。',
+    acctLoginBtn:'送出',
+    acctEmailPh:'你的信箱',
+    acctEmailErr:'请输入有效的信箱地址',
+    acctFirstBonus:'首次注册送 1 点，可立即解锁一次完整星盘。',
+    acctStubNote:'开发中：目前只储存在你的浏览器，不会寄信。',
+    acctMemberTitle:'我的帐号',
+    acctEmailLab:'信箱',
+    acctCreditsLab:'剩余点数',
+    acctBuyNote:'购买点数即将开放（Stripe / 微信支付 / 支付宝）。',
+    acctLogout:'登出',
   },
   en: {
     title:'Zi Wei Dou Shu', intro:'Purple Star Astrology arranges 14 major stars across 12 palaces to depict the architecture of a life. Enter your accurate birth time to see the chart.',
@@ -613,11 +644,23 @@ const I18N = {
     lockedHoroTeaser:'Your current decadal and yearly cycle — including the four mutagens (lu/quan/ke/ji) analysis.',
     lockedPatTitle:'Pattern detection · premium',
     lockedPatTeaser:'Auto-detect classical patterns (Zi-Fu, Ji-Yue-Tong-Liang, Wu-Fu-Xiang, Sha-Po-Lang, etc.).',
-    paywallTitle:'Premium reading required',
-    paywallBody:'Free tier: full 12-palace astrolabe. Premium analysis (Soul Palace deep dive, 12-palace walkthrough, current cycle, pattern detection) costs 1 credit.',
+    paywallTitle:'No credits left',
+    paywallBody:'Premium reading costs 1 credit. You have none.',
     paywallSoon:'Payment system in the works. Coming soon with Stripe (cards / WeChat Pay / Alipay).',
     paywallDev:'For devs: append <code style="background:rgba(212,175,55,0.1);padding:1px 6px;border-radius:4px;color:var(--gold)">?premium=1</code> to the URL to preview the full version.',
     paywallClose:'Maybe later',
+    acctLoginTitle:'Sign in / sign up',
+    acctLoginBody:'Create an account with your email — credits are shared across all three widgets.',
+    acctLoginBtn:'Submit',
+    acctEmailPh:'Your email',
+    acctEmailErr:'Please enter a valid email address',
+    acctFirstBonus:'First sign-up grants 1 free credit — enough for one full chart reading.',
+    acctStubNote:'Dev preview: stored only in your browser. No email is sent.',
+    acctMemberTitle:'My account',
+    acctEmailLab:'Email',
+    acctCreditsLab:'Credits',
+    acctBuyNote:'Credit packs coming soon (Stripe / WeChat Pay / Alipay).',
+    acctLogout:'Sign out',
   },
 };
 
@@ -931,23 +974,107 @@ function trMutagen(name) {
   return name;
 }
 
+function loadUser() {
+  try { return JSON.parse(localStorage.getItem('fatism_user') || 'null'); } catch (e) { return null; }
+}
+
 let state = {
   lang: 'tw', input: null, astro: null, selectedIdx: null,
-  premium: (new URLSearchParams(location.search).get('premium') === '1'),
+  user: loadUser(),
   credits: parseInt(localStorage.getItem('fatism_credits') || '0', 10),
+  sessionUnlocked: false,
 };
 
 function t(k) { return I18N[state.lang][k] || k; }
-function isPremium() { return state.premium; }
+function isLoggedIn() { return !!state.user; }
+function isPremium() {
+  const urlOverride = (new URLSearchParams(location.search).get('premium') === '1');
+  return urlOverride || state.sessionUnlocked;
+}
 function openPaywall() { document.getElementById('paywallModal').classList.add('open'); }
 function closePaywall() { document.getElementById('paywallModal').classList.remove('open'); }
+function openAccountModal() { renderAccountModal(); document.getElementById('acctModal').classList.add('open'); }
+function closeAccountModal() { document.getElementById('acctModal').classList.remove('open'); }
+
+function login(email) {
+  email = (email || '').trim().toLowerCase();
+  if (!email || !email.includes('@') || email.length < 5) return false;
+  const isFirstTime = !state.user;
+  state.user = { email };
+  localStorage.setItem('fatism_user', JSON.stringify(state.user));
+  if (isFirstTime && state.credits === 0) {
+    state.credits = 1;
+    localStorage.setItem('fatism_credits', '1');
+  }
+  renderAccountBar();
+  renderAccountModal();
+  return true;
+}
+
+function logout() {
+  state.user = null;
+  localStorage.removeItem('fatism_user');
+  state.sessionUnlocked = false;
+  renderAccountBar();
+  renderAccountModal();
+}
+
+function spendCredit() {
+  if (state.credits < 1) return false;
+  state.credits -= 1;
+  localStorage.setItem('fatism_credits', String(state.credits));
+  state.sessionUnlocked = true;
+  return true;
+}
+
+function tryUnlock() {
+  if (isPremium()) return;
+  if (!isLoggedIn()) { openAccountModal(); return; }
+  if (state.credits < 1) { openPaywall(); return; }
+  spendCredit();
+  renderAccountBar();
+  if (state.input) calculate();
+}
+
+function handleLoginSubmit() {
+  const v = document.getElementById('acctEmailInput').value;
+  if (!login(v)) alert(t('acctEmailErr'));
+}
+
+function renderAccountModal() {
+  const body = document.getElementById('acctModalBody');
+  if (!body) return;
+  if (isLoggedIn()) {
+    body.innerHTML = `
+      <h2>${t('acctMemberTitle')}</h2>
+      <p>${t('acctEmailLab')}: <strong style="color:var(--gold)">${state.user.email}</strong></p>
+      <p>${t('acctCreditsLab')}: <strong style="color:var(--gold)">${state.credits} ${t('creditsUnit')}</strong></p>
+      <p style="color:var(--text-dim);font-size:12px">${t('acctBuyNote')}</p>
+      <div class="modal-actions">
+        <button class="acct-btn" onclick="logout()">${t('acctLogout')}</button>
+        <button class="acct-btn primary" onclick="closeAccountModal()">${t('paywallClose')}</button>
+      </div>`;
+  } else {
+    body.innerHTML = `
+      <h2>${t('acctLoginTitle')}</h2>
+      <p>${t('acctLoginBody')}</p>
+      <input id="acctEmailInput" type="email" placeholder="${t('acctEmailPh')}" style="width:100%;padding:10px 12px;background:rgba(0,0,0,0.3);border:1px solid var(--gold-dim);border-radius:8px;color:var(--text);font-family:inherit;font-size:14px;margin:10px 0 4px" />
+      <p style="color:var(--text-dim);font-size:11px;margin:6px 0 2px">${t('acctFirstBonus')}</p>
+      <p style="color:var(--text-dim);font-size:11px;margin-top:2px">${t('acctStubNote')}</p>
+      <div class="modal-actions">
+        <button class="acct-btn" onclick="closeAccountModal()">${t('paywallClose')}</button>
+        <button class="acct-btn primary" onclick="handleLoginSubmit()">${t('acctLoginBtn')}</button>
+      </div>`;
+    setTimeout(() => { const e = document.getElementById('acctEmailInput'); if (e) { e.focus(); e.addEventListener('keydown', ev => { if (ev.key === 'Enter') handleLoginSubmit(); }); } }, 50);
+  }
+}
 
 function lockedSectionHtml(titleKey, teaserKey) {
   return `<div class="locked-card">
     <div class="lock-ico">🔒</div>
     <div class="lock-title">${t(titleKey)}</div>
     <div class="lock-teaser">${t(teaserKey)}</div>
-    <button class="unlock-btn" onclick="openPaywall()">${t('unlockOne')}</button>
+    <button class="unlock-btn" onclick="tryUnlock()">${t('unlockOne')}</button>
   </div>`;
 }
 
@@ -970,9 +1097,9 @@ function renderAccountBar() {
   const cEl = document.getElementById('acctCredits');
   if (cEl) cEl.textContent = state.credits + ' ' + t('creditsUnit');
   const btn = document.getElementById('acctBtn');
-  if (btn) btn.textContent = state.premium ? t('acctMember') : t('acctLogin');
+  if (btn) btn.textContent = isLoggedIn() ? t('acctMember') : t('acctLogin');
   const hint = document.getElementById('devHint');
-  if (hint) hint.style.display = state.premium ? 'none' : '';
+  if (hint) hint.style.display = isPremium() ? 'none' : '';
 }
 
 function applyI18n() {
@@ -1363,9 +1490,12 @@ function reset() {
 
 document.getElementById('calcBtn').addEventListener('click', calculate);
 document.getElementById('resetBtn').addEventListener('click', reset);
-document.getElementById('acctBtn').addEventListener('click', openPaywall);
+document.getElementById('acctBtn').addEventListener('click', openAccountModal);
 document.getElementById('paywallModal').addEventListener('click', (e) => {
   if (e.target.id === 'paywallModal') closePaywall();
+});
+document.getElementById('acctModal').addEventListener('click', (e) => {
+  if (e.target.id === 'acctModal') closeAccountModal();
 });
 
 initHourSlot();
