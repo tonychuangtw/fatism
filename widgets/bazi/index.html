@@ -181,6 +181,38 @@
   .ana-body b { color: var(--ivory); }
   .ana-meta { color: var(--text-dim); font-size: 12px; margin-top: 6px; }
 
+  .relatives { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
+  .rel-card {
+    background: rgba(0,0,0,0.25); border: 1px solid rgba(212,175,55,0.2);
+    border-radius: 10px; padding: 12px 14px;
+  }
+  .rel-title { color: var(--gold); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px; }
+  .rel-shishen { color: var(--ivory); font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+  .rel-loc { color: var(--text-dim); font-size: 12px; margin-bottom: 6px; }
+  .rel-loc .pos { display: inline-block; padding: 1px 6px; border-radius: 4px; background: rgba(212,175,55,0.12); color: var(--gold); margin-right: 4px; font-size: 11px; }
+  .rel-comment { color: var(--text); font-size: 13px; line-height: 1.6; }
+  .rel-card.absent .rel-shishen { color: var(--text-dim); font-weight: 400; font-style: italic; }
+
+  .domains { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  @media (max-width: 720px) { .domains { grid-template-columns: 1fr; } }
+  .domain-card {
+    background: rgba(0,0,0,0.25); border: 1px solid rgba(212,175,55,0.25);
+    border-radius: 10px; padding: 16px;
+  }
+  .domain-icon { font-size: 28px; margin-bottom: 6px; }
+  .domain-title { color: var(--gold); font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
+  .domain-rating { margin: 4px 0 10px; }
+  .stars { color: var(--gold); letter-spacing: 2px; font-size: 16px; }
+  .stars .dim { color: var(--gold-dim); opacity: 0.4; }
+  .domain-body { color: var(--text); font-size: 13px; line-height: 1.7; }
+
+  .dy-rating { white-space: nowrap; }
+  .dy-rating .stars { font-size: 14px; letter-spacing: 1px; }
+  .dy-score { font-size: 11px; color: var(--text-dim); display: block; margin-top: 2px; }
+  tr.dy-row.bad { background: rgba(214,84,84,0.06); }
+  tr.dy-row.good { background: rgba(74,155,110,0.06); }
+  tr.dy-row.great { background: rgba(212,175,55,0.10); }
+
   footer { text-align: center; margin-top: 40px; color: var(--text-dim); font-size: 13px; }
   .error { color: var(--fire); background: rgba(214,84,84,0.1); border: 1px solid var(--fire); padding: 12px; border-radius: 8px; margin-top: 12px; }
 </style>
@@ -273,6 +305,16 @@
     </div>
 
     <div class="panel">
+      <div class="panel-title" data-i18n="relativesTitle">六親</div>
+      <div class="relatives" id="relativesBody"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title" data-i18n="domainsTitle">事業 · 財運 · 桃花</div>
+      <div class="domains" id="domainsBody"></div>
+    </div>
+
+    <div class="panel">
       <div class="panel-title" data-i18n="daYun">大運（10 年一運）</div>
       <div class="scroll-x">
         <table class="table" id="dyTable"></table>
@@ -324,6 +366,39 @@ const I18N = {
     wxCommentFull:'此命五行最旺為 <span class="tag most">{most}</span>，最弱為 <span class="tag least">{least}</span>。{missingText}',
     wxMissingText:'命局完全缺 <b>{missing}</b>，宜後天補。',
     wxNoMissing:'五行齊備。',
+    relativesTitle:'六親',
+    relFather:'父', relMother:'母', relSiblings:'兄弟姊妹', relSpouse:'配偶', relChildren:'子女',
+    relAbsent:'命中未顯',
+    relAtY:'年柱', relAtM:'月柱', relAtD:'日柱', relAtH:'時柱',
+    relPresentTpl:'出現於 {locs}。{note}',
+    relMultipleTpl:'共 {n} 處顯現，緣分豐厚但需留意取捨。',
+    relSingleTpl:'單顯，緣分專一明確。',
+    relAbsentTpl:'命局未直接顯現，緣分需後天主動經營。',
+    domainsTitle:'事業 · 財運 · 桃花',
+    careerTitle:'事業', wealthTitle:'財運', romanceTitle:'桃花',
+    careerBody:{
+      official:'<b>官殺旺</b>：適合體制內、管理職、軍警公職、需承擔責任的角色。能扛得起壓力。',
+      output:'<b>食傷旺</b>：適合創作、表演、教學、自由業，靠才華與表達吃飯。不適合死板體制。',
+      resource:'<b>印星旺</b>：適合學術、研究、教育、文書類；靠專業知識立足。',
+      peer:'<b>比劫旺</b>：適合創業、合夥、業務、競爭性強的領域，但要學會分潤。',
+      wealth:'<b>財星旺</b>：適合經商、投資、業務、財務管理，重視實質回報。',
+    },
+    wealthBody:{
+      richStrong:'<b>身強財旺</b>：富格，能扛得起財，賺錢守得住。',
+      richWeak:'<b>財多身弱</b>：賺得到但守不住，宜避過度擴張，找穩定環境。',
+      poorStrong:'<b>身強財弱</b>：意志強但財來得辛苦，要避比劫奪財（合夥糾紛）。',
+      poorWeak:'<b>身財俱弱</b>：財運平淡，宜以穩定薪資為主，少投機。',
+      balanced:'<b>財星中和</b>：財運平穩，量入為出即可。',
+    },
+    romanceBody:{
+      manyPeach:'<b>桃花重</b>：異性緣旺，感情選擇多，要小心三角關係與情感消耗。',
+      onePeach:'<b>有桃花</b>：異性緣自然，有正緣機會，宜珍惜。',
+      noPeach:'<b>桃花淡</b>：感情需主動經營，重質不重量。',
+      strongOpposite:'桃花地支 <b>{ch}</b> 出現於命局，神煞顯。',
+      weakOpposite:'命局無明顯桃花神煞。',
+    },
+    daYunRating:'吉凶',
+    rateGreat:'大吉', rateGood:'吉', rateAvg:'平', rateBad:'凶', rateTerrible:'大凶',
     summary:'<b>{name}</b>{gender}命，{solarStr}（農曆 {lunarStr}），日主為 <b>{dayMaster}</b>，五行屬 <b>{dayWx}</b>。',
     errInvalidDate:'日期不合法，請檢查。',
     errLib:'命理函式庫載入失敗，請檢查網路。',
@@ -359,6 +434,39 @@ const I18N = {
     wxCommentFull:'此命五行最旺为 <span class="tag most">{most}</span>，最弱为 <span class="tag least">{least}</span>。{missingText}',
     wxMissingText:'命局完全缺 <b>{missing}</b>，宜后天补。',
     wxNoMissing:'五行齐备。',
+    relativesTitle:'六亲',
+    relFather:'父', relMother:'母', relSiblings:'兄弟姐妹', relSpouse:'配偶', relChildren:'子女',
+    relAbsent:'命中未显',
+    relAtY:'年柱', relAtM:'月柱', relAtD:'日柱', relAtH:'时柱',
+    relPresentTpl:'出现于 {locs}。{note}',
+    relMultipleTpl:'共 {n} 处显现，缘分丰厚但需留意取舍。',
+    relSingleTpl:'单显，缘分专一明确。',
+    relAbsentTpl:'命局未直接显现，缘分需后天主动经营。',
+    domainsTitle:'事业 · 财运 · 桃花',
+    careerTitle:'事业', wealthTitle:'财运', romanceTitle:'桃花',
+    careerBody:{
+      official:'<b>官杀旺</b>：适合体制内、管理职、军警公职、需承担责任的角色。能扛得起压力。',
+      output:'<b>食伤旺</b>：适合创作、表演、教学、自由业，靠才华与表达吃饭。不适合死板体制。',
+      resource:'<b>印星旺</b>：适合学术、研究、教育、文书类；靠专业知识立足。',
+      peer:'<b>比劫旺</b>：适合创业、合伙、业务、竞争性强的领域，但要学会分润。',
+      wealth:'<b>财星旺</b>：适合经商、投资、业务、财务管理，重视实质回报。',
+    },
+    wealthBody:{
+      richStrong:'<b>身强财旺</b>：富格，能扛得起财，赚钱守得住。',
+      richWeak:'<b>财多身弱</b>：赚得到但守不住，宜避过度扩张，找稳定环境。',
+      poorStrong:'<b>身强财弱</b>：意志强但财来得辛苦，要避比劫夺财（合伙纠纷）。',
+      poorWeak:'<b>身财俱弱</b>：财运平淡，宜以稳定薪资为主，少投机。',
+      balanced:'<b>财星中和</b>：财运平稳，量入为出即可。',
+    },
+    romanceBody:{
+      manyPeach:'<b>桃花重</b>：异性缘旺，感情选择多，要小心三角关系与情感消耗。',
+      onePeach:'<b>有桃花</b>：异性缘自然，有正缘机会，宜珍惜。',
+      noPeach:'<b>桃花淡</b>：感情需主动经营，重质不重量。',
+      strongOpposite:'桃花地支 <b>{ch}</b> 出现于命局，神煞显。',
+      weakOpposite:'命局无明显桃花神煞。',
+    },
+    daYunRating:'吉凶',
+    rateGreat:'大吉', rateGood:'吉', rateAvg:'平', rateBad:'凶', rateTerrible:'大凶',
     summary:'<b>{name}</b>{gender}命，{solarStr}（农历 {lunarStr}），日主为 <b>{dayMaster}</b>，五行属 <b>{dayWx}</b>。',
     errInvalidDate:'日期不合法，请检查。',
     errLib:'命理函式库载入失败，请检查网络。',
@@ -394,6 +502,39 @@ const I18N = {
     wxCommentFull:'Strongest element: <span class="tag most">{most}</span>. Weakest: <span class="tag least">{least}</span>. {missingText}',
     wxMissingText:'<b>{missing}</b> is entirely absent — consider supplementing it through environment and practice.',
     wxNoMissing:'All five elements are present.',
+    relativesTitle:'Relatives',
+    relFather:'Father', relMother:'Mother', relSiblings:'Siblings', relSpouse:'Spouse', relChildren:'Children',
+    relAbsent:'absent in chart',
+    relAtY:'Year', relAtM:'Month', relAtD:'Day', relAtH:'Hour',
+    relPresentTpl:'Appears in {locs}. {note}',
+    relMultipleTpl:'{n} appearances — abundant ties, but choices may be needed.',
+    relSingleTpl:'Single appearance — focused and clear bond.',
+    relAbsentTpl:'Not directly shown in the chart — must be cultivated actively in life.',
+    domainsTitle:'Career · Wealth · Romance',
+    careerTitle:'Career', wealthTitle:'Wealth', romanceTitle:'Romance',
+    careerBody:{
+      official:'<b>Officer dominant</b>: institutional, managerial, public service, responsibility-bearing roles. Bears pressure well.',
+      output:'<b>Output dominant</b>: creative, performance, teaching, freelance. Talent and expression are your currency. Rigid systems do not suit you.',
+      resource:'<b>Resource dominant</b>: academia, research, education, documentation. Built on expertise.',
+      peer:'<b>Peer dominant</b>: entrepreneurship, partnerships, sales, competitive fields. But learn to share rewards.',
+      wealth:'<b>Wealth dominant</b>: business, investment, sales, financial management. Tangible return-focused.',
+    },
+    wealthBody:{
+      richStrong:'<b>Strong self + strong wealth</b>: prosperous frame. You can both earn and hold wealth.',
+      richWeak:'<b>Wealth strong, self weak</b>: can earn but hard to keep. Avoid overreach; choose stability.',
+      poorStrong:'<b>Self strong, wealth weak</b>: willful but money comes hard. Watch out for peers diluting your gains (partnership disputes).',
+      poorWeak:'<b>Both weak</b>: modest fortune. Favor steady salary, avoid speculation.',
+      balanced:'<b>Balanced wealth</b>: steady fortune. Live within means.',
+    },
+    romanceBody:{
+      manyPeach:'<b>Strong peach blossom</b>: high opposite-sex appeal, many options, but beware triangles and emotional drain.',
+      onePeach:'<b>Peach present</b>: natural appeal and chance of true partnership — cherish it.',
+      noPeach:'<b>Faint peach</b>: romance must be cultivated actively. Quality over quantity.',
+      strongOpposite:'Peach branch <b>{ch}</b> appears in the chart — symbol manifest.',
+      weakOpposite:'No prominent peach symbol in the chart.',
+    },
+    daYunRating:'Rating',
+    rateGreat:'Excellent', rateGood:'Favorable', rateAvg:'Neutral', rateBad:'Challenging', rateTerrible:'Difficult',
     summary:'<b>{name}</b>{gender}, born {solarStr} (lunar {lunarStr}). Day Master: <b>{dayMaster}</b> ({dayWx}).',
     errInvalidDate:'Invalid date. Please check inputs.',
     errLib:'Calendar library failed to load. Check connection.',
@@ -489,6 +630,34 @@ function shishenGroupOf(ss) {
   }
   return null;
 }
+
+const RELATIVES = {
+  male: {
+    father: ['偏財','偏财'],
+    mother: ['正印'],
+    siblings: ['比肩','劫財','劫财'],
+    spouse: ['正財','偏財','正财','偏财'],
+    children: ['七殺','正官','七杀'],
+  },
+  female: {
+    father: ['偏財','偏财'],
+    mother: ['正印'],
+    siblings: ['比肩','劫財','劫财'],
+    spouse: ['正官','偏官','七殺','七杀'],
+    children: ['傷官','食神','伤官'],
+  },
+};
+
+const PEACH_BLOSSOM = {
+  '申':'酉','子':'酉','辰':'酉',
+  '巳':'午','酉':'午','丑':'午',
+  '寅':'卯','午':'卯','戌':'卯',
+  '亥':'子','卯':'子','未':'子',
+};
+
+const REL_KEYS = ['father','mother','siblings','spouse','children'];
+const REL_I18N_KEY = { father:'relFather', mother:'relMother', siblings:'relSiblings', spouse:'relSpouse', children:'relChildren' };
+const REL_LOC_KEY = ['relAtY','relAtM','relAtD','relAtH'];
 
 let state = { lang: 'tw', last: null };
 
@@ -619,15 +788,100 @@ function calculate() {
     if (v > max) { max = v; dominantGroup = k; }
   }
 
+  const genderKey = i.g === 1 ? 'male' : 'female';
+  const relMap = RELATIVES[genderKey];
+  const relatives = {};
+  for (const key of REL_KEYS) {
+    const targets = relMap[key];
+    const positions = [];
+    for (let k = 0; k < 4; k++) {
+      const gSs = shishenGan[k];
+      if (gSs && targets.includes(gSs)) positions.push({ pos: k, where: 'gan' });
+      const zArr = shishenZhi[k];
+      if (Array.isArray(zArr)) {
+        for (const ss of zArr) {
+          if (targets.includes(ss)) { positions.push({ pos: k, where: 'zhi' }); break; }
+        }
+      } else if (zArr && targets.includes(zArr)) {
+        positions.push({ pos: k, where: 'zhi' });
+      }
+    }
+    const uniquePos = [...new Set(positions.map(p => p.pos))];
+    relatives[key] = { positions: uniquePos, count: uniquePos.length };
+  }
+
+  let careerType;
+  if (dominantGroup === '官殺') careerType = 'official';
+  else if (dominantGroup === '食傷') careerType = 'output';
+  else if (dominantGroup === '印') careerType = 'resource';
+  else if (dominantGroup === '比劫') careerType = 'peer';
+  else careerType = 'wealth';
+
+  const wealthCount = groupCount['財'];
+  const wealthStrong = wealthCount >= 3;
+  const wealthWeak = wealthCount <= 1;
+  let wealthClass;
+  if (strengthLevel === 'strong' && wealthStrong) wealthClass = 'richStrong';
+  else if (strengthLevel === 'weak' && wealthStrong) wealthClass = 'richWeak';
+  else if (strengthLevel === 'strong' && wealthWeak) wealthClass = 'poorStrong';
+  else if (strengthLevel === 'weak' && wealthWeak) wealthClass = 'poorWeak';
+  else wealthClass = 'balanced';
+
+  const dayZhi = ec.getDayZhi();
+  const peachZhi = PEACH_BLOSSOM[dayZhi];
+  const peachInChart = peachZhi && zhiList.includes(peachZhi);
+  const spouseTargets = relMap.spouse;
+  let spouseCount = 0;
+  for (let k = 0; k < 4; k++) {
+    if (spouseTargets.includes(shishenGan[k])) spouseCount++;
+    const zArr = shishenZhi[k];
+    if (Array.isArray(zArr)) {
+      for (const ss of zArr) if (spouseTargets.includes(ss)) { spouseCount++; break; }
+    } else if (zArr && spouseTargets.includes(zArr)) spouseCount++;
+  }
+  let romanceClass;
+  if (spouseCount >= 3) romanceClass = 'manyPeach';
+  else if (spouseCount >= 1) romanceClass = 'onePeach';
+  else romanceClass = 'noPeach';
+
+  const dyRatings = daYun.map((dy, idx) => {
+    if (idx === 0) return { score: 0, level: 'avg' };
+    const gz = dy.getGanZhi();
+    if (!gz || gz.length < 2) return { score: 0, level: 'avg' };
+    const gan = gz[0], zhi = gz[1];
+    const gWx = GAN_WX[gan], zWx = ZHI_WX[zhi];
+    let s = 0;
+    const target = strengthLevel === 'strong' ? R_drainSet(drainWx) : (strengthLevel === 'weak' ? new Set(supportWx) : null);
+    const anti = strengthLevel === 'strong' ? new Set(supportWx) : (strengthLevel === 'weak' ? R_drainSet(drainWx) : null);
+    if (target && anti) {
+      if (target.has(gWx)) s += 1;
+      else if (anti.has(gWx)) s -= 1;
+      if (target.has(zWx)) s += 1;
+      else if (anti.has(zWx)) s -= 1;
+    }
+    let level;
+    if (s >= 2) level = 'great';
+    else if (s === 1) level = 'good';
+    else if (s === 0) level = 'avg';
+    else if (s === -1) level = 'bad';
+    else level = 'terrible';
+    return { score: s, level };
+  });
+
   state.last = {
     input: i, solar, lunar, ec, yun, daYun,
     ganList, zhiList, shishenGan, shishenZhi, nayin, hideGan, wxCount,
     dayMaster: dm, dayWx: dmWx,
     supportWx, drainWx, supportScore, drainScore, ratio, strengthLevel,
     groupCount, dominantGroup,
+    genderKey, relatives, careerType, wealthClass,
+    peachZhi, peachInChart, spouseCount, romanceClass,
+    dyRatings,
   };
   render(state.last);
 }
+
+function R_drainSet(drainWx) { return new Set(drainWx.filter(Boolean)); }
 
 function render(R) {
   document.getElementById('result').classList.add('show');
@@ -721,12 +975,72 @@ function render(R) {
     .replace('{drainWx}', drainWxNames)
     .replace('{supportWx}', supportWxNames);
 
+  const relBody = document.getElementById('relativesBody');
+  relBody.innerHTML = '';
+  REL_KEYS.forEach(key => {
+    const rel = R.relatives[key];
+    const title = t(REL_I18N_KEY[key]);
+    if (rel.count === 0) {
+      relBody.insertAdjacentHTML('beforeend', `
+        <div class="rel-card absent">
+          <div class="rel-title">${title}</div>
+          <div class="rel-shishen">${t('relAbsent')}</div>
+          <div class="rel-comment">${t('relAbsentTpl')}</div>
+        </div>`);
+      return;
+    }
+    const targets = RELATIVES[R.genderKey][key];
+    const locsHtml = rel.positions.map(p => `<span class="pos">${t(REL_LOC_KEY[p])}</span>`).join('');
+    const note = rel.count >= 2 ? t('relMultipleTpl').replace('{n}', rel.count) : t('relSingleTpl');
+    const comment = t('relPresentTpl').replace('{locs}', locsHtml).replace('{note}', note);
+    relBody.insertAdjacentHTML('beforeend', `
+      <div class="rel-card">
+        <div class="rel-title">${title}</div>
+        <div class="rel-shishen">${targets[0]}</div>
+        <div class="rel-comment">${comment}</div>
+      </div>`);
+  });
+
+  const dEl = document.getElementById('domainsBody');
+  const careerScore = ({ official:4, output:4, resource:3, peer:3, wealth:4 })[R.careerType];
+  const wealthScore = ({ richStrong:5, balanced:3, poorStrong:3, richWeak:2, poorWeak:2 })[R.wealthClass];
+  const romanceScore = ({ manyPeach:4, onePeach:4, noPeach:2 })[R.romanceClass] + (R.peachInChart ? 1 : 0);
+  const starsHtml = (n) => {
+    const full = Math.max(0, Math.min(5, n));
+    return '<span class="stars">' + '★'.repeat(full) + '<span class="dim">' + '★'.repeat(5 - full) + '</span></span>';
+  };
+  const peachNote = R.peachInChart
+    ? t('romanceBody').strongOpposite.replace('{ch}', R.peachZhi)
+    : t('romanceBody').weakOpposite;
+  dEl.innerHTML = `
+    <div class="domain-card">
+      <div class="domain-icon">💼</div>
+      <div class="domain-title">${t('careerTitle')}</div>
+      <div class="domain-rating">${starsHtml(careerScore)}</div>
+      <div class="domain-body">${t('careerBody')[R.careerType]}</div>
+    </div>
+    <div class="domain-card">
+      <div class="domain-icon">💰</div>
+      <div class="domain-title">${t('wealthTitle')}</div>
+      <div class="domain-rating">${starsHtml(wealthScore)}</div>
+      <div class="domain-body">${t('wealthBody')[R.wealthClass]}</div>
+    </div>
+    <div class="domain-card">
+      <div class="domain-icon">🌸</div>
+      <div class="domain-title">${t('romanceTitle')}</div>
+      <div class="domain-rating">${starsHtml(Math.min(5, romanceScore))}</div>
+      <div class="domain-body">${t('romanceBody')[R.romanceClass]}<div style="margin-top:6px;color:var(--text-dim);font-size:12px;">${peachNote}</div></div>
+    </div>`;
+
   const dyEl = document.getElementById('dyTable');
   dyEl.innerHTML = `
     <thead><tr>
-      <th>#</th><th>${t('age')}</th><th>${t('startYear')}</th><th>${t('ganzhi')}</th><th>${t('nayin')}</th>
+      <th>#</th><th>${t('age')}</th><th>${t('startYear')}</th><th>${t('ganzhi')}</th><th>${t('daYunRating')}</th>
     </tr></thead><tbody></tbody>`;
   const dyBody = dyEl.querySelector('tbody');
+  const rateLabels = { great: t('rateGreat'), good: t('rateGood'), avg: t('rateAvg'), bad: t('rateBad'), terrible: t('rateTerrible') };
+  const rateStars = { great: 5, good: 4, avg: 3, bad: 2, terrible: 1 };
+  const rateRowClass = { great: 'great', good: 'good', avg: '', bad: 'bad', terrible: 'bad' };
   R.daYun.forEach((dy, idx) => {
     if (idx === 0 && idx >= R.daYun.length) return;
     if (idx === 0) {
@@ -736,13 +1050,16 @@ function render(R) {
     const gz = dy.getGanZhi();
     const gan = gz[0], zhi = gz[1];
     const gWx = GAN_WX[gan] || '', zWx = ZHI_WX[zhi] || '';
+    const rating = R.dyRatings[idx];
+    const rowClass = rateRowClass[rating.level];
+    const ratingHtml = `${starsHtml(rateStars[rating.level])}<span class="dy-score">${rateLabels[rating.level]}</span>`;
     dyBody.insertAdjacentHTML('beforeend', `
-      <tr>
+      <tr class="dy-row ${rowClass}">
         <td>${idx}</td>
         <td>${dy.getStartAge()}-${dy.getEndAge()}</td>
         <td>${dy.getStartYear()}</td>
         <td class="gz"><span class="wx-${gWx}">${gan}</span><span class="wx-${zWx}">${zhi}</span></td>
-        <td>—</td>
+        <td class="dy-rating">${ratingHtml}</td>
       </tr>`);
   });
 
