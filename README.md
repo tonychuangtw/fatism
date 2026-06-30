@@ -16,6 +16,7 @@
 
 ```
 index.html              ← 命運閣首頁（串接 3 個 widget）
+pricing.html            ← 點數方案頁（3 種 pack + 結帳 stub）
 widgets/
   tarot/index.html      塔羅 · 78 張全 + 位置脈絡解讀 + 凱爾特對位 + 整體綜觀
   bazi/index.html       八字命盤 · 含六親 / 三分項 / 大運評分 / 四柱解讀 / 流年解讀

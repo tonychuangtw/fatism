@@ -437,6 +437,7 @@
     <p data-i18n="paywallDev" style="color:var(--text-dim);font-size:12px">開發者：網址加 <code style="background:rgba(212,175,55,0.1);padding:1px 6px;border-radius:4px;color:var(--gold)">?premium=1</code> 可預覽完整版。</p>
     <div class="modal-actions">
       <button class="acct-btn" onclick="closePaywall()" data-i18n="paywallClose">先看看</button>
+      <button class="acct-btn primary" onclick="goPricing()" data-i18n="goPricing">前往購買點數</button>
     </div>
   </div>
 </div>
@@ -564,8 +565,9 @@ const I18N = {
     acctMemberTitle:'我的帳號',
     acctEmailLab:'信箱',
     acctCreditsLab:'剩餘點數',
-    acctBuyNote:'購買點數即將開放（Stripe / 微信支付 / 支付寶）。',
+    acctBuyNote:'購買點數開放中，按下方按鈕前往。',
     acctLogout:'登出',
+    goPricing:'購買點數',
   },
   cn: {
     title:'八字命盘', intro:'八字以出生年月日时推算四柱，揭示先天命局与大运流年。输入正确的出生时间，看见你的命盘。',
@@ -681,8 +683,9 @@ const I18N = {
     acctMemberTitle:'我的帐号',
     acctEmailLab:'信箱',
     acctCreditsLab:'剩余点数',
-    acctBuyNote:'购买点数即将开放（Stripe / 微信支付 / 支付宝）。',
+    acctBuyNote:'购买点数开放中，按下方按钮前往。',
     acctLogout:'登出',
+    goPricing:'购买点数',
   },
   en: {
     title:'BaZi Chart', intro:'BaZi derives four pillars from your birth year, month, day, and hour, revealing the innate energy map and life cycles. Enter your accurate birth time to see your chart.',
@@ -798,8 +801,9 @@ const I18N = {
     acctMemberTitle:'My account',
     acctEmailLab:'Email',
     acctCreditsLab:'Credits',
-    acctBuyNote:'Credit packs coming soon (Stripe / WeChat Pay / Alipay).',
+    acctBuyNote:'Credit packs available — tap the button below.',
     acctLogout:'Sign out',
+    goPricing:'Buy credits',
   },
 };
 
@@ -1018,6 +1022,7 @@ function openPaywall() { document.getElementById('paywallModal').classList.add('
 function closePaywall() { document.getElementById('paywallModal').classList.remove('open'); }
 function openAccountModal() { renderAccountModal(); document.getElementById('acctModal').classList.add('open'); }
 function closeAccountModal() { document.getElementById('acctModal').classList.remove('open'); }
+function goPricing() { location.href = '../../pricing.html'; }
 
 function login(email) {
   email = (email || '').trim().toLowerCase();
@@ -1075,7 +1080,8 @@ function renderAccountModal() {
       <p style="color:var(--text-dim);font-size:12px">${t('acctBuyNote')}</p>
       <div class="modal-actions">
         <button class="acct-btn" onclick="logout()">${t('acctLogout')}</button>
-        <button class="acct-btn primary" onclick="closeAccountModal()">${t('paywallClose')}</button>
+        <button class="acct-btn" onclick="closeAccountModal()">${t('paywallClose')}</button>
+        <button class="acct-btn primary" onclick="goPricing()">${t('goPricing')}</button>
       </div>`;
   } else {
     body.innerHTML = `

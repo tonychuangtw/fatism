@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>命運閣 · 點數方案 — Pricing</title>
+<style>
+  :root {
+    --bg-1: #1a1340; --bg-2: #2d1b5e; --bg-3: #4a1a6e;
+    --gold: #d4af37; --gold-dim: #8a7028;
+    --ivory: #f5e9c8; --text: #ece4d3; --text-dim: #b3a98c;
+    --shadow: 0 8px 32px rgba(0,0,0,0.5);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Serif TC', 'Noto Serif SC', 'Cormorant Garamond', Georgia, serif;
+    background: radial-gradient(ellipse at top, var(--bg-3) 0%, var(--bg-2) 40%, var(--bg-1) 100%);
+    min-height: 100vh; color: var(--text);
+    padding: 24px 16px 48px; overflow-x: hidden;
+  }
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background-image:
+      radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.4), transparent),
+      radial-gradient(1px 1px at 60% 70%, rgba(255,255,255,0.3), transparent),
+      radial-gradient(1.5px 1.5px at 80% 20%, rgba(255,255,255,0.5), transparent),
+      radial-gradient(1px 1px at 30% 80%, rgba(255,255,255,0.3), transparent);
+    pointer-events: none; z-index: 0;
+  }
+  .container { max-width: 1000px; margin: 0 auto; position: relative; z-index: 1; }
+  .home-link { display: inline-block; color: var(--gold-dim); text-decoration: none;
+    font-size: 13px; letter-spacing: 0.1em; margin-bottom: 12px; transition: color 0.15s; }
+  .home-link:hover { color: var(--gold); }
+  header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+  h1 { font-size: clamp(28px, 5vw, 40px); color: var(--gold); letter-spacing: 0.12em;
+    text-shadow: 0 2px 16px rgba(212,175,55,0.35); }
+  h1 .sub { color: var(--text-dim); font-size: 0.42em; letter-spacing: 0.3em; display: block; margin-top: 6px; }
+
+  .head-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+  .account-bar {
+    display: flex; align-items: center; gap: 10px;
+    background: rgba(0,0,0,0.3); border: 1px solid var(--gold-dim);
+    border-radius: 999px; padding: 4px 6px 4px 14px; font-size: 12px;
+  }
+  .account-bar .acct-credits { color: var(--gold); letter-spacing: 0.08em; }
+  .account-bar .acct-btn { background: transparent; color: var(--text-dim); border: none;
+    padding: 4px 12px; border-radius: 999px; cursor: pointer; font-family: inherit;
+    font-size: 12px; transition: color 0.15s; }
+  .account-bar .acct-btn:hover { color: var(--gold); }
+  .account-bar .acct-btn.primary { background: var(--gold); color: var(--bg-1); font-weight: 600; }
+
+  .lang-switch { display: flex; gap: 4px; border: 1px solid var(--gold-dim); border-radius: 999px; padding: 3px; }
+  .lang-switch button {
+    background: transparent; color: var(--text-dim); border: none;
+    padding: 6px 12px; border-radius: 999px; cursor: pointer;
+    font-family: inherit; font-size: 13px; transition: all 0.15s;
+  }
+  .lang-switch button.active { background: var(--gold); color: var(--bg-1); font-weight: 600; }
+
+  .banner {
+    background: rgba(212,175,55,0.12); border: 1px solid var(--gold);
+    border-radius: 12px; padding: 14px 18px; margin: 12px 0 24px;
+    display: none; color: var(--ivory); font-size: 14px;
+  }
+  .banner.cancel { background: rgba(180,90,90,0.12); border-color: rgba(220,120,120,0.6); color: #f0d8d8; }
+  .banner.open { display: block; }
+
+  .tagline { text-align: center; color: var(--text-dim);
+    font-size: clamp(14px, 1.8vw, 16px); line-height: 1.7;
+    max-width: 640px; margin: 24px auto 40px; font-style: italic;
+  }
+
+  .grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 22px; margin-bottom: 32px;
+  }
+  .pack {
+    background: rgba(0,0,0,0.35); border: 1px solid var(--gold-dim);
+    border-radius: 16px; padding: 28px 24px;
+    display: flex; flex-direction: column; gap: 14px;
+    position: relative; transition: all 0.2s; box-shadow: var(--shadow);
+  }
+  .pack:hover { border-color: var(--gold); transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(212,175,55,0.18); }
+  .pack.featured { border-color: var(--gold); background: rgba(212,175,55,0.06); }
+  .pack .featured-tag {
+    position: absolute; top: -12px; right: 18px;
+    background: var(--gold); color: var(--bg-1);
+    padding: 4px 12px; border-radius: 12px; font-size: 11px;
+    font-weight: 700; letter-spacing: 0.1em;
+  }
+  .pack .icon { font-size: 36px; line-height: 1; }
+  .pack .name { color: var(--ivory); font-size: 20px; font-weight: 700; letter-spacing: 0.06em; }
+  .pack .credits { color: var(--gold); font-size: 32px; font-weight: 700; letter-spacing: 0.03em; }
+  .pack .credits-unit { color: var(--text-dim); font-size: 13px; letter-spacing: 0.1em; margin-left: 4px; }
+  .pack .price { color: var(--text); font-size: 22px; }
+  .pack .price-each { color: var(--text-dim); font-size: 12px; }
+  .pack .desc { color: var(--text-dim); font-size: 13px; line-height: 1.6; flex: 1; }
+  .pack .buy-btn {
+    background: linear-gradient(180deg, var(--gold) 0%, var(--gold-dim) 100%);
+    color: var(--bg-1); border: none; border-radius: 8px;
+    padding: 11px 22px; font-family: inherit; font-size: 14px; font-weight: 600;
+    letter-spacing: 0.06em; cursor: pointer; transition: all 0.15s;
+  }
+  .pack .buy-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(212,175,55,0.3); }
+
+  .pricing-note {
+    background: rgba(212,175,55,0.06); border: 1px dashed rgba(212,175,55,0.35);
+    border-radius: 14px; padding: 18px 22px; margin-top: 12px;
+    color: var(--text); line-height: 1.7; font-size: 13px;
+  }
+  .pricing-note strong { color: var(--gold); }
+
+  footer { text-align: center; margin-top: 48px; color: var(--text-dim); font-size: 12px; letter-spacing: 0.1em; }
+  footer a { color: var(--gold-dim); text-decoration: none; }
+  footer a:hover { color: var(--gold); }
+
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75);
+    display: none; align-items: center; justify-content: center; z-index: 100; padding: 16px; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: linear-gradient(160deg, var(--bg-2) 0%, var(--bg-1) 100%);
+    border: 1px solid var(--gold); border-radius: 16px;
+    padding: 28px 28px 24px; max-width: 460px; width: 100%;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.6); color: var(--text); position: relative; }
+  .modal h2 { color: var(--gold); font-size: 22px; margin-bottom: 14px; letter-spacing: 0.04em; }
+  .modal p { line-height: 1.7; font-size: 14px; margin-bottom: 10px; }
+  .modal .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 18px; flex-wrap: wrap; }
+  .modal .x-close { position: absolute; top: 12px; right: 16px; background: none; border: none;
+    color: var(--text-dim); font-size: 22px; cursor: pointer; padding: 0; line-height: 1; }
+  .modal .x-close:hover { color: var(--gold); }
+  .modal .dev-tag {
+    display: inline-block; background: rgba(255,160,80,0.15); border: 1px solid rgba(255,160,80,0.5);
+    color: #ffb066; font-size: 10px; padding: 2px 8px; border-radius: 8px;
+    letter-spacing: 0.15em; margin-left: 6px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <a class="home-link" href="index.html">← <span data-i18n="backHome">命運閣 · Fatism</span></a>
+  <header>
+    <h1>✦ <span data-i18n="title">點數方案</span>
+      <span class="sub" data-i18n="subtitle">Credit Packs · 一次購買，三館共用</span>
+    </h1>
+    <div class="head-right">
+      <div class="account-bar" id="acctBar">
+        <span class="acct-credits" id="acctCredits">— 點</span>
+        <button class="acct-btn primary" id="acctBtn" data-i18n="acctLogin">登入</button>
+      </div>
+      <div class="lang-switch" id="langSwitch">
+        <button data-lang="tw" class="active">繁中</button>
+        <button data-lang="cn">简中</button>
+        <button data-lang="en">EN</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="banner" id="banner"></div>
+
+  <p class="tagline" data-i18n="tagline">
+    1 點 = 一個完整解讀（塔羅一局、八字一張命盤、紫微一張星盤）。<br>
+    點數不過期，三館（塔羅／八字／紫微）共用。
+  </p>
+
+  <div class="grid">
+    <div class="pack">
+      <div class="icon">🌱</div>
+      <div>
+        <div class="name" data-i18n="p1Name">試試水溫</div>
+        <div style="margin-top:6px"><span class="credits">1</span><span class="credits-unit" data-i18n="creditsUnit">點</span></div>
+      </div>
+      <div class="price">NT$ <strong>60</strong></div>
+      <div class="price-each" data-i18n="p1Each">每點 NT$60</div>
+      <div class="desc" data-i18n="p1Desc">先解鎖一次完整解讀。適合單次嘗試。</div>
+      <button class="buy-btn" onclick="startCheckout('pack1')" data-i18n="buyBtn">結帳</button>
+    </div>
+
+    <div class="pack featured">
+      <div class="featured-tag" data-i18n="popular">熱門</div>
+      <div class="icon">✨</div>
+      <div>
+        <div class="name" data-i18n="p5Name">五次套餐</div>
+        <div style="margin-top:6px"><span class="credits">5</span><span class="credits-unit" data-i18n="creditsUnit">點</span></div>
+      </div>
+      <div class="price">NT$ <strong>250</strong></div>
+      <div class="price-each" data-i18n="p5Each">每點 NT$50 · 約 8 折</div>
+      <div class="desc" data-i18n="p5Desc">夠你跨三館各看一次還有餘。日常推薦。</div>
+      <button class="buy-btn" onclick="startCheckout('pack5')" data-i18n="buyBtn">結帳</button>
+    </div>
+
+    <div class="pack">
+      <div class="icon">🔮</div>
+      <div>
+        <div class="name" data-i18n="p20Name">深度年用</div>
+        <div style="margin-top:6px"><span class="credits">20</span><span class="credits-unit" data-i18n="creditsUnit">點</span></div>
+      </div>
+      <div class="price">NT$ <strong>800</strong></div>
+      <div class="price-each" data-i18n="p20Each">每點 NT$40 · 約 66 折</div>
+      <div class="desc" data-i18n="p20Desc">人生重要決策、流年變化頻繁追蹤者。CP 值最高。</div>
+      <button class="buy-btn" onclick="startCheckout('pack20')" data-i18n="buyBtn">結帳</button>
+    </div>
+  </div>
+
+  <div class="pricing-note">
+    <strong data-i18n="noteH">關於付款方式：</strong>
+    <span data-i18n="noteBody">即將支援信用卡、Apple Pay、Google Pay（透過 Stripe），以及微信支付、支付寶。所有交易由 Stripe 處理，本站不儲存卡片資訊。</span>
+  </div>
+
+  <footer>
+    <p data-i18n="footer">© 2026 命運閣 · 點數不退費，但永久有效。</p>
+  </footer>
+</div>
+
+<div class="modal-overlay" id="acctModal">
+  <div class="modal">
+    <button class="x-close" onclick="closeAccountModal()">×</button>
+    <div id="acctModalBody"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="checkoutModal">
+  <div class="modal">
+    <button class="x-close" onclick="closeCheckoutModal()">×</button>
+    <div id="checkoutModalBody"></div>
+  </div>
+</div>
+
+<script>
+const I18N = {
+  tw: {
+    backHome: '命運閣 · Fatism',
+    title: '點數方案',
+    subtitle: 'Credit Packs · 一次購買，三館共用',
+    tagline: '1 點 = 一個完整解讀（塔羅一局、八字一張命盤、紫微一張星盤）。<br>點數不過期，三館（塔羅／八字／紫微）共用。',
+    creditsUnit: '點',
+    popular: '熱門',
+    buyBtn: '結帳',
+    p1Name: '試試水溫', p1Each: '每點 NT$60',
+    p1Desc: '先解鎖一次完整解讀。適合單次嘗試。',
+    p5Name: '五次套餐', p5Each: '每點 NT$50 · 約 8 折',
+    p5Desc: '夠你跨三館各看一次還有餘。日常推薦。',
+    p20Name: '深度年用', p20Each: '每點 NT$40 · 約 66 折',
+    p20Desc: '人生重要決策、流年變化頻繁追蹤者。CP 值最高。',
+    noteH: '關於付款方式：',
+    noteBody: '即將支援信用卡、Apple Pay、Google Pay（透過 Stripe），以及微信支付、支付寶。所有交易由 Stripe 處理，本站不儲存卡片資訊。',
+    footer: '© 2026 命運閣 · 點數不退費，但永久有效。',
+    acctLogin: '登入', acctMember: '會員',
+    successH: '購買成功',
+    successBody: '已加入 {n} 點到你的帳戶，目前餘額 {bal} 點。',
+    cancelH: '已取消',
+    cancelBody: '本次購買已取消，未扣款。',
+    coTitle: '確認購買',
+    coBody: '購買 <strong>{n} 點</strong>，金額 <strong>NT$ {p}</strong>',
+    coConfirm: '確認購買',
+    coCancel: '取消',
+    coDevTag: 'DEV',
+    coDevNote: '開發中：目前直接發放點數到瀏覽器，不會實際扣款。正式版會跳轉 Stripe Checkout。',
+    coLoginFirst: '請先登入或註冊，才能購買點數。',
+    coLoginBtn: '前往登入',
+    acctLoginTitle: '登入 / 註冊',
+    acctLoginBody: '用信箱建立帳號，點數會在三個 widget 共用。',
+    acctLoginBtn: '送出',
+    acctEmailPh: '你的信箱',
+    acctEmailErr: '請輸入有效的信箱地址',
+    acctFirstBonus: '首次註冊送 1 點，可立即解鎖一次完整解讀。',
+    acctStubNote: '開發中：目前只儲存在你的瀏覽器，不會寄信。',
+    acctMemberTitle: '我的帳號',
+    acctEmailLab: '信箱',
+    acctCreditsLab: '剩餘點數',
+    acctLogout: '登出',
+    acctClose: '關閉',
+  },
+  cn: {
+    backHome: '命运阁 · Fatism',
+    title: '点数方案',
+    subtitle: 'Credit Packs · 一次购买，三馆共用',
+    tagline: '1 点 = 一个完整解读（塔罗一局、八字一张命盘、紫微一张星盘）。<br>点数不过期，三馆（塔罗／八字／紫微）共用。',
+    creditsUnit: '点',
+    popular: '热门',
+    buyBtn: '结账',
+    p1Name: '试试水温', p1Each: '每点 NT$60',
+    p1Desc: '先解锁一次完整解读。适合单次尝试。',
+    p5Name: '五次套餐', p5Each: '每点 NT$50 · 约 8 折',
+    p5Desc: '够你跨三馆各看一次还有余。日常推荐。',
+    p20Name: '深度年用', p20Each: '每点 NT$40 · 约 66 折',
+    p20Desc: '人生重要决策、流年变化频繁追踪者。CP 值最高。',
+    noteH: '关于付款方式：',
+    noteBody: '即将支持信用卡、Apple Pay、Google Pay（透过 Stripe），以及微信支付、支付宝。所有交易由 Stripe 处理，本站不储存卡片信息。',
+    footer: '© 2026 命运阁 · 点数不退费，但永久有效。',
+    acctLogin: '登入', acctMember: '会员',
+    successH: '购买成功',
+    successBody: '已加入 {n} 点到你的帐户，目前余额 {bal} 点。',
+    cancelH: '已取消',
+    cancelBody: '本次购买已取消，未扣款。',
+    coTitle: '确认购买',
+    coBody: '购买 <strong>{n} 点</strong>，金额 <strong>NT$ {p}</strong>',
+    coConfirm: '确认购买',
+    coCancel: '取消',
+    coDevTag: 'DEV',
+    coDevNote: '开发中：目前直接发放点数到浏览器，不会实际扣款。正式版会跳转 Stripe Checkout。',
+    coLoginFirst: '请先登入或注册，才能购买点数。',
+    coLoginBtn: '前往登入',
+    acctLoginTitle: '登入 / 注册',
+    acctLoginBody: '用信箱建立帐号，点数会在三个 widget 共用。',
+    acctLoginBtn: '送出',
+    acctEmailPh: '你的信箱',
+    acctEmailErr: '请输入有效的信箱地址',
+    acctFirstBonus: '首次注册送 1 点，可立即解锁一次完整解读。',
+    acctStubNote: '开发中：目前只储存在你的浏览器，不会寄信。',
+    acctMemberTitle: '我的帐号',
+    acctEmailLab: '信箱',
+    acctCreditsLab: '剩余点数',
+    acctLogout: '登出',
+    acctClose: '关闭',
+  },
+  en: {
+    backHome: 'Fatism',
+    title: 'Credit Packs',
+    subtitle: 'Buy once · share across all three readings',
+    tagline: '1 credit = one full reading (one Tarot spread, one BaZi chart, or one Zi Wei astrolabe).<br>Credits never expire and work across all three widgets.',
+    creditsUnit: 'cr',
+    popular: 'Popular',
+    buyBtn: 'Check out',
+    p1Name: 'Single', p1Each: 'NT$60 each',
+    p1Desc: 'Unlock one full reading. Good for a single try.',
+    p5Name: '5-Pack', p5Each: 'NT$50 each · ~17% off',
+    p5Desc: 'Enough for one of each reading with credits to spare.',
+    p20Name: 'Year supply', p20Each: 'NT$40 each · ~33% off',
+    p20Desc: 'For major life decisions and frequent cycle tracking. Best value.',
+    noteH: 'About payment:',
+    noteBody: 'Cards, Apple Pay, Google Pay (via Stripe), plus WeChat Pay and Alipay coming soon. All transactions processed by Stripe — no card data stored here.',
+    footer: '© 2026 Fatism · Credits non-refundable but never expire.',
+    acctLogin: 'Sign in', acctMember: 'Member',
+    successH: 'Purchase successful',
+    successBody: '{n} credits added. Your balance is now {bal}.',
+    cancelH: 'Purchase cancelled',
+    cancelBody: 'This purchase was cancelled. No charge was made.',
+    coTitle: 'Confirm purchase',
+    coBody: 'Buy <strong>{n} credits</strong> for <strong>NT$ {p}</strong>',
+    coConfirm: 'Confirm purchase',
+    coCancel: 'Cancel',
+    coDevTag: 'DEV',
+    coDevNote: 'Dev preview: credits are granted locally — no actual charge. Production will redirect to Stripe Checkout.',
+    coLoginFirst: 'Please sign in first before purchasing credits.',
+    coLoginBtn: 'Sign in',
+    acctLoginTitle: 'Sign in / sign up',
+    acctLoginBody: 'Create an account with your email — credits are shared across all three widgets.',
+    acctLoginBtn: 'Submit',
+    acctEmailPh: 'Your email',
+    acctEmailErr: 'Please enter a valid email address',
+    acctFirstBonus: 'First sign-up grants 1 free credit — enough for one full reading.',
+    acctStubNote: 'Dev preview: stored only in your browser. No email is sent.',
+    acctMemberTitle: 'My account',
+    acctEmailLab: 'Email',
+    acctCreditsLab: 'Credits',
+    acctLogout: 'Sign out',
+    acctClose: 'Close',
+  },
+};
+
+const PACKS = {
+  pack1:  { credits: 1,  price: 60  },
+  pack5:  { credits: 5,  price: 250 },
+  pack20: { credits: 20, price: 800 },
+};
+
+function loadUser() {
+  try { return JSON.parse(localStorage.getItem('fatism_user') || 'null'); } catch (e) { return null; }
+}
+
+let state = {
+  lang: 'tw',
+  user: loadUser(),
+  credits: parseInt(localStorage.getItem('fatism_credits') || '0', 10),
+};
+
+function t(k) { return I18N[state.lang][k] || k; }
+function isLoggedIn() { return !!state.user; }
+
+function applyI18n() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.dataset.i18n;
+    if (I18N[state.lang][k] != null) {
+      if (['tagline','noteBody','subtitle'].includes(k)) el.innerHTML = I18N[state.lang][k];
+      else el.textContent = I18N[state.lang][k];
+    }
+  });
+  document.documentElement.lang = ({tw:'zh-TW',cn:'zh-CN',en:'en'})[state.lang];
+  renderAccountBar();
+  renderBanner();
+}
+
+function renderAccountBar() {
+  document.getElementById('acctCredits').textContent = state.credits + ' ' + t('creditsUnit');
+  document.getElementById('acctBtn').textContent = isLoggedIn() ? t('acctMember') : t('acctLogin');
+}
+
+function renderBanner() {
+  const b = document.getElementById('banner');
+  const params = new URLSearchParams(location.search);
+  const st = params.get('status');
+  const n = parseInt(params.get('n') || '0', 10);
+  if (st === 'success' && n > 0) {
+    b.className = 'banner open';
+    b.innerHTML = '<strong>' + t('successH') + '</strong> · '
+      + t('successBody').replace('{n}', n).replace('{bal}', state.credits);
+  } else if (st === 'cancel') {
+    b.className = 'banner cancel open';
+    b.innerHTML = '<strong>' + t('cancelH') + '</strong> · ' + t('cancelBody');
+  } else {
+    b.className = 'banner';
+  }
+}
+
+// === Account modal (login/member) ===
+
+function openAccountModal() { renderAccountModal(); document.getElementById('acctModal').classList.add('open'); }
+function closeAccountModal() { document.getElementById('acctModal').classList.remove('open'); }
+
+function login(email) {
+  email = (email || '').trim().toLowerCase();
+  if (!email || !email.includes('@') || email.length < 5) return false;
+  const isFirstTime = !state.user;
+  state.user = { email };
+  localStorage.setItem('fatism_user', JSON.stringify(state.user));
+  if (isFirstTime && state.credits === 0) {
+    state.credits = 1;
+    localStorage.setItem('fatism_credits', '1');
+  }
+  renderAccountBar();
+  renderAccountModal();
+  return true;
+}
+
+function logout() {
+  state.user = null;
+  localStorage.removeItem('fatism_user');
+  renderAccountBar();
+  renderAccountModal();
+}
+
+function handleLoginSubmit() {
+  const v = document.getElementById('acctEmailInput').value;
+  if (!login(v)) alert(t('acctEmailErr'));
+}
+
+function renderAccountModal() {
+  const body = document.getElementById('acctModalBody');
+  if (isLoggedIn()) {
+    body.innerHTML = `
+      <h2>${t('acctMemberTitle')}</h2>
+      <p>${t('acctEmailLab')}: <strong style="color:var(--gold)">${state.user.email}</strong></p>
+      <p>${t('acctCreditsLab')}: <strong style="color:var(--gold)">${state.credits} ${t('creditsUnit')}</strong></p>
+      <div class="modal-actions">
+        <button class="acct-btn" onclick="logout()">${t('acctLogout')}</button>
+        <button class="acct-btn primary" onclick="closeAccountModal()">${t('acctClose')}</button>
+      </div>`;
+  } else {
+    body.innerHTML = `
+      <h2>${t('acctLoginTitle')}</h2>
+      <p>${t('acctLoginBody')}</p>
+      <input id="acctEmailInput" type="email" placeholder="${t('acctEmailPh')}" style="width:100%;padding:10px 12px;background:rgba(0,0,0,0.3);border:1px solid var(--gold-dim);border-radius:8px;color:var(--text);font-family:inherit;font-size:14px;margin:10px 0 4px" />
+      <p style="color:var(--text-dim);font-size:11px;margin:6px 0 2px">${t('acctFirstBonus')}</p>
+      <p style="color:var(--text-dim);font-size:11px;margin-top:2px">${t('acctStubNote')}</p>
+      <div class="modal-actions">
+        <button class="acct-btn" onclick="closeAccountModal()">${t('acctClose')}</button>
+        <button class="acct-btn primary" onclick="handleLoginSubmit()">${t('acctLoginBtn')}</button>
+      </div>`;
+    setTimeout(() => { const e = document.getElementById('acctEmailInput'); if (e) { e.focus(); e.addEventListener('keydown', ev => { if (ev.key === 'Enter') handleLoginSubmit(); }); } }, 50);
+  }
+}
+
+// === Checkout flow ===
+
+let pendingPack = null;
+
+function startCheckout(packId) {
+  pendingPack = packId;
+  if (!isLoggedIn()) {
+    renderCheckoutModalLogin();
+  } else {
+    renderCheckoutModalConfirm();
+  }
+  document.getElementById('checkoutModal').classList.add('open');
+}
+
+function closeCheckoutModal() {
+  document.getElementById('checkoutModal').classList.remove('open');
+  pendingPack = null;
+}
+
+function renderCheckoutModalLogin() {
+  document.getElementById('checkoutModalBody').innerHTML = `
+    <h2>${t('coTitle')}</h2>
+    <p>${t('coLoginFirst')}</p>
+    <div class="modal-actions">
+      <button class="acct-btn" onclick="closeCheckoutModal()">${t('coCancel')}</button>
+      <button class="acct-btn primary" onclick="closeCheckoutModal(); openAccountModal()">${t('coLoginBtn')}</button>
+    </div>`;
+}
+
+function renderCheckoutModalConfirm() {
+  const p = PACKS[pendingPack];
+  document.getElementById('checkoutModalBody').innerHTML = `
+    <h2>${t('coTitle')}<span class="dev-tag">${t('coDevTag')}</span></h2>
+    <p>${t('coBody').replace('{n}', p.credits).replace('{p}', p.price)}</p>
+    <p style="color:var(--text-dim);font-size:12px">${t('coDevNote')}</p>
+    <div class="modal-actions">
+      <button class="acct-btn" onclick="closeCheckoutModal()">${t('coCancel')}</button>
+      <button class="acct-btn primary" onclick="confirmCheckout()">${t('coConfirm')}</button>
+    </div>`;
+}
+
+function confirmCheckout() {
+  if (!pendingPack || !isLoggedIn()) return;
+  const p = PACKS[pendingPack];
+  // Dev stub: grant credits locally. Production will redirect to Stripe Checkout
+  // and only credit on webhook callback.
+  state.credits += p.credits;
+  localStorage.setItem('fatism_credits', String(state.credits));
+  const n = p.credits;
+  pendingPack = null;
+  closeCheckoutModal();
+  // Redirect to ?status=success to show banner
+  location.href = 'pricing.html?status=success&n=' + n;
+}
+
+// === Wire up ===
+
+document.getElementById('langSwitch').addEventListener('click', (e) => {
+  if (e.target.tagName !== 'BUTTON') return;
+  state.lang = e.target.dataset.lang;
+  document.querySelectorAll('#langSwitch button').forEach(b =>
+    b.classList.toggle('active', b.dataset.lang === state.lang));
+  applyI18n();
+});
+document.getElementById('acctBtn').addEventListener('click', openAccountModal);
+document.getElementById('acctModal').addEventListener('click', (e) => {
+  if (e.target.id === 'acctModal') closeAccountModal();
+});
+document.getElementById('checkoutModal').addEventListener('click', (e) => {
+  if (e.target.id === 'checkoutModal') closeCheckoutModal();
+});
+
+applyI18n();
+</script>
+</body>
+</html>
