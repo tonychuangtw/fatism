@@ -164,27 +164,15 @@
   </p>
 
   <div class="grid">
-    <div class="pack">
-      <div class="icon">🌱</div>
-      <div>
-        <div class="name" data-i18n="p1Name">試試水溫</div>
-        <div style="margin-top:6px"><span class="credits">1</span><span class="credits-unit" data-i18n="creditsUnit">點</span></div>
-      </div>
-      <div class="price">NT$ <strong>60</strong></div>
-      <div class="price-each" data-i18n="p1Each">每點 NT$60</div>
-      <div class="desc" data-i18n="p1Desc">先解鎖一次完整解讀。適合單次嘗試。</div>
-      <button class="buy-btn" onclick="startCheckout('pack1')" data-i18n="buyBtn">結帳</button>
-    </div>
-
     <div class="pack featured">
-      <div class="featured-tag" data-i18n="popular">熱門</div>
+      <div class="featured-tag" data-i18n="popular">入門</div>
       <div class="icon">✨</div>
       <div>
-        <div class="name" data-i18n="p5Name">五次套餐</div>
+        <div class="name" data-i18n="p5Name">入門套餐</div>
         <div style="margin-top:6px"><span class="credits">5</span><span class="credits-unit" data-i18n="creditsUnit">點</span></div>
       </div>
       <div class="price">NT$ <strong>250</strong></div>
-      <div class="price-each" data-i18n="p5Each">每點 NT$50 · 約 8 折</div>
+      <div class="price-each" data-i18n="p5Each">每點 NT$50</div>
       <div class="desc" data-i18n="p5Desc">夠你跨三館各看一次還有餘。日常推薦。</div>
       <button class="buy-btn" onclick="startCheckout('pack5')" data-i18n="buyBtn">結帳</button>
     </div>
@@ -196,15 +184,32 @@
         <div style="margin-top:6px"><span class="credits">20</span><span class="credits-unit" data-i18n="creditsUnit">點</span></div>
       </div>
       <div class="price">NT$ <strong>800</strong></div>
-      <div class="price-each" data-i18n="p20Each">每點 NT$40 · 約 66 折</div>
-      <div class="desc" data-i18n="p20Desc">人生重要決策、流年變化頻繁追蹤者。CP 值最高。</div>
+      <div class="price-each" data-i18n="p20Each">每點 NT$40 · 8 折</div>
+      <div class="desc" data-i18n="p20Desc">人生重要決策、流年變化頻繁追蹤者。</div>
       <button class="buy-btn" onclick="startCheckout('pack20')" data-i18n="buyBtn">結帳</button>
+    </div>
+
+    <div class="pack">
+      <div class="featured-tag" style="background:linear-gradient(135deg,#d4af37,#b8860b)" data-i18n="bestValue">最划算</div>
+      <div class="icon">🌌</div>
+      <div>
+        <div class="name" data-i18n="p50Name">命運閣常客</div>
+        <div style="margin-top:6px"><span class="credits">50</span><span class="credits-unit" data-i18n="creditsUnit">點</span></div>
+      </div>
+      <div class="price">NT$ <strong>1800</strong></div>
+      <div class="price-each" data-i18n="p50Each">每點 NT$36 · 約 72 折</div>
+      <div class="desc" data-i18n="p50Desc">長期追蹤運勢、頻繁解牌者。每點成本最低。</div>
+      <button class="buy-btn" onclick="startCheckout('pack50')" data-i18n="buyBtn">結帳</button>
     </div>
   </div>
 
+  <p style="text-align:center;color:var(--text-dim);font-size:12px;margin:0 0 24px;font-style:italic" data-i18n="firstBonus">
+    💎 首次註冊免費送 1 點 · 立即體驗一次完整解讀
+  </p>
+
   <div class="pricing-note">
     <strong data-i18n="noteH">關於付款方式：</strong>
-    <span data-i18n="noteBody">即將支援信用卡、Apple Pay、Google Pay（透過 Stripe），以及微信支付、支付寶。所有交易由 Stripe 處理，本站不儲存卡片資訊。</span>
+    <span data-i18n="noteBody">支援信用卡、Apple Pay、Google Pay、PayPal、<strong>微信支付、支付寶</strong>，由 Paddle 處理跨境收款。本站不儲存卡片資訊，發票由 Paddle 開立。</span>
   </div>
 
   <footer>
@@ -234,16 +239,18 @@ const I18N = {
     subtitle: 'Credit Packs · 一次購買，三館共用',
     tagline: '1 點 = 一個完整解讀（塔羅一局、八字一張命盤、紫微一張星盤）。<br>點數不過期，三館（塔羅／八字／紫微）共用。',
     creditsUnit: '點',
-    popular: '熱門',
+    popular: '入門',
+    bestValue: '最划算',
     buyBtn: '結帳',
-    p1Name: '試試水溫', p1Each: '每點 NT$60',
-    p1Desc: '先解鎖一次完整解讀。適合單次嘗試。',
-    p5Name: '五次套餐', p5Each: '每點 NT$50 · 約 8 折',
+    firstBonus: '💎 首次註冊免費送 1 點 · 立即體驗一次完整解讀',
+    p5Name: '入門套餐', p5Each: '每點 NT$50',
     p5Desc: '夠你跨三館各看一次還有餘。日常推薦。',
-    p20Name: '深度年用', p20Each: '每點 NT$40 · 約 66 折',
-    p20Desc: '人生重要決策、流年變化頻繁追蹤者。CP 值最高。',
+    p20Name: '深度年用', p20Each: '每點 NT$40 · 8 折',
+    p20Desc: '人生重要決策、流年變化頻繁追蹤者。',
+    p50Name: '命運閣常客', p50Each: '每點 NT$36 · 約 72 折',
+    p50Desc: '長期追蹤運勢、頻繁解牌者。每點成本最低。',
     noteH: '關於付款方式：',
-    noteBody: '即將支援信用卡、Apple Pay、Google Pay（透過 Stripe），以及微信支付、支付寶。所有交易由 Stripe 處理，本站不儲存卡片資訊。',
+    noteBody: '支援信用卡、Apple Pay、Google Pay、PayPal、<strong>微信支付、支付寶</strong>，由 Paddle 處理跨境收款。本站不儲存卡片資訊，發票由 Paddle 開立。',
     footer: '© 2026 命運閣 · 點數不退費，但永久有效。',
     acctLogin: '登入', acctMember: '會員',
     successH: '購買成功',
@@ -255,7 +262,7 @@ const I18N = {
     coConfirm: '確認購買',
     coCancel: '取消',
     coDevTag: 'DEV',
-    coDevNote: '開發中：目前直接發放點數到瀏覽器，不會實際扣款。正式版會跳轉 Stripe Checkout。',
+    coDevNote: '開發中：目前直接發放點數到瀏覽器，不會實際扣款。正式版會跳轉 Paddle Checkout。',
     coLoginFirst: '請先登入或註冊，才能購買點數。',
     coLoginBtn: '前往登入',
     acctLoginTitle: '登入 / 註冊',
@@ -277,16 +284,18 @@ const I18N = {
     subtitle: 'Credit Packs · 一次购买，三馆共用',
     tagline: '1 点 = 一个完整解读（塔罗一局、八字一张命盘、紫微一张星盘）。<br>点数不过期，三馆（塔罗／八字／紫微）共用。',
     creditsUnit: '点',
-    popular: '热门',
+    popular: '入门',
+    bestValue: '最划算',
     buyBtn: '结账',
-    p1Name: '试试水温', p1Each: '每点 NT$60',
-    p1Desc: '先解锁一次完整解读。适合单次尝试。',
-    p5Name: '五次套餐', p5Each: '每点 NT$50 · 约 8 折',
+    firstBonus: '💎 首次注册免费送 1 点 · 立即体验一次完整解读',
+    p5Name: '入门套餐', p5Each: '每点 NT$50',
     p5Desc: '够你跨三馆各看一次还有余。日常推荐。',
-    p20Name: '深度年用', p20Each: '每点 NT$40 · 约 66 折',
-    p20Desc: '人生重要决策、流年变化频繁追踪者。CP 值最高。',
+    p20Name: '深度年用', p20Each: '每点 NT$40 · 8 折',
+    p20Desc: '人生重要决策、流年变化频繁追踪者。',
+    p50Name: '命运阁常客', p50Each: '每点 NT$36 · 约 72 折',
+    p50Desc: '长期追踪运势、频繁解牌者。每点成本最低。',
     noteH: '关于付款方式：',
-    noteBody: '即将支持信用卡、Apple Pay、Google Pay（透过 Stripe），以及微信支付、支付宝。所有交易由 Stripe 处理，本站不储存卡片信息。',
+    noteBody: '支持信用卡、Apple Pay、Google Pay、PayPal、<strong>微信支付、支付宝</strong>，由 Paddle 处理跨境收款。本站不储存卡片信息，发票由 Paddle 开立。',
     footer: '© 2026 命运阁 · 点数不退费，但永久有效。',
     acctLogin: '登入', acctMember: '会员',
     successH: '购买成功',
@@ -298,7 +307,7 @@ const I18N = {
     coConfirm: '确认购买',
     coCancel: '取消',
     coDevTag: 'DEV',
-    coDevNote: '开发中：目前直接发放点数到浏览器，不会实际扣款。正式版会跳转 Stripe Checkout。',
+    coDevNote: '开发中：目前直接发放点数到浏览器，不会实际扣款。正式版会跳转 Paddle Checkout。',
     coLoginFirst: '请先登入或注册，才能购买点数。',
     coLoginBtn: '前往登入',
     acctLoginTitle: '登入 / 注册',
@@ -320,16 +329,18 @@ const I18N = {
     subtitle: 'Buy once · share across all three readings',
     tagline: '1 credit = one full reading (one Tarot spread, one BaZi chart, or one Zi Wei astrolabe).<br>Credits never expire and work across all three widgets.',
     creditsUnit: 'cr',
-    popular: 'Popular',
+    popular: 'Starter',
+    bestValue: 'Best value',
     buyBtn: 'Check out',
-    p1Name: 'Single', p1Each: 'NT$60 each',
-    p1Desc: 'Unlock one full reading. Good for a single try.',
-    p5Name: '5-Pack', p5Each: 'NT$50 each · ~17% off',
+    firstBonus: '💎 First-time sign-up grants 1 free credit — try one full reading instantly',
+    p5Name: 'Starter', p5Each: 'NT$50 each',
     p5Desc: 'Enough for one of each reading with credits to spare.',
-    p20Name: 'Year supply', p20Each: 'NT$40 each · ~33% off',
-    p20Desc: 'For major life decisions and frequent cycle tracking. Best value.',
+    p20Name: 'Year supply', p20Each: 'NT$40 each · 20% off',
+    p20Desc: 'For major decisions and frequent cycle tracking.',
+    p50Name: 'Regular', p50Each: 'NT$36 each · ~28% off',
+    p50Desc: 'For long-term tracking and frequent readings. Lowest per-credit cost.',
     noteH: 'About payment:',
-    noteBody: 'Cards, Apple Pay, Google Pay (via Stripe), plus WeChat Pay and Alipay coming soon. All transactions processed by Stripe — no card data stored here.',
+    noteBody: 'Cards, Apple Pay, Google Pay, PayPal, <strong>WeChat Pay, and Alipay</strong>, processed by Paddle. No card data stored here. Invoices issued by Paddle.',
     footer: '© 2026 Fatism · Credits non-refundable but never expire.',
     acctLogin: 'Sign in', acctMember: 'Member',
     successH: 'Purchase successful',
@@ -341,7 +352,7 @@ const I18N = {
     coConfirm: 'Confirm purchase',
     coCancel: 'Cancel',
     coDevTag: 'DEV',
-    coDevNote: 'Dev preview: credits are granted locally — no actual charge. Production will redirect to Stripe Checkout.',
+    coDevNote: 'Dev preview: credits are granted locally — no actual charge. Production will open Paddle Checkout.',
     coLoginFirst: 'Please sign in first before purchasing credits.',
     coLoginBtn: 'Sign in',
     acctLoginTitle: 'Sign in / sign up',
@@ -360,9 +371,9 @@ const I18N = {
 };
 
 const PACKS = {
-  pack1:  { credits: 1,  price: 60  },
-  pack5:  { credits: 5,  price: 250 },
-  pack20: { credits: 20, price: 800 },
+  pack5:  { credits: 5,  price: 250  },
+  pack20: { credits: 20, price: 800  },
+  pack50: { credits: 50, price: 1800 },
 };
 
 function loadUser() {
@@ -515,8 +526,8 @@ function renderCheckoutModalConfirm() {
 function confirmCheckout() {
   if (!pendingPack || !isLoggedIn()) return;
   const p = PACKS[pendingPack];
-  // Dev stub: grant credits locally. Production will redirect to Stripe Checkout
-  // and only credit on webhook callback.
+  // Dev stub: grant credits locally. Production will open Paddle Checkout
+  // and only credit on transaction.completed webhook callback.
   state.credits += p.credits;
   localStorage.setItem('fatism_credits', String(state.credits));
   const n = p.credits;
