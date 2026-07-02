@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>八字命盤入門 — 命運閣 · Fatism</title>
+<style>
+  :root {
+    --bg-1: #1a1340;
+    --bg-2: #2d1b5e;
+    --bg-3: #4a1a6e;
+    --gold: #d4af37;
+    --gold-dim: #8a7028;
+    --ivory: #f5e9c8;
+    --text: #ece4d3;
+    --text-dim: #b3a98c;
+    --shadow: 0 8px 32px rgba(0,0,0,0.5);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Serif TC', 'Noto Serif SC', 'Cormorant Garamond', Georgia, serif;
+    background: radial-gradient(ellipse at top, var(--bg-3) 0%, var(--bg-2) 40%, var(--bg-1) 100%);
+    min-height: 100vh;
+    color: var(--text);
+    padding: 32px 16px 48px;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.4), transparent),
+      radial-gradient(1px 1px at 60% 70%, rgba(255,255,255,0.3), transparent),
+      radial-gradient(1.5px 1.5px at 80% 20%, rgba(255,255,255,0.5), transparent),
+      radial-gradient(1px 1px at 30% 80%, rgba(255,255,255,0.3), transparent),
+      radial-gradient(2px 2px at 90% 50%, rgba(255,255,255,0.4), transparent);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .container { max-width: 860px; margin: 0 auto; position: relative; z-index: 1; }
+  nav.topnav {
+    display: flex; flex-wrap: wrap; gap: 6px 14px; justify-content: center;
+    margin-bottom: 40px; font-size: 14px; letter-spacing: 0.08em;
+    border-bottom: 1px solid rgba(212,175,55,0.25); padding-bottom: 14px;
+  }
+  nav.topnav a { color: var(--text-dim); text-decoration: none; padding: 4px 6px; transition: color 0.15s; }
+  nav.topnav a:hover { color: var(--gold); }
+  nav.topnav a.current { color: var(--gold); border-bottom: 1px solid var(--gold); }
+  .hero { text-align: center; margin-bottom: 48px; }
+  .hero .icon { font-size: 56px; line-height: 1; margin-bottom: 12px; }
+  h1 {
+    font-size: clamp(30px, 6vw, 46px);
+    color: var(--gold);
+    letter-spacing: 0.12em;
+    text-shadow: 0 2px 16px rgba(212,175,55,0.35);
+    line-height: 1.2;
+  }
+  .hero .sub { color: var(--text-dim); font-size: 14px; letter-spacing: 0.3em; text-transform: uppercase; margin-top: 10px; }
+  section.block {
+    background: rgba(0,0,0,0.35);
+    border: 1px solid var(--gold-dim);
+    border-radius: 16px;
+    padding: 28px 26px;
+    margin-bottom: 26px;
+    box-shadow: var(--shadow);
+  }
+  section.block h2 {
+    color: var(--ivory);
+    font-size: 21px;
+    letter-spacing: 0.06em;
+    margin-bottom: 14px;
+  }
+  section.block h2::before { content: '✦ '; color: var(--gold); font-size: 0.8em; }
+  section.block p { font-size: 15px; line-height: 1.9; margin-bottom: 10px; }
+  section.block p:last-child { margin-bottom: 0; }
+  section.block ul { margin: 8px 0 10px 1.4em; }
+  section.block li { font-size: 15px; line-height: 1.9; margin-bottom: 4px; }
+  section.block strong { color: var(--gold); font-weight: 600; }
+  .cta { text-align: center; margin: 40px 0 24px; }
+  .cta a {
+    display: inline-block;
+    background: linear-gradient(180deg, var(--gold) 0%, var(--gold-dim) 100%);
+    color: var(--bg-1); text-decoration: none;
+    padding: 12px 32px; border-radius: 8px;
+    font-weight: 600; letter-spacing: 0.08em; font-size: 15px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .cta a:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(212,175,55,0.3); }
+  footer {
+    text-align: center; margin-top: 48px;
+    color: var(--text-dim); font-size: 12px; letter-spacing: 0.1em;
+  }
+  footer a { color: var(--gold-dim); text-decoration: none; }
+  footer a:hover { color: var(--gold); }
+</style>
+</head>
+<body>
+<div class="container">
+  <nav class="topnav">
+    <a href="../index.html">首頁</a>
+    <a href="tarot.html">塔羅牌</a>
+    <a href="bazi.html" class="current">八字命盤</a>
+    <a href="ziwei.html">紫微斗數</a>
+    <a href="palmistry.html">手相</a>
+    <a href="physiognomy.html">面相</a>
+    <a href="../pricing.html">價格</a>
+  </nav>
+
+  <div class="hero">
+    <div class="icon">☯</div>
+    <h1>八字命盤入門</h1>
+    <div class="sub">BaZi · 四柱推命的智慧</div>
+  </div>
+
+  <section class="block">
+    <h2>什麼是八字？</h2>
+    <p>八字，又稱<strong>四柱推命</strong>，以人出生的年、月、日、時四個時間點各配上一組天干與地支，形成「年柱、月柱、日柱、時柱」四柱、共八個字，故名八字。其理論體系奠基於唐代李虛中，至宋代徐子平確立以「日干」為核心的推算方法，因此又稱「子平術」。</p>
+    <p>八字的基本假設是：出生時刻的天地之氣，蘊含著一個人先天稟賦的訊息。它不是宿命的判決書，而是一張描述性格傾向、能量結構與人生節奏的「說明書」。</p>
+  </section>
+
+  <section class="block">
+    <h2>天干地支：時間的座標系統</h2>
+    <p>八字使用中國古代的干支紀時法。<strong>十天干</strong>為甲、乙、丙、丁、戊、己、庚、辛、壬、癸；<strong>十二地支</strong>為子、丑、寅、卯、辰、巳、午、未、申、酉、戌、亥（也就是十二生肖的符號）。天干與地支依序兩兩相配，形成六十組循環，稱為「六十甲子」——這就是「六十年一甲子」的由來。</p>
+    <p>值得注意的是，八字的月份以「節氣」而非農曆初一劃分（例如立春才算新一年的開始），時辰則以兩小時為一個地支時段，如晚上十一點到凌晨一點為「子時」。</p>
+  </section>
+
+  <section class="block">
+    <h2>五行：金木水火土的生剋</h2>
+    <p>每個天干地支都對應五行屬性與陰陽。五行之間存在兩種基本關係：<strong>相生</strong>（木生火、火生土、土生金、金生水、水生木）與<strong>相剋</strong>（木剋土、土剋水、水剋火、火剋金、金剋木）。</p>
+    <p>分析八字的第一步，就是看命盤中五行的分布：哪一行偏旺、哪一行缺乏、彼此如何生剋制衡。傳統認為五行流通均衡者，人生較為平順；某行過旺或過弱，則對應性格與際遇上的特定課題。所謂「喜用神」，就是能讓整體結構趨於平衡的關鍵五行。</p>
+  </section>
+
+  <section class="block">
+    <h2>十神：以日主為中心的關係網</h2>
+    <p>八字以<strong>日柱天干</strong>（日主、日元）代表命主本人，其餘七字與日主的五行生剋與陰陽關係，歸納為十種角色，稱為「十神」：</p>
+    <ul>
+      <li><strong>比肩、劫財</strong>（同我）：自我、同儕、競爭與合作。</li>
+      <li><strong>食神、傷官</strong>（我生）：才華、表達、創造力。</li>
+      <li><strong>正財、偏財</strong>（我剋）：財富、務實能力、掌控的資源。</li>
+      <li><strong>正官、七殺</strong>（剋我）：紀律、事業、壓力與責任。</li>
+      <li><strong>正印、偏印</strong>（生我）：學習、庇蔭、長輩與內在涵養。</li>
+    </ul>
+    <p>十神同時對應六親（父母、配偶、子女等），使八字能同時談性格、事業、財運與人際。</p>
+  </section>
+
+  <section class="block">
+    <h2>大運與流年：人生的節奏</h2>
+    <p>八字是靜態的先天結構，<strong>大運</strong>與<strong>流年</strong>則是動態的時間變數。大運由月柱推排而出，每十年更換一組干支，代表人生每十年的大環境走向；流年即每一年的干支（如 2026 丙午年），代表當年的外來能量。</p>
+    <p>解讀時，將大運、流年的干支與原局八字互動比對——生扶喜用神則機會浮現，沖剋關鍵字則需謹慎經營。這也是為什麼同樣的八字，在不同年紀、不同年份會有截然不同的際遇感受。理解自己的節奏，順勢而為，正是八字最實用的價值。</p>
+  </section>
+
+  <div class="cta">
+    <a href="../widgets/bazi/index.html">試用互動工具：線上八字排盤 →</a>
+  </div>
+
+  <footer>
+    <p>© 2026 命運閣 · 僅供反思啟發，不構成任何決策建議。 <a href="../index.html">返回首頁</a></p>
+  </footer>
+</div>
+</body>
+</html>
