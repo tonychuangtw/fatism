@@ -401,8 +401,9 @@ function loadUser() {
   try { return JSON.parse(localStorage.getItem('fatism_user') || 'null'); } catch (e) { return null; }
 }
 
+let savedLang = 'tw'; try { const sl = localStorage.getItem('fatism_lang'); if (sl === 'cn' || sl === 'en') savedLang = sl; } catch (e) {}
 let state = {
-  lang: 'tw',
+  lang: savedLang,
   user: loadUser(),
   credits: parseInt(localStorage.getItem('fatism_credits') || '0', 10),
 };
@@ -595,6 +596,7 @@ async function syncCredits() {
 document.getElementById('langSwitch').addEventListener('click', (e) => {
   if (e.target.tagName !== 'BUTTON') return;
   state.lang = e.target.dataset.lang;
+  try { localStorage.setItem('fatism_lang', state.lang); } catch (e2) {}
   document.querySelectorAll('#langSwitch button').forEach(b =>
     b.classList.toggle('active', b.dataset.lang === state.lang));
   applyI18n();
@@ -607,6 +609,7 @@ document.getElementById('checkoutModal').addEventListener('click', (e) => {
   if (e.target.id === 'checkoutModal') closeCheckoutModal();
 });
 
+document.querySelectorAll('#langSwitch button').forEach(b => b.classList.toggle('active', b.dataset.lang === state.lang));
 applyI18n();
 syncCredits();
 // After a successful checkout the webhook may lag a few seconds — retry sync.

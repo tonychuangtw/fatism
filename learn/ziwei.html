@@ -38,6 +38,14 @@
     z-index: 0;
   }
   .container { max-width: 860px; margin: 0 auto; position: relative; z-index: 1; }
+  .lang-row { display: flex; justify-content: flex-end; margin-bottom: 14px; }
+  .lang-switch { display: flex; gap: 4px; border: 1px solid var(--gold-dim); border-radius: 999px; padding: 3px; }
+  .lang-switch button {
+    background: transparent; color: var(--text-dim); border: none;
+    padding: 6px 12px; border-radius: 999px; cursor: pointer;
+    font-family: inherit; font-size: 13px; transition: all 0.15s;
+  }
+  .lang-switch button.active { background: var(--gold); color: var(--bg-1); font-weight: 600; }
   nav.topnav {
     display: flex; flex-wrap: wrap; gap: 6px 14px; justify-content: center;
     margin-bottom: 40px; font-size: 14px; letter-spacing: 0.08em;
@@ -96,68 +104,204 @@
 </head>
 <body>
 <div class="container">
+  <div class="lang-row">
+    <div class="lang-switch" id="langSwitch">
+      <button data-lang="tw" class="active">繁中</button>
+      <button data-lang="cn">简中</button>
+      <button data-lang="en">EN</button>
+    </div>
+  </div>
+
   <nav class="topnav">
-    <a href="../index.html">首頁</a>
-    <a href="tarot.html">塔羅牌</a>
-    <a href="bazi.html">八字命盤</a>
-    <a href="ziwei.html" class="current">紫微斗數</a>
-    <a href="palmistry.html">手相</a>
-    <a href="physiognomy.html">面相</a>
-    <a href="../pricing.html">價格</a>
+    <a href="../index.html" data-i18n="navHome">首頁</a>
+    <a href="tarot.html" data-i18n="navTarot">塔羅牌</a>
+    <a href="bazi.html" data-i18n="navBazi">八字命盤</a>
+    <a href="ziwei.html" class="current" data-i18n="navZiwei">紫微斗數</a>
+    <a href="palmistry.html" data-i18n="navPalm">手相</a>
+    <a href="physiognomy.html" data-i18n="navFace">面相</a>
+    <a href="../pricing.html" data-i18n="navPricing">價格</a>
   </nav>
 
   <div class="hero">
     <div class="icon">✦</div>
-    <h1>紫微斗數入門</h1>
-    <div class="sub">Zi Wei Dou Shu · 東方星命學</div>
+    <h1 data-i18n="heroTitle">紫微斗數入門</h1>
+    <div class="sub" data-i18n="heroSub">Zi Wei Dou Shu · 東方星命學</div>
   </div>
 
   <section class="block">
-    <h2>什麼是紫微斗數？</h2>
-    <p>紫微斗數相傳為五代宋初道士<strong>陳摶（希夷先生）</strong>所創，是中國傳統命理中的「星命學」代表，與八字並稱東方兩大命學體系。它以出生的農曆年、月、日、時為依據，將一百餘顆虛星安入十二個宮位，排出一張完整的「命盤」。</p>
-    <p>相較於八字著重五行氣勢的推演，紫微斗數如同一張人生的「平面圖」：十二宮各司其職，星曜落宮組合具體而視覺化，因此常被形容為「東方占星術」。</p>
+    <h2 data-i18n="s1h">什麼是紫微斗數？</h2>
+    <p data-i18n="s1p1">紫微斗數相傳為五代宋初道士<strong>陳摶（希夷先生）</strong>所創，是中國傳統命理中的「星命學」代表，與八字並稱東方兩大命學體系。它以出生的農曆年、月、日、時為依據，將一百餘顆虛星安入十二個宮位，排出一張完整的「命盤」。</p>
+    <p data-i18n="s1p2">相較於八字著重五行氣勢的推演，紫微斗數如同一張人生的「平面圖」：十二宮各司其職，星曜落宮組合具體而視覺化，因此常被形容為「東方占星術」。</p>
   </section>
 
   <section class="block">
-    <h2>十二宮：人生的十二個面向</h2>
-    <p>命盤分為十二宮，依序為：<strong>命宮</strong>（性格與人生主軸）、<strong>兄弟宮</strong>、<strong>夫妻宮</strong>（感情婚姻）、<strong>子女宮</strong>、<strong>財帛宮</strong>（金錢觀與財運）、<strong>疾厄宮</strong>（健康體質）、<strong>遷移宮</strong>（外出際遇與外在形象）、<strong>交友宮</strong>（僕役宮）、<strong>官祿宮</strong>（事業）、<strong>田宅宮</strong>（不動產與家庭環境）、<strong>福德宮</strong>（精神生活與福分）、<strong>父母宮</strong>。</p>
-    <p>解盤時除了看單一宮位，更重視「三方四正」——即本宮與對宮，加上三合方的兩個宮位，四者合看才能掌握該領域的完整格局。例如看事業，命宮、官祿宮、財帛宮、遷移宮須一併衡量。</p>
+    <h2 data-i18n="s2h">十二宮：人生的十二個面向</h2>
+    <p data-i18n="s2p1">命盤分為十二宮，依序為：<strong>命宮</strong>（性格與人生主軸）、<strong>兄弟宮</strong>、<strong>夫妻宮</strong>（感情婚姻）、<strong>子女宮</strong>、<strong>財帛宮</strong>（金錢觀與財運）、<strong>疾厄宮</strong>（健康體質）、<strong>遷移宮</strong>（外出際遇與外在形象）、<strong>交友宮</strong>（僕役宮）、<strong>官祿宮</strong>（事業）、<strong>田宅宮</strong>（不動產與家庭環境）、<strong>福德宮</strong>（精神生活與福分）、<strong>父母宮</strong>。</p>
+    <p data-i18n="s2p2">解盤時除了看單一宮位，更重視「三方四正」——即本宮與對宮，加上三合方的兩個宮位，四者合看才能掌握該領域的完整格局。例如看事業，命宮、官祿宮、財帛宮、遷移宮須一併衡量。</p>
   </section>
 
   <section class="block">
-    <h2>主星系統：十四主星</h2>
-    <p>紫微斗數的核心是<strong>十四顆主星</strong>，分為兩大星系：</p>
+    <h2 data-i18n="s3h">主星系統：十四主星</h2>
+    <p data-i18n="s3p1">紫微斗數的核心是<strong>十四顆主星</strong>，分為兩大星系：</p>
     <ul>
-      <li><strong>紫微星系（北斗）</strong>：紫微、天機、太陽、武曲、天同、廉貞——以帝星紫微為首，帶有領導、開創的性質。</li>
-      <li><strong>天府星系（南斗）</strong>：天府、太陰、貪狼、巨門、天相、天梁、七殺、破軍——以庫星天府為首，偏向守成、蓄積的性質。</li>
+      <li data-i18n="s3li1"><strong>紫微星系（北斗）</strong>：紫微、天機、太陽、武曲、天同、廉貞——以帝星紫微為首，帶有領導、開創的性質。</li>
+      <li data-i18n="s3li2"><strong>天府星系（南斗）</strong>：天府、太陰、貪狼、巨門、天相、天梁、七殺、破軍——以庫星天府為首，偏向守成、蓄積的性質。</li>
     </ul>
-    <p>每顆主星都有鮮明的性格原型：紫微尊貴而好面子、天機聰敏善謀、武曲剛毅務實、貪狼多才多慾、七殺衝勁十足、破軍破舊立新……主星落在命宮，即勾勒出一個人的基本性格底色；再配合左輔右弼、文昌文曲等輔星與煞星（擎羊、陀羅、火星、鈴星），層次便更加豐富。</p>
+    <p data-i18n="s3p2">每顆主星都有鮮明的性格原型：紫微尊貴而好面子、天機聰敏善謀、武曲剛毅務實、貪狼多才多慾、七殺衝勁十足、破軍破舊立新……主星落在命宮，即勾勒出一個人的基本性格底色；再配合左輔右弼、文昌文曲等輔星與煞星（擎羊、陀羅、火星、鈴星），層次便更加豐富。</p>
   </section>
 
   <section class="block">
-    <h2>四化：祿、權、科、忌</h2>
-    <p><strong>四化</strong>是紫微斗數的靈魂。依出生年的天干，特定四顆星會分別「化祿、化權、化科、化忌」：</p>
+    <h2 data-i18n="s4h">四化：祿、權、科、忌</h2>
+    <p data-i18n="s4p1"><strong>四化</strong>是紫微斗數的靈魂。依出生年的天干，特定四顆星會分別「化祿、化權、化科、化忌」：</p>
     <ul>
-      <li><strong>化祿</strong>：資源、緣分與順遂，事情容易水到渠成。</li>
-      <li><strong>化權</strong>：力量、掌控與擴張，主動爭取的能量。</li>
-      <li><strong>化科</strong>：名聲、貴人與化解，溫和的助力。</li>
-      <li><strong>化忌</strong>：執著、阻滯與課題，是最需要用心經營之處。</li>
+      <li data-i18n="s4li1"><strong>化祿</strong>：資源、緣分與順遂，事情容易水到渠成。</li>
+      <li data-i18n="s4li2"><strong>化權</strong>：力量、掌控與擴張，主動爭取的能量。</li>
+      <li data-i18n="s4li3"><strong>化科</strong>：名聲、貴人與化解，溫和的助力。</li>
+      <li data-i18n="s4li4"><strong>化忌</strong>：執著、阻滯與課題，是最需要用心經營之處。</li>
     </ul>
-    <p>四化落入哪個宮位，就點出人生能量的流向與功課所在——化忌並非「凶」，而是標示出這一生最放不下、也最能促使人成長的領域。</p>
+    <p data-i18n="s4p2">四化落入哪個宮位，就點出人生能量的流向與功課所在——化忌並非「凶」，而是標示出這一生最放不下、也最能促使人成長的領域。</p>
   </section>
 
   <section class="block">
-    <h2>大限與流年：格局中的時間軸</h2>
-    <p>紫微斗數同樣有時間系統：<strong>大限</strong>每十年行經一個宮位，該宮位便成為那十年的「命宮」，人生重心隨之轉移；<strong>流年</strong>則逐年推移，配合流年四化，可觀察當年的機會與挑戰。先天命盤是「格局」，大限流年是「時機」——格局定高度，時機定起伏，兩者合參，才是完整的紫微解讀。</p>
+    <h2 data-i18n="s5h">大限與流年：格局中的時間軸</h2>
+    <p data-i18n="s5p1">紫微斗數同樣有時間系統：<strong>大限</strong>每十年行經一個宮位，該宮位便成為那十年的「命宮」，人生重心隨之轉移；<strong>流年</strong>則逐年推移，配合流年四化，可觀察當年的機會與挑戰。先天命盤是「格局」，大限流年是「時機」——格局定高度，時機定起伏，兩者合參，才是完整的紫微解讀。</p>
   </section>
 
   <div class="cta">
-    <a href="../widgets/ziwei/index.html">試用互動工具：線上紫微排盤 →</a>
+    <a href="../widgets/ziwei/index.html" data-i18n="cta">試用互動工具：線上紫微排盤 →</a>
   </div>
 
   <footer>
-    <p>© 2026 命運閣 · 僅供反思啟發，不構成任何決策建議。 <a href="../index.html">返回首頁</a></p>
+    <p data-i18n="footer">© 2026 命運閣 · 僅供反思啟發，不構成任何決策建議。 <a href="../index.html">返回首頁</a></p>
   </footer>
 </div>
+
+<script>
+const I18N = {
+  tw: {
+    navHome: '首頁',
+    navTarot: '塔羅牌',
+    navBazi: '八字命盤',
+    navZiwei: '紫微斗數',
+    navPalm: '手相',
+    navFace: '面相',
+    navPricing: '價格',
+    heroTitle: '紫微斗數入門',
+    heroSub: 'Zi Wei Dou Shu · 東方星命學',
+    s1h: '什麼是紫微斗數？',
+    s1p1: '紫微斗數相傳為五代宋初道士<strong>陳摶（希夷先生）</strong>所創，是中國傳統命理中的「星命學」代表，與八字並稱東方兩大命學體系。它以出生的農曆年、月、日、時為依據，將一百餘顆虛星安入十二個宮位，排出一張完整的「命盤」。',
+    s1p2: '相較於八字著重五行氣勢的推演，紫微斗數如同一張人生的「平面圖」：十二宮各司其職，星曜落宮組合具體而視覺化，因此常被形容為「東方占星術」。',
+    s2h: '十二宮：人生的十二個面向',
+    s2p1: '命盤分為十二宮，依序為：<strong>命宮</strong>（性格與人生主軸）、<strong>兄弟宮</strong>、<strong>夫妻宮</strong>（感情婚姻）、<strong>子女宮</strong>、<strong>財帛宮</strong>（金錢觀與財運）、<strong>疾厄宮</strong>（健康體質）、<strong>遷移宮</strong>（外出際遇與外在形象）、<strong>交友宮</strong>（僕役宮）、<strong>官祿宮</strong>（事業）、<strong>田宅宮</strong>（不動產與家庭環境）、<strong>福德宮</strong>（精神生活與福分）、<strong>父母宮</strong>。',
+    s2p2: '解盤時除了看單一宮位，更重視「三方四正」——即本宮與對宮，加上三合方的兩個宮位，四者合看才能掌握該領域的完整格局。例如看事業，命宮、官祿宮、財帛宮、遷移宮須一併衡量。',
+    s3h: '主星系統：十四主星',
+    s3p1: '紫微斗數的核心是<strong>十四顆主星</strong>，分為兩大星系：',
+    s3li1: '<strong>紫微星系（北斗）</strong>：紫微、天機、太陽、武曲、天同、廉貞——以帝星紫微為首，帶有領導、開創的性質。',
+    s3li2: '<strong>天府星系（南斗）</strong>：天府、太陰、貪狼、巨門、天相、天梁、七殺、破軍——以庫星天府為首，偏向守成、蓄積的性質。',
+    s3p2: '每顆主星都有鮮明的性格原型：紫微尊貴而好面子、天機聰敏善謀、武曲剛毅務實、貪狼多才多慾、七殺衝勁十足、破軍破舊立新……主星落在命宮，即勾勒出一個人的基本性格底色；再配合左輔右弼、文昌文曲等輔星與煞星（擎羊、陀羅、火星、鈴星），層次便更加豐富。',
+    s4h: '四化：祿、權、科、忌',
+    s4p1: '<strong>四化</strong>是紫微斗數的靈魂。依出生年的天干，特定四顆星會分別「化祿、化權、化科、化忌」：',
+    s4li1: '<strong>化祿</strong>：資源、緣分與順遂，事情容易水到渠成。',
+    s4li2: '<strong>化權</strong>：力量、掌控與擴張，主動爭取的能量。',
+    s4li3: '<strong>化科</strong>：名聲、貴人與化解，溫和的助力。',
+    s4li4: '<strong>化忌</strong>：執著、阻滯與課題，是最需要用心經營之處。',
+    s4p2: '四化落入哪個宮位，就點出人生能量的流向與功課所在——化忌並非「凶」，而是標示出這一生最放不下、也最能促使人成長的領域。',
+    s5h: '大限與流年：格局中的時間軸',
+    s5p1: '紫微斗數同樣有時間系統：<strong>大限</strong>每十年行經一個宮位，該宮位便成為那十年的「命宮」，人生重心隨之轉移；<strong>流年</strong>則逐年推移，配合流年四化，可觀察當年的機會與挑戰。先天命盤是「格局」，大限流年是「時機」——格局定高度，時機定起伏，兩者合參，才是完整的紫微解讀。',
+    cta: '試用互動工具：線上紫微排盤 →',
+    footer: '© 2026 命運閣 · 僅供反思啟發，不構成任何決策建議。 <a href="../index.html">返回首頁</a>',
+  },
+  cn: {
+    navHome: '首页',
+    navTarot: '塔罗牌',
+    navBazi: '八字命盘',
+    navZiwei: '紫微斗数',
+    navPalm: '手相',
+    navFace: '面相',
+    navPricing: '价格',
+    heroTitle: '紫微斗数入门',
+    heroSub: 'Zi Wei Dou Shu · 东方星命学',
+    s1h: '什么是紫微斗数？',
+    s1p1: '紫微斗数相传为五代宋初道士<strong>陈抟（希夷先生）</strong>所创，是中国传统命理中的「星命学」代表，与八字并称东方两大命学体系。它以出生的农历年、月、日、时为依据，将一百余颗虚星安入十二个宫位，排出一张完整的「命盘」。',
+    s1p2: '相较于八字着重五行气势的推演，紫微斗数如同一张人生的「平面图」：十二宫各司其职，星曜落宫组合具体而视觉化，因此常被形容为「东方占星术」。',
+    s2h: '十二宫：人生的十二个面向',
+    s2p1: '命盘分为十二宫，依序为：<strong>命宫</strong>（性格与人生主轴）、<strong>兄弟宫</strong>、<strong>夫妻宫</strong>（感情婚姻）、<strong>子女宫</strong>、<strong>财帛宫</strong>（金钱观与财运）、<strong>疾厄宫</strong>（健康体质）、<strong>迁移宫</strong>（外出际遇与外在形象）、<strong>交友宫</strong>（仆役宫）、<strong>官禄宫</strong>（事业）、<strong>田宅宫</strong>（不动产与家庭环境）、<strong>福德宫</strong>（精神生活与福分）、<strong>父母宫</strong>。',
+    s2p2: '解盘时除了看单一宫位，更重视「三方四正」——即本宫与对宫，加上三合方的两个宫位，四者合看才能掌握该领域的完整格局。例如看事业，命宫、官禄宫、财帛宫、迁移宫须一并衡量。',
+    s3h: '主星系统：十四主星',
+    s3p1: '紫微斗数的核心是<strong>十四颗主星</strong>，分为两大星系：',
+    s3li1: '<strong>紫微星系（北斗）</strong>：紫微、天机、太阳、武曲、天同、廉贞——以帝星紫微为首，带有领导、开创的性质。',
+    s3li2: '<strong>天府星系（南斗）</strong>：天府、太阴、贪狼、巨门、天相、天梁、七杀、破军——以库星天府为首，偏向守成、蓄积的性质。',
+    s3p2: '每颗主星都有鲜明的性格原型：紫微尊贵而好面子、天机聪敏善谋、武曲刚毅务实、贪狼多才多欲、七杀冲劲十足、破军破旧立新……主星落在命宫，即勾勒出一个人的基本性格底色；再配合左辅右弼、文昌文曲等辅星与煞星（擎羊、陀罗、火星、铃星），层次便更加丰富。',
+    s4h: '四化：禄、权、科、忌',
+    s4p1: '<strong>四化</strong>是紫微斗数的灵魂。依出生年的天干，特定四颗星会分别「化禄、化权、化科、化忌」：',
+    s4li1: '<strong>化禄</strong>：资源、缘分与顺遂，事情容易水到渠成。',
+    s4li2: '<strong>化权</strong>：力量、掌控与扩张，主动争取的能量。',
+    s4li3: '<strong>化科</strong>：名声、贵人与化解，温和的助力。',
+    s4li4: '<strong>化忌</strong>：执着、阻滞与课题，是最需要用心经营之处。',
+    s4p2: '四化落入哪个宫位，就点出人生能量的流向与功课所在——化忌并非「凶」，而是标示出这一生最放不下、也最能促使人成长的领域。',
+    s5h: '大限与流年：格局中的时间轴',
+    s5p1: '紫微斗数同样有时间系统：<strong>大限</strong>每十年行经一个宫位，该宫位便成为那十年的「命宫」，人生重心随之转移；<strong>流年</strong>则逐年推移，配合流年四化，可观察当年的机会与挑战。先天命盘是「格局」，大限流年是「时机」——格局定高度，时机定起伏，两者合参，才是完整的紫微解读。',
+    cta: '试用互动工具：在线紫微排盘 →',
+    footer: '© 2026 命运阁 · 仅供反思启发，不构成任何决策建议。 <a href="../index.html">返回首页</a>',
+  },
+  en: {
+    navHome: 'Home',
+    navTarot: 'Tarot',
+    navBazi: 'BaZi',
+    navZiwei: 'Zi Wei',
+    navPalm: 'Palmistry',
+    navFace: 'Physiognomy',
+    navPricing: 'Pricing',
+    heroTitle: 'Zi Wei Dou Shu for Beginners',
+    heroSub: 'Zi Wei Dou Shu · Chinese Star Astrology',
+    s1h: 'What Is Zi Wei Dou Shu?',
+    s1p1: 'Zi Wei Dou Shu ("Purple Star Astrology") is traditionally attributed to <strong>Chen Tuan (Master Xiyi)</strong>, a Daoist of the Five Dynasties and early Song period. It is the foremost "star astrology" school of Chinese destiny studies, standing alongside BaZi as one of the East\'s two great systems of fate analysis. Using the lunar year, month, day, and hour of birth, it places more than a hundred symbolic stars into twelve palaces to produce a complete natal chart.',
+    s1p2: 'Where BaZi reasons about the momentum of the Five Elements, Zi Wei Dou Shu reads like a "floor plan" of a life: each of the Twelve Palaces governs its own domain, and the star-palace combinations are concrete and visual — which is why it is often called "Chinese astrology."',
+    s2h: 'The Twelve Palaces: Twelve Facets of Life',
+    s2p1: 'The chart is divided into twelve palaces, in order: the <strong>Life Palace</strong> (character and life theme), the <strong>Siblings Palace</strong>, the <strong>Spouse Palace</strong> (love and marriage), the <strong>Children Palace</strong>, the <strong>Wealth Palace</strong> (money mindset and fortune), the <strong>Health Palace</strong>, the <strong>Travel Palace</strong> (fortunes away from home and outward image), the <strong>Friends Palace</strong>, the <strong>Career Palace</strong>, the <strong>Property Palace</strong> (real estate and home environment), the <strong>Fortune Palace</strong> (inner life and blessings), and the <strong>Parents Palace</strong>.',
+    s2p2: 'Reading a chart means looking beyond any single palace to the "three directions and four squares" — the palace itself, its opposite palace, and the two palaces in trine with it, all weighed together to grasp the full pattern of that life domain. To assess career, for instance, the Life, Career, Wealth, and Travel palaces must be considered as a set.',
+    s3h: 'The Star System: Fourteen Major Stars',
+    s3p1: 'At the heart of Zi Wei Dou Shu are the <strong>fourteen major stars</strong>, grouped into two star systems:',
+    s3li1: '<strong>The Zi Wei group (Northern Dipper)</strong>: Zi Wei, Tian Ji, Tai Yang, Wu Qu, Tian Tong, and Lian Zhen — led by the Emperor Star, Zi Wei, with a leading, pioneering character.',
+    s3li2: '<strong>The Tian Fu group (Southern Dipper)</strong>: Tian Fu, Tai Yin, Tan Lang, Ju Men, Tian Xiang, Tian Liang, Qi Sha, and Po Jun — led by the Treasury Star, Tian Fu, inclined toward consolidation and accumulation.',
+    s3p2: 'Each major star carries a vivid personality archetype: Zi Wei is dignified and image-conscious, Tian Ji quick-witted and strategic, Wu Qu resolute and pragmatic, Tan Lang multi-talented and full of desires, Qi Sha brimming with drive, Po Jun a breaker of old orders who builds anew... The major star seated in the Life Palace sketches a person\'s basic temperament; auxiliary stars such as Zuo Fu, You Bi, Wen Chang, and Wen Qu, together with the malefic stars (Qing Yang, Tuo Luo, Huo Xing, Ling Xing), add further layers of nuance.',
+    s4h: 'The Four Transformations: Prosperity, Power, Merit, Obstruction',
+    s4p1: 'The <strong>Four Transformations (Si Hua)</strong> are the soul of Zi Wei Dou Shu. According to the Heavenly Stem of the birth year, four particular stars each undergo a transformation — into Lu, Quan, Ke, or Ji:',
+    s4li1: '<strong>Hua Lu (Prosperity)</strong>: resources, affinity, and smooth progress — things tend to fall into place.',
+    s4li2: '<strong>Hua Quan (Power)</strong>: force, control, and expansion — the energy of active pursuit.',
+    s4li3: '<strong>Hua Ke (Merit)</strong>: reputation, benefactors, and resolution — a gentle helping hand.',
+    s4li4: '<strong>Hua Ji (Obstruction)</strong>: attachment, blockage, and life lessons — the area demanding the most care.',
+    s4p2: 'Whichever palaces the Four Transformations land in reveal where life\'s energy flows and where its homework lies — Hua Ji is not simply "bad luck," but a marker of what one finds hardest to let go of in this life, and precisely what most drives one\'s growth.',
+    s5h: 'Decade and Annual Cycles: The Timeline Within the Pattern',
+    s5p1: 'Zi Wei Dou Shu has its own time system: the <strong>decade cycle (Da Xian)</strong> moves through one palace every ten years, and that palace becomes the acting Life Palace for the decade, shifting life\'s center of gravity; the <strong>annual cycle</strong> advances year by year and, combined with the annual Four Transformations, reveals each year\'s opportunities and challenges. The natal chart is the "pattern"; the cycles are the "timing" — pattern sets the ceiling, timing sets the ups and downs, and only by reading the two together does one arrive at a complete Zi Wei interpretation.',
+    cta: 'Try the interactive tool: Online Zi Wei Chart →',
+    footer: '© 2026 Fatism · For reflection only. Not advice. <a href="../index.html">Back to home</a>',
+  },
+};
+
+const LANG_KEY = 'fatism_lang';
+let lang = localStorage.getItem(LANG_KEY) || 'tw';
+if (!I18N[lang]) lang = 'tw';
+
+function t(k) { return I18N[lang][k] || k; }
+
+function apply() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.dataset.i18n;
+    if (I18N[lang][k] != null) el.innerHTML = I18N[lang][k];
+  });
+  document.documentElement.lang = ({tw:'zh-TW',cn:'zh-CN',en:'en'})[lang];
+  document.querySelectorAll('#langSwitch button').forEach(b =>
+    b.classList.toggle('active', b.dataset.lang === lang));
+}
+
+document.getElementById('langSwitch').addEventListener('click', (e) => {
+  if (e.target.tagName !== 'BUTTON') return;
+  lang = e.target.dataset.lang;
+  localStorage.setItem(LANG_KEY, lang);
+  apply();
+});
+apply();
+</script>
 </body>
 </html>

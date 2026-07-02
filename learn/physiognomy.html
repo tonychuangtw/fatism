@@ -46,6 +46,14 @@
   nav.topnav a { color: var(--text-dim); text-decoration: none; padding: 4px 6px; transition: color 0.15s; }
   nav.topnav a:hover { color: var(--gold); }
   nav.topnav a.current { color: var(--gold); border-bottom: 1px solid var(--gold); }
+  .lang-row { display: flex; justify-content: flex-end; margin-bottom: 14px; }
+  .lang-switch { display: flex; gap: 4px; border: 1px solid var(--gold-dim); border-radius: 999px; padding: 3px; }
+  .lang-switch button {
+    background: transparent; color: var(--text-dim); border: none;
+    padding: 6px 12px; border-radius: 999px; cursor: pointer;
+    font-family: inherit; font-size: 13px; transition: all 0.15s;
+  }
+  .lang-switch button.active { background: var(--gold); color: var(--bg-1); font-weight: 600; }
   .hero { text-align: center; margin-bottom: 48px; }
   .hero .icon { font-size: 56px; line-height: 1; margin-bottom: 12px; }
   h1 {
@@ -96,62 +104,185 @@
 </head>
 <body>
 <div class="container">
+  <div class="lang-row">
+    <div class="lang-switch" id="langSwitch">
+      <button data-lang="tw" class="active">繁中</button>
+      <button data-lang="cn">简中</button>
+      <button data-lang="en">EN</button>
+    </div>
+  </div>
+
   <nav class="topnav">
-    <a href="../index.html">首頁</a>
-    <a href="tarot.html">塔羅牌</a>
-    <a href="bazi.html">八字命盤</a>
-    <a href="ziwei.html">紫微斗數</a>
-    <a href="palmistry.html">手相</a>
-    <a href="physiognomy.html" class="current">面相</a>
-    <a href="../pricing.html">價格</a>
+    <a href="../index.html" data-i18n="navHome">首頁</a>
+    <a href="tarot.html" data-i18n="navTarot">塔羅牌</a>
+    <a href="bazi.html" data-i18n="navBazi">八字命盤</a>
+    <a href="ziwei.html" data-i18n="navZiwei">紫微斗數</a>
+    <a href="palmistry.html" data-i18n="navPalm">手相</a>
+    <a href="physiognomy.html" class="current" data-i18n="navFace">面相</a>
+    <a href="../pricing.html" data-i18n="navPricing">價格</a>
   </nav>
 
   <div class="hero">
     <div class="icon">👤</div>
-    <h1>面相入門</h1>
-    <div class="sub">Physiognomy · 相由心生的觀察學</div>
+    <h1 data-i18n="heroT">面相入門</h1>
+    <div class="sub" data-i18n="heroSub">Physiognomy · 相由心生的觀察學</div>
   </div>
 
   <section class="block">
-    <h2>面相學的傳統</h2>
-    <p>面相學是中國相術中歷史最悠久的分支之一，先秦典籍已有觀人之術的記載，歷代著作如《麻衣相法》《柳莊相法》《冰鑑》等，將觀察面部形貌、神態與氣色的方法系統化。傳統面相並非只看五官美醜，而是綜合<strong>形（骨肉輪廓）、神（眼神精氣）、氣（氣色明暗）</strong>三個層次，其中「神」被視為最重要——所謂「相由心生」，指的正是內在心境長期形塑外在神情的觀察智慧。</p>
+    <h2 data-i18n="s1H">面相學的傳統</h2>
+    <p data-i18n="s1P1">面相學是中國相術中歷史最悠久的分支之一，先秦典籍已有觀人之術的記載，歷代著作如《麻衣相法》《柳莊相法》《冰鑑》等，將觀察面部形貌、神態與氣色的方法系統化。傳統面相並非只看五官美醜，而是綜合<strong>形（骨肉輪廓）、神（眼神精氣）、氣（氣色明暗）</strong>三個層次，其中「神」被視為最重要——所謂「相由心生」，指的正是內在心境長期形塑外在神情的觀察智慧。</p>
   </section>
 
   <section class="block">
-    <h2>三停：面部的三等分</h2>
-    <p>面相首先將臉縱向分為三段，稱為<strong>三停</strong>：</p>
+    <h2 data-i18n="s2H">三停：面部的三等分</h2>
+    <p data-i18n="s2P1">面相首先將臉縱向分為三段，稱為<strong>三停</strong>：</p>
     <ul>
-      <li><strong>上停</strong>（髮際至眉）：主早年運（約 15–30 歲），觀察智力稟賦、父母庇蔭。額頭飽滿開闊者，傳統視為思慮清晰、早年得助。</li>
-      <li><strong>中停</strong>（眉至鼻底）：主中年運（約 31–50 歲），觀察意志力、行動力與事業成就。眉眼有神、鼻樑挺直，代表中年拚搏有成。</li>
-      <li><strong>下停</strong>（鼻底至下巴）：主晚年運（51 歲以後），觀察包容力、部屬緣與晚境安穩。地閣（下巴）方圓有肉者，晚運被認為較為安定。</li>
+      <li data-i18n="s2L1"><strong>上停</strong>（髮際至眉）：主早年運（約 15–30 歲），觀察智力稟賦、父母庇蔭。額頭飽滿開闊者，傳統視為思慮清晰、早年得助。</li>
+      <li data-i18n="s2L2"><strong>中停</strong>（眉至鼻底）：主中年運（約 31–50 歲），觀察意志力、行動力與事業成就。眉眼有神、鼻樑挺直，代表中年拚搏有成。</li>
+      <li data-i18n="s2L3"><strong>下停</strong>（鼻底至下巴）：主晚年運（51 歲以後），觀察包容力、部屬緣與晚境安穩。地閣（下巴）方圓有肉者，晚運被認為較為安定。</li>
     </ul>
-    <p>三停以<strong>均衡</strong>為貴：三段比例勻稱，代表人生各階段發展平穩，勝過單一部位特別突出。</p>
+    <p data-i18n="s2P2">三停以<strong>均衡</strong>為貴：三段比例勻稱，代表人生各階段發展平穩，勝過單一部位特別突出。</p>
   </section>
 
   <section class="block">
-    <h2>五官：五種觀察之官</h2>
-    <p>相學中的「五官」各有專名與職司：<strong>眉為保壽官</strong>（情感表達與手足緣，宜秀長順貼）、<strong>眼為監察官</strong>（心神所在，貴在黑白分明、眼神安定）、<strong>鼻為審辨官</strong>（自我與財帛，鼻樑主行動力、鼻頭鼻翼主財庫）、<strong>耳為採聽官</strong>（稟賦與少年運，宜輪廓分明、色澤明潤）、<strong>口為出納官</strong>（食祿與信用，宜稜角分明、開合有力）。</p>
-    <p>五官之中以眼最為關鍵——古人論相先觀神，「一身精神具乎兩目」，眼神清亮安定者，縱使其他部位平常，整體格局仍佳。</p>
+    <h2 data-i18n="s3H">五官：五種觀察之官</h2>
+    <p data-i18n="s3P1">相學中的「五官」各有專名與職司：<strong>眉為保壽官</strong>（情感表達與手足緣，宜秀長順貼）、<strong>眼為監察官</strong>（心神所在，貴在黑白分明、眼神安定）、<strong>鼻為審辨官</strong>（自我與財帛，鼻樑主行動力、鼻頭鼻翼主財庫）、<strong>耳為採聽官</strong>（稟賦與少年運，宜輪廓分明、色澤明潤）、<strong>口為出納官</strong>（食祿與信用，宜稜角分明、開合有力）。</p>
+    <p data-i18n="s3P2">五官之中以眼最為關鍵——古人論相先觀神，「一身精神具乎兩目」，眼神清亮安定者，縱使其他部位平常，整體格局仍佳。</p>
   </section>
 
   <section class="block">
-    <h2>十二宮位：面上的人生領域</h2>
-    <p>與紫微斗數呼應，面相也把臉部劃分為十二宮，各對應一個人生領域：<strong>命宮</strong>（兩眉之間的印堂，一生總樞紐，宜開闊明淨）、<strong>財帛宮</strong>（鼻頭準頭）、<strong>兄弟宮</strong>（眉毛）、<strong>田宅宮</strong>（眉眼之間的眼皮部位）、<strong>夫妻宮</strong>（眼尾奸門）、<strong>子女宮</strong>（眼下淚堂）、<strong>疾厄宮</strong>（山根，兩眼之間）、<strong>遷移宮</strong>（額角驛馬）、<strong>官祿宮</strong>（額頭中央）、<strong>福德宮</strong>（眉上方）、<strong>父母宮</strong>（額頭日月角）、<strong>奴僕宮</strong>（下巴兩側）。判讀時觀察該部位的豐隆、平陷、紋痕與色澤，對應該領域的順逆。</p>
+    <h2 data-i18n="s4H">十二宮位：面上的人生領域</h2>
+    <p data-i18n="s4P1">與紫微斗數呼應，面相也把臉部劃分為十二宮，各對應一個人生領域：<strong>命宮</strong>（兩眉之間的印堂，一生總樞紐，宜開闊明淨）、<strong>財帛宮</strong>（鼻頭準頭）、<strong>兄弟宮</strong>（眉毛）、<strong>田宅宮</strong>（眉眼之間的眼皮部位）、<strong>夫妻宮</strong>（眼尾奸門）、<strong>子女宮</strong>（眼下淚堂）、<strong>疾厄宮</strong>（山根，兩眼之間）、<strong>遷移宮</strong>（額角驛馬）、<strong>官祿宮</strong>（額頭中央）、<strong>福德宮</strong>（眉上方）、<strong>父母宮</strong>（額頭日月角）、<strong>奴僕宮</strong>（下巴兩側）。判讀時觀察該部位的豐隆、平陷、紋痕與色澤，對應該領域的順逆。</p>
   </section>
 
   <section class="block">
-    <h2>氣色：動態的晴雨表</h2>
-    <p>骨相輪廓一生變化有限，<strong>氣色</strong>卻隨身心狀態日日流轉，是面相中的「動態指標」。傳統以色澤論吉凶：<strong>明黃潤澤</strong>為吉，主運勢通達；<strong>青色</strong>主憂驚勞損；<strong>赤紅浮躁</strong>主口舌是非；<strong>白而枯槁</strong>主耗損哀戚；<strong>黑暗滯澀</strong>主阻滯疲敝。重點部位如印堂、準頭氣色明亮，多半反映近期精神飽滿、諸事順手。</p>
-    <p>以現代眼光看，氣色其實與睡眠、血液循環與情緒狀態高度相關——面相觀氣色，某種程度上正是古人的「身心健康觀察法」。面相之學，終究是認識自己與理解他人的一面鏡子，觀相不如觀心，養好心境與作息，便是最好的「改運」。</p>
+    <h2 data-i18n="s5H">氣色：動態的晴雨表</h2>
+    <p data-i18n="s5P1">骨相輪廓一生變化有限，<strong>氣色</strong>卻隨身心狀態日日流轉，是面相中的「動態指標」。傳統以色澤論吉凶：<strong>明黃潤澤</strong>為吉，主運勢通達；<strong>青色</strong>主憂驚勞損；<strong>赤紅浮躁</strong>主口舌是非；<strong>白而枯槁</strong>主耗損哀戚；<strong>黑暗滯澀</strong>主阻滯疲敝。重點部位如印堂、準頭氣色明亮，多半反映近期精神飽滿、諸事順手。</p>
+    <p data-i18n="s5P2">以現代眼光看，氣色其實與睡眠、血液循環與情緒狀態高度相關——面相觀氣色，某種程度上正是古人的「身心健康觀察法」。面相之學，終究是認識自己與理解他人的一面鏡子，觀相不如觀心，養好心境與作息，便是最好的「改運」。</p>
   </section>
 
   <div class="cta">
-    <span class="soon">互動工具即將推出</span>
+    <span class="soon" data-i18n="ctaSoon">互動工具即將推出</span>
   </div>
 
   <footer>
-    <p>© 2026 命運閣 · 僅供反思啟發，不構成任何決策建議。 <a href="../index.html">返回首頁</a></p>
+    <p data-i18n="footer">© 2026 命運閣 · 僅供反思啟發，不構成任何決策建議。 <a href="../index.html">返回首頁</a></p>
   </footer>
 </div>
+
+<script>
+const I18N = {
+  tw: {
+    navHome: '首頁',
+    navTarot: '塔羅牌',
+    navBazi: '八字命盤',
+    navZiwei: '紫微斗數',
+    navPalm: '手相',
+    navFace: '面相',
+    navPricing: '價格',
+    heroT: '面相入門',
+    heroSub: 'Physiognomy · 相由心生的觀察學',
+    s1H: '面相學的傳統',
+    s1P1: '面相學是中國相術中歷史最悠久的分支之一，先秦典籍已有觀人之術的記載，歷代著作如《麻衣相法》《柳莊相法》《冰鑑》等，將觀察面部形貌、神態與氣色的方法系統化。傳統面相並非只看五官美醜，而是綜合<strong>形（骨肉輪廓）、神（眼神精氣）、氣（氣色明暗）</strong>三個層次，其中「神」被視為最重要——所謂「相由心生」，指的正是內在心境長期形塑外在神情的觀察智慧。',
+    s2H: '三停：面部的三等分',
+    s2P1: '面相首先將臉縱向分為三段，稱為<strong>三停</strong>：',
+    s2L1: '<strong>上停</strong>（髮際至眉）：主早年運（約 15–30 歲），觀察智力稟賦、父母庇蔭。額頭飽滿開闊者，傳統視為思慮清晰、早年得助。',
+    s2L2: '<strong>中停</strong>（眉至鼻底）：主中年運（約 31–50 歲），觀察意志力、行動力與事業成就。眉眼有神、鼻樑挺直，代表中年拚搏有成。',
+    s2L3: '<strong>下停</strong>（鼻底至下巴）：主晚年運（51 歲以後），觀察包容力、部屬緣與晚境安穩。地閣（下巴）方圓有肉者，晚運被認為較為安定。',
+    s2P2: '三停以<strong>均衡</strong>為貴：三段比例勻稱，代表人生各階段發展平穩，勝過單一部位特別突出。',
+    s3H: '五官：五種觀察之官',
+    s3P1: '相學中的「五官」各有專名與職司：<strong>眉為保壽官</strong>（情感表達與手足緣，宜秀長順貼）、<strong>眼為監察官</strong>（心神所在，貴在黑白分明、眼神安定）、<strong>鼻為審辨官</strong>（自我與財帛，鼻樑主行動力、鼻頭鼻翼主財庫）、<strong>耳為採聽官</strong>（稟賦與少年運，宜輪廓分明、色澤明潤）、<strong>口為出納官</strong>（食祿與信用，宜稜角分明、開合有力）。',
+    s3P2: '五官之中以眼最為關鍵——古人論相先觀神，「一身精神具乎兩目」，眼神清亮安定者，縱使其他部位平常，整體格局仍佳。',
+    s4H: '十二宮位：面上的人生領域',
+    s4P1: '與紫微斗數呼應，面相也把臉部劃分為十二宮，各對應一個人生領域：<strong>命宮</strong>（兩眉之間的印堂，一生總樞紐，宜開闊明淨）、<strong>財帛宮</strong>（鼻頭準頭）、<strong>兄弟宮</strong>（眉毛）、<strong>田宅宮</strong>（眉眼之間的眼皮部位）、<strong>夫妻宮</strong>（眼尾奸門）、<strong>子女宮</strong>（眼下淚堂）、<strong>疾厄宮</strong>（山根，兩眼之間）、<strong>遷移宮</strong>（額角驛馬）、<strong>官祿宮</strong>（額頭中央）、<strong>福德宮</strong>（眉上方）、<strong>父母宮</strong>（額頭日月角）、<strong>奴僕宮</strong>（下巴兩側）。判讀時觀察該部位的豐隆、平陷、紋痕與色澤，對應該領域的順逆。',
+    s5H: '氣色：動態的晴雨表',
+    s5P1: '骨相輪廓一生變化有限，<strong>氣色</strong>卻隨身心狀態日日流轉，是面相中的「動態指標」。傳統以色澤論吉凶：<strong>明黃潤澤</strong>為吉，主運勢通達；<strong>青色</strong>主憂驚勞損；<strong>赤紅浮躁</strong>主口舌是非；<strong>白而枯槁</strong>主耗損哀戚；<strong>黑暗滯澀</strong>主阻滯疲敝。重點部位如印堂、準頭氣色明亮，多半反映近期精神飽滿、諸事順手。',
+    s5P2: '以現代眼光看，氣色其實與睡眠、血液循環與情緒狀態高度相關——面相觀氣色，某種程度上正是古人的「身心健康觀察法」。面相之學，終究是認識自己與理解他人的一面鏡子，觀相不如觀心，養好心境與作息，便是最好的「改運」。',
+    ctaSoon: '互動工具即將推出',
+    footer: '© 2026 命運閣 · 僅供反思啟發，不構成任何決策建議。 <a href="../index.html">返回首頁</a>',
+  },
+  cn: {
+    navHome: '首页',
+    navTarot: '塔罗牌',
+    navBazi: '八字命盘',
+    navZiwei: '紫微斗数',
+    navPalm: '手相',
+    navFace: '面相',
+    navPricing: '价格',
+    heroT: '面相入门',
+    heroSub: 'Physiognomy · 相由心生的观察学',
+    s1H: '面相学的传统',
+    s1P1: '面相学是中国相术中历史最悠久的分支之一，先秦典籍已有观人之术的记载，历代著作如《麻衣相法》《柳庄相法》《冰鉴》等，将观察面部形貌、神态与气色的方法系统化。传统面相并非只看五官美丑，而是综合<strong>形（骨肉轮廓）、神（眼神精气）、气（气色明暗）</strong>三个层次，其中“神”被视为最重要——所谓“相由心生”，指的正是内在心境长期形塑外在神情的观察智慧。',
+    s2H: '三停：面部的三等分',
+    s2P1: '面相首先将脸纵向分为三段，称为<strong>三停</strong>：',
+    s2L1: '<strong>上停</strong>（发际至眉）：主早年运（约 15–30 岁），观察智力禀赋、父母庇荫。额头饱满开阔者，传统视为思虑清晰、早年得助。',
+    s2L2: '<strong>中停</strong>（眉至鼻底）：主中年运（约 31–50 岁），观察意志力、行动力与事业成就。眉眼有神、鼻梁挺直，代表中年拼搏有成。',
+    s2L3: '<strong>下停</strong>（鼻底至下巴）：主晚年运（51 岁以后），观察包容力、部属缘与晚境安稳。地阁（下巴）方圆有肉者，晚运被认为较为安定。',
+    s2P2: '三停以<strong>均衡</strong>为贵：三段比例匀称，代表人生各阶段发展平稳，胜过单一部位特别突出。',
+    s3H: '五官：五种观察之官',
+    s3P1: '相学中的“五官”各有专名与职司：<strong>眉为保寿官</strong>（情感表达与手足缘，宜秀长顺贴）、<strong>眼为监察官</strong>（心神所在，贵在黑白分明、眼神安定）、<strong>鼻为审辨官</strong>（自我与财帛，鼻梁主行动力、鼻头鼻翼主财库）、<strong>耳为采听官</strong>（禀赋与少年运，宜轮廓分明、色泽明润）、<strong>口为出纳官</strong>（食禄与信用，宜棱角分明、开合有力）。',
+    s3P2: '五官之中以眼最为关键——古人论相先观神，“一身精神具乎两目”，眼神清亮安定者，纵使其他部位平常，整体格局仍佳。',
+    s4H: '十二宫位：面上的人生领域',
+    s4P1: '与紫微斗数呼应，面相也把脸部划分为十二宫，各对应一个人生领域：<strong>命宫</strong>（两眉之间的印堂，一生总枢纽，宜开阔明净）、<strong>财帛宫</strong>（鼻头准头）、<strong>兄弟宫</strong>（眉毛）、<strong>田宅宫</strong>（眉眼之间的眼皮部位）、<strong>夫妻宫</strong>（眼尾奸门）、<strong>子女宫</strong>（眼下泪堂）、<strong>疾厄宫</strong>（山根，两眼之间）、<strong>迁移宫</strong>（额角驿马）、<strong>官禄宫</strong>（额头中央）、<strong>福德宫</strong>（眉上方）、<strong>父母宫</strong>（额头日月角）、<strong>奴仆宫</strong>（下巴两侧）。判读时观察该部位的丰隆、平陷、纹痕与色泽，对应该领域的顺逆。',
+    s5H: '气色：动态的晴雨表',
+    s5P1: '骨相轮廓一生变化有限，<strong>气色</strong>却随身心状态日日流转，是面相中的“动态指标”。传统以色泽论吉凶：<strong>明黄润泽</strong>为吉，主运势通达；<strong>青色</strong>主忧惊劳损；<strong>赤红浮躁</strong>主口舌是非；<strong>白而枯槁</strong>主耗损哀戚；<strong>黑暗滞涩</strong>主阻滞疲敝。重点部位如印堂、准头气色明亮，多半反映近期精神饱满、诸事顺手。',
+    s5P2: '以现代眼光看，气色其实与睡眠、血液循环与情绪状态高度相关——面相观气色，某种程度上正是古人的“身心健康观察法”。面相之学，终究是认识自己与理解他人的一面镜子，观相不如观心，养好心境与作息，便是最好的“改运”。',
+    ctaSoon: '互动工具即将推出',
+    footer: '© 2026 命运阁 · 仅供反思启发，不构成任何决策建议。 <a href="../index.html">返回首页</a>',
+  },
+  en: {
+    navHome: 'Home',
+    navTarot: 'Tarot',
+    navBazi: 'BaZi Chart',
+    navZiwei: 'Zi Wei Dou Shu',
+    navPalm: 'Palmistry',
+    navFace: 'Physiognomy',
+    navPricing: 'Pricing',
+    heroT: 'Physiognomy Basics',
+    heroSub: 'Physiognomy · The Face Mirrors the Heart',
+    s1H: 'The Tradition of Face Reading',
+    s1P1: 'Physiognomy is one of the oldest branches of the Chinese divinatory arts. Texts from the pre-Qin era already record methods for judging character by appearance, and later classics such as the <strong>Mayi Xiangfa</strong>, the <strong>Liuzhuang Xiangfa</strong>, and the <strong>Bingjian</strong> systematized the observation of facial structure, bearing, and complexion. Traditional face reading is not about judging beauty. It weighs three layers together — <strong>form (the contours of bone and flesh), spirit (the vitality of the gaze), and qi (the brightness of the complexion)</strong> — with spirit considered the most important. The saying "the face is born of the heart" captures exactly this insight: over time, one\'s inner state shapes one\'s outward expression.',
+    s2H: 'The Three Courts: Dividing the Face into Thirds',
+    s2P1: 'Face reading begins by dividing the face vertically into three sections, known as the <strong>Three Courts (San Ting)</strong>:',
+    s2L1: '<strong>Upper Court</strong> (hairline to eyebrows): governs early life (roughly ages 15–30), revealing intellectual endowment and parental support. A full, open forehead is traditionally read as clear thinking and helpful backing early in life.',
+    s2L2: '<strong>Middle Court</strong> (eyebrows to the base of the nose): governs midlife (roughly ages 31–50), revealing willpower, drive, and career achievement. Spirited eyes and a straight nose bridge suggest hard-won success in the middle years.',
+    s2L3: '<strong>Lower Court</strong> (base of the nose to the chin): governs later life (from age 51 onward), revealing tolerance, rapport with subordinates, and stability in old age. A rounded, fleshy chin is considered a sign of a settled later life.',
+    s2P2: '<strong>Balance</strong> is prized above all: when the three courts are well proportioned, life is said to unfold steadily through every stage — better than any single feature standing out on its own.',
+    s3H: 'The Five Officials: Five Organs of Observation',
+    s3P1: 'In physiognomy each of the <strong>Five Officials</strong> carries a title and a duty: the <strong>eyebrows are the Official of Longevity</strong> (emotional expression and sibling ties; best long, fine, and lying smooth), the <strong>eyes are the Official of Inspection</strong> (the seat of the spirit; prized for clear contrast between iris and white and a steady gaze), the <strong>nose is the Official of Discernment</strong> (self and wealth; the bridge governs drive, the tip and wings the treasury), the <strong>ears are the Official of Listening</strong> (natural endowment and youth; best well-defined and lustrous), and the <strong>mouth is the Official of Intake</strong> (livelihood and credibility; best crisply outlined, opening and closing with force).',
+    s3P2: 'Among the five, the eyes matter most. The ancients judged spirit before anything else — "the vitality of the whole person gathers in the two eyes." Someone whose gaze is bright and steady is considered well-configured overall, even if the other features are ordinary.',
+    s4H: 'The Twelve Palaces: Life Domains on the Face',
+    s4P1: 'Echoing Zi Wei Dou Shu, physiognomy also maps the face into twelve palaces, each governing a life domain: the <strong>Life Palace</strong> (the yintang between the brows — the master hub of the whole face, best open and clear), the <strong>Wealth Palace</strong> (the tip of the nose), the <strong>Siblings Palace</strong> (the eyebrows), the <strong>Property Palace</strong> (the eyelid area between brow and eye), the <strong>Marriage Palace</strong> (the temples at the outer corners of the eyes), the <strong>Children Palace</strong> (the area just below the eyes), the <strong>Health Palace</strong> (the bridge of the nose between the eyes), the <strong>Travel Palace</strong> (the upper corners of the forehead), the <strong>Career Palace</strong> (the center of the forehead), the <strong>Fortune Palace</strong> (just above the brows), the <strong>Parents Palace</strong> (the "sun and moon corners" of the forehead), and the <strong>Servants Palace</strong> (both sides of the chin). A reading assesses each area\'s fullness or hollowness, marks, and coloring to gauge fortune in the corresponding domain.',
+    s5H: 'Complexion: The Dynamic Barometer',
+    s5P1: 'Bone structure changes little over a lifetime, but <strong>complexion (qi se)</strong> shifts day by day with the state of body and mind — the "dynamic indicator" of face reading. Tradition reads its tones for fortune: a <strong>bright, moist yellow glow</strong> is auspicious, signaling smooth progress; a <strong>bluish-green cast</strong> suggests worry and strain; <strong>agitated redness</strong> points to disputes and friction; a <strong>pallid, withered white</strong> to depletion and grief; and a <strong>dark, murky dullness</strong> to obstruction and fatigue. Brightness at key points such as the yintang and the tip of the nose usually reflects recent high spirits and things going one\'s way.',
+    s5P2: 'Seen through modern eyes, complexion correlates closely with sleep, circulation, and emotional state — reading qi se was, in a sense, the ancients\' method of monitoring physical and mental health. In the end, face reading is a mirror for knowing yourself and understanding others. Watching the heart matters more than watching the face: tending your state of mind and your daily rhythms is the best "luck adjustment" there is.',
+    ctaSoon: 'Interactive tool coming soon',
+    footer: '© 2026 Fatism · For reflection only. Not advice. <a href="../index.html">Back to home</a>',
+  },
+};
+
+let lang = 'tw';
+try { const saved = localStorage.getItem('fatism_lang'); if (I18N[saved]) lang = saved; } catch (e) {}
+
+function apply() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.dataset.i18n;
+    if (I18N[lang][k] != null) el.innerHTML = I18N[lang][k];
+  });
+  document.documentElement.lang = ({tw:'zh-TW',cn:'zh-CN',en:'en'})[lang];
+}
+
+document.getElementById('langSwitch').addEventListener('click', (e) => {
+  if (e.target.tagName !== 'BUTTON') return;
+  lang = e.target.dataset.lang;
+  try { localStorage.setItem('fatism_lang', lang); } catch (e2) {}
+  document.querySelectorAll('#langSwitch button').forEach(b =>
+    b.classList.toggle('active', b.dataset.lang === lang));
+  apply();
+});
+document.querySelectorAll('#langSwitch button').forEach(b =>
+  b.classList.toggle('active', b.dataset.lang === lang));
+apply();
+</script>
 </body>
 </html>

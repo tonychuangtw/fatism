@@ -38,6 +38,14 @@
     z-index: 0;
   }
   .container { max-width: 860px; margin: 0 auto; position: relative; z-index: 1; }
+  .lang-row { display: flex; justify-content: flex-end; margin-bottom: 14px; }
+  .lang-switch { display: flex; gap: 4px; border: 1px solid var(--gold-dim); border-radius: 999px; padding: 3px; }
+  .lang-switch button {
+    background: transparent; color: var(--text-dim); border: none;
+    padding: 6px 12px; border-radius: 999px; cursor: pointer;
+    font-family: inherit; font-size: 13px; transition: all 0.15s;
+  }
+  .lang-switch button.active { background: var(--gold); color: var(--bg-1); font-weight: 600; }
   nav.topnav {
     display: flex; flex-wrap: wrap; gap: 6px 14px; justify-content: center;
     margin-bottom: 40px; font-size: 14px; letter-spacing: 0.08em;
@@ -96,66 +104,202 @@
 </head>
 <body>
 <div class="container">
+  <div class="lang-row">
+    <div class="lang-switch" id="langSwitch">
+      <button data-lang="tw" class="active">繁中</button>
+      <button data-lang="cn">简中</button>
+      <button data-lang="en">EN</button>
+    </div>
+  </div>
+
   <nav class="topnav">
-    <a href="../index.html">首頁</a>
-    <a href="tarot.html">塔羅牌</a>
-    <a href="bazi.html" class="current">八字命盤</a>
-    <a href="ziwei.html">紫微斗數</a>
-    <a href="palmistry.html">手相</a>
-    <a href="physiognomy.html">面相</a>
-    <a href="../pricing.html">價格</a>
+    <a href="../index.html" data-i18n="navHome">首頁</a>
+    <a href="tarot.html" data-i18n="navTarot">塔羅牌</a>
+    <a href="bazi.html" class="current" data-i18n="navBazi">八字命盤</a>
+    <a href="ziwei.html" data-i18n="navZiwei">紫微斗數</a>
+    <a href="palmistry.html" data-i18n="navPalm">手相</a>
+    <a href="physiognomy.html" data-i18n="navFace">面相</a>
+    <a href="../pricing.html" data-i18n="navPricing">價格</a>
   </nav>
 
   <div class="hero">
     <div class="icon">☯</div>
-    <h1>八字命盤入門</h1>
-    <div class="sub">BaZi · 四柱推命的智慧</div>
+    <h1 data-i18n="heroTitle">八字命盤入門</h1>
+    <div class="sub" data-i18n="heroSub">BaZi · 四柱推命的智慧</div>
   </div>
 
   <section class="block">
-    <h2>什麼是八字？</h2>
-    <p>八字，又稱<strong>四柱推命</strong>，以人出生的年、月、日、時四個時間點各配上一組天干與地支，形成「年柱、月柱、日柱、時柱」四柱、共八個字，故名八字。其理論體系奠基於唐代李虛中，至宋代徐子平確立以「日干」為核心的推算方法，因此又稱「子平術」。</p>
-    <p>八字的基本假設是：出生時刻的天地之氣，蘊含著一個人先天稟賦的訊息。它不是宿命的判決書，而是一張描述性格傾向、能量結構與人生節奏的「說明書」。</p>
+    <h2 data-i18n="s1h">什麼是八字？</h2>
+    <p data-i18n="s1p1">八字，又稱<strong>四柱推命</strong>，以人出生的年、月、日、時四個時間點各配上一組天干與地支，形成「年柱、月柱、日柱、時柱」四柱、共八個字，故名八字。其理論體系奠基於唐代李虛中，至宋代徐子平確立以「日干」為核心的推算方法，因此又稱「子平術」。</p>
+    <p data-i18n="s1p2">八字的基本假設是：出生時刻的天地之氣，蘊含著一個人先天稟賦的訊息。它不是宿命的判決書，而是一張描述性格傾向、能量結構與人生節奏的「說明書」。</p>
   </section>
 
   <section class="block">
-    <h2>天干地支：時間的座標系統</h2>
-    <p>八字使用中國古代的干支紀時法。<strong>十天干</strong>為甲、乙、丙、丁、戊、己、庚、辛、壬、癸；<strong>十二地支</strong>為子、丑、寅、卯、辰、巳、午、未、申、酉、戌、亥（也就是十二生肖的符號）。天干與地支依序兩兩相配，形成六十組循環，稱為「六十甲子」——這就是「六十年一甲子」的由來。</p>
-    <p>值得注意的是，八字的月份以「節氣」而非農曆初一劃分（例如立春才算新一年的開始），時辰則以兩小時為一個地支時段，如晚上十一點到凌晨一點為「子時」。</p>
+    <h2 data-i18n="s2h">天干地支：時間的座標系統</h2>
+    <p data-i18n="s2p1">八字使用中國古代的干支紀時法。<strong>十天干</strong>為甲、乙、丙、丁、戊、己、庚、辛、壬、癸；<strong>十二地支</strong>為子、丑、寅、卯、辰、巳、午、未、申、酉、戌、亥（也就是十二生肖的符號）。天干與地支依序兩兩相配，形成六十組循環，稱為「六十甲子」——這就是「六十年一甲子」的由來。</p>
+    <p data-i18n="s2p2">值得注意的是，八字的月份以「節氣」而非農曆初一劃分（例如立春才算新一年的開始），時辰則以兩小時為一個地支時段，如晚上十一點到凌晨一點為「子時」。</p>
   </section>
 
   <section class="block">
-    <h2>五行：金木水火土的生剋</h2>
-    <p>每個天干地支都對應五行屬性與陰陽。五行之間存在兩種基本關係：<strong>相生</strong>（木生火、火生土、土生金、金生水、水生木）與<strong>相剋</strong>（木剋土、土剋水、水剋火、火剋金、金剋木）。</p>
-    <p>分析八字的第一步，就是看命盤中五行的分布：哪一行偏旺、哪一行缺乏、彼此如何生剋制衡。傳統認為五行流通均衡者，人生較為平順；某行過旺或過弱，則對應性格與際遇上的特定課題。所謂「喜用神」，就是能讓整體結構趨於平衡的關鍵五行。</p>
+    <h2 data-i18n="s3h">五行：金木水火土的生剋</h2>
+    <p data-i18n="s3p1">每個天干地支都對應五行屬性與陰陽。五行之間存在兩種基本關係：<strong>相生</strong>（木生火、火生土、土生金、金生水、水生木）與<strong>相剋</strong>（木剋土、土剋水、水剋火、火剋金、金剋木）。</p>
+    <p data-i18n="s3p2">分析八字的第一步，就是看命盤中五行的分布：哪一行偏旺、哪一行缺乏、彼此如何生剋制衡。傳統認為五行流通均衡者，人生較為平順；某行過旺或過弱，則對應性格與際遇上的特定課題。所謂「喜用神」，就是能讓整體結構趨於平衡的關鍵五行。</p>
   </section>
 
   <section class="block">
-    <h2>十神：以日主為中心的關係網</h2>
-    <p>八字以<strong>日柱天干</strong>（日主、日元）代表命主本人，其餘七字與日主的五行生剋與陰陽關係，歸納為十種角色，稱為「十神」：</p>
+    <h2 data-i18n="s4h">十神：以日主為中心的關係網</h2>
+    <p data-i18n="s4p1">八字以<strong>日柱天干</strong>（日主、日元）代表命主本人，其餘七字與日主的五行生剋與陰陽關係，歸納為十種角色，稱為「十神」：</p>
     <ul>
-      <li><strong>比肩、劫財</strong>（同我）：自我、同儕、競爭與合作。</li>
-      <li><strong>食神、傷官</strong>（我生）：才華、表達、創造力。</li>
-      <li><strong>正財、偏財</strong>（我剋）：財富、務實能力、掌控的資源。</li>
-      <li><strong>正官、七殺</strong>（剋我）：紀律、事業、壓力與責任。</li>
-      <li><strong>正印、偏印</strong>（生我）：學習、庇蔭、長輩與內在涵養。</li>
+      <li data-i18n="s4li1"><strong>比肩、劫財</strong>（同我）：自我、同儕、競爭與合作。</li>
+      <li data-i18n="s4li2"><strong>食神、傷官</strong>（我生）：才華、表達、創造力。</li>
+      <li data-i18n="s4li3"><strong>正財、偏財</strong>（我剋）：財富、務實能力、掌控的資源。</li>
+      <li data-i18n="s4li4"><strong>正官、七殺</strong>（剋我）：紀律、事業、壓力與責任。</li>
+      <li data-i18n="s4li5"><strong>正印、偏印</strong>（生我）：學習、庇蔭、長輩與內在涵養。</li>
     </ul>
-    <p>十神同時對應六親（父母、配偶、子女等），使八字能同時談性格、事業、財運與人際。</p>
+    <p data-i18n="s4p2">十神同時對應六親（父母、配偶、子女等），使八字能同時談性格、事業、財運與人際。</p>
   </section>
 
   <section class="block">
-    <h2>大運與流年：人生的節奏</h2>
-    <p>八字是靜態的先天結構，<strong>大運</strong>與<strong>流年</strong>則是動態的時間變數。大運由月柱推排而出，每十年更換一組干支，代表人生每十年的大環境走向；流年即每一年的干支（如 2026 丙午年），代表當年的外來能量。</p>
-    <p>解讀時，將大運、流年的干支與原局八字互動比對——生扶喜用神則機會浮現，沖剋關鍵字則需謹慎經營。這也是為什麼同樣的八字，在不同年紀、不同年份會有截然不同的際遇感受。理解自己的節奏，順勢而為，正是八字最實用的價值。</p>
+    <h2 data-i18n="s5h">大運與流年：人生的節奏</h2>
+    <p data-i18n="s5p1">八字是靜態的先天結構，<strong>大運</strong>與<strong>流年</strong>則是動態的時間變數。大運由月柱推排而出，每十年更換一組干支，代表人生每十年的大環境走向；流年即每一年的干支（如 2026 丙午年），代表當年的外來能量。</p>
+    <p data-i18n="s5p2">解讀時，將大運、流年的干支與原局八字互動比對——生扶喜用神則機會浮現，沖剋關鍵字則需謹慎經營。這也是為什麼同樣的八字，在不同年紀、不同年份會有截然不同的際遇感受。理解自己的節奏，順勢而為，正是八字最實用的價值。</p>
   </section>
 
   <div class="cta">
-    <a href="../widgets/bazi/index.html">試用互動工具：線上八字排盤 →</a>
+    <a href="../widgets/bazi/index.html" data-i18n="cta">試用互動工具：線上八字排盤 →</a>
   </div>
 
   <footer>
-    <p>© 2026 命運閣 · 僅供反思啟發，不構成任何決策建議。 <a href="../index.html">返回首頁</a></p>
+    <p data-i18n="footer">© 2026 命運閣 · 僅供反思啟發，不構成任何決策建議。 <a href="../index.html">返回首頁</a></p>
   </footer>
 </div>
+
+<script>
+const I18N = {
+  tw: {
+    navHome: '首頁',
+    navTarot: '塔羅牌',
+    navBazi: '八字命盤',
+    navZiwei: '紫微斗數',
+    navPalm: '手相',
+    navFace: '面相',
+    navPricing: '價格',
+    heroTitle: '八字命盤入門',
+    heroSub: 'BaZi · 四柱推命的智慧',
+    s1h: '什麼是八字？',
+    s1p1: '八字，又稱<strong>四柱推命</strong>，以人出生的年、月、日、時四個時間點各配上一組天干與地支，形成「年柱、月柱、日柱、時柱」四柱、共八個字，故名八字。其理論體系奠基於唐代李虛中，至宋代徐子平確立以「日干」為核心的推算方法，因此又稱「子平術」。',
+    s1p2: '八字的基本假設是：出生時刻的天地之氣，蘊含著一個人先天稟賦的訊息。它不是宿命的判決書，而是一張描述性格傾向、能量結構與人生節奏的「說明書」。',
+    s2h: '天干地支：時間的座標系統',
+    s2p1: '八字使用中國古代的干支紀時法。<strong>十天干</strong>為甲、乙、丙、丁、戊、己、庚、辛、壬、癸；<strong>十二地支</strong>為子、丑、寅、卯、辰、巳、午、未、申、酉、戌、亥（也就是十二生肖的符號）。天干與地支依序兩兩相配，形成六十組循環，稱為「六十甲子」——這就是「六十年一甲子」的由來。',
+    s2p2: '值得注意的是，八字的月份以「節氣」而非農曆初一劃分（例如立春才算新一年的開始），時辰則以兩小時為一個地支時段，如晚上十一點到凌晨一點為「子時」。',
+    s3h: '五行：金木水火土的生剋',
+    s3p1: '每個天干地支都對應五行屬性與陰陽。五行之間存在兩種基本關係：<strong>相生</strong>（木生火、火生土、土生金、金生水、水生木）與<strong>相剋</strong>（木剋土、土剋水、水剋火、火剋金、金剋木）。',
+    s3p2: '分析八字的第一步，就是看命盤中五行的分布：哪一行偏旺、哪一行缺乏、彼此如何生剋制衡。傳統認為五行流通均衡者，人生較為平順；某行過旺或過弱，則對應性格與際遇上的特定課題。所謂「喜用神」，就是能讓整體結構趨於平衡的關鍵五行。',
+    s4h: '十神：以日主為中心的關係網',
+    s4p1: '八字以<strong>日柱天干</strong>（日主、日元）代表命主本人，其餘七字與日主的五行生剋與陰陽關係，歸納為十種角色，稱為「十神」：',
+    s4li1: '<strong>比肩、劫財</strong>（同我）：自我、同儕、競爭與合作。',
+    s4li2: '<strong>食神、傷官</strong>（我生）：才華、表達、創造力。',
+    s4li3: '<strong>正財、偏財</strong>（我剋）：財富、務實能力、掌控的資源。',
+    s4li4: '<strong>正官、七殺</strong>（剋我）：紀律、事業、壓力與責任。',
+    s4li5: '<strong>正印、偏印</strong>（生我）：學習、庇蔭、長輩與內在涵養。',
+    s4p2: '十神同時對應六親（父母、配偶、子女等），使八字能同時談性格、事業、財運與人際。',
+    s5h: '大運與流年：人生的節奏',
+    s5p1: '八字是靜態的先天結構，<strong>大運</strong>與<strong>流年</strong>則是動態的時間變數。大運由月柱推排而出，每十年更換一組干支，代表人生每十年的大環境走向；流年即每一年的干支（如 2026 丙午年），代表當年的外來能量。',
+    s5p2: '解讀時，將大運、流年的干支與原局八字互動比對——生扶喜用神則機會浮現，沖剋關鍵字則需謹慎經營。這也是為什麼同樣的八字，在不同年紀、不同年份會有截然不同的際遇感受。理解自己的節奏，順勢而為，正是八字最實用的價值。',
+    cta: '試用互動工具：線上八字排盤 →',
+    footer: '© 2026 命運閣 · 僅供反思啟發，不構成任何決策建議。 <a href="../index.html">返回首頁</a>',
+  },
+  cn: {
+    navHome: '首页',
+    navTarot: '塔罗牌',
+    navBazi: '八字命盘',
+    navZiwei: '紫微斗数',
+    navPalm: '手相',
+    navFace: '面相',
+    navPricing: '价格',
+    heroTitle: '八字命盘入门',
+    heroSub: 'BaZi · 四柱推命的智慧',
+    s1h: '什么是八字？',
+    s1p1: '八字，又称<strong>四柱推命</strong>，以人出生的年、月、日、时四个时间点各配上一组天干与地支，形成「年柱、月柱、日柱、时柱」四柱、共八个字，故名八字。其理论体系奠基于唐代李虚中，至宋代徐子平确立以「日干」为核心的推算方法，因此又称「子平术」。',
+    s1p2: '八字的基本假设是：出生时刻的天地之气，蕴含着一个人先天禀赋的信息。它不是宿命的判决书，而是一张描述性格倾向、能量结构与人生节奏的「说明书」。',
+    s2h: '天干地支：时间的坐标系统',
+    s2p1: '八字使用中国古代的干支纪时法。<strong>十天干</strong>为甲、乙、丙、丁、戊、己、庚、辛、壬、癸；<strong>十二地支</strong>为子、丑、寅、卯、辰、巳、午、未、申、酉、戌、亥（也就是十二生肖的符号）。天干与地支依序两两相配，形成六十组循环，称为「六十甲子」——这就是「六十年一甲子」的由来。',
+    s2p2: '值得注意的是，八字的月份以「节气」而非农历初一划分（例如立春才算新一年的开始），时辰则以两小时为一个地支时段，如晚上十一点到凌晨一点为「子时」。',
+    s3h: '五行：金木水火土的生克',
+    s3p1: '每个天干地支都对应五行属性与阴阳。五行之间存在两种基本关系：<strong>相生</strong>（木生火、火生土、土生金、金生水、水生木）与<strong>相克</strong>（木克土、土克水、水克火、火克金、金克木）。',
+    s3p2: '分析八字的第一步，就是看命盘中五行的分布：哪一行偏旺、哪一行缺乏、彼此如何生克制衡。传统认为五行流通均衡者，人生较为平顺；某行过旺或过弱，则对应性格与际遇上的特定课题。所谓「喜用神」，就是能让整体结构趋于平衡的关键五行。',
+    s4h: '十神：以日主为中心的关系网',
+    s4p1: '八字以<strong>日柱天干</strong>（日主、日元）代表命主本人，其余七字与日主的五行生克与阴阳关系，归纳为十种角色，称为「十神」：',
+    s4li1: '<strong>比肩、劫财</strong>（同我）：自我、同侪、竞争与合作。',
+    s4li2: '<strong>食神、伤官</strong>（我生）：才华、表达、创造力。',
+    s4li3: '<strong>正财、偏财</strong>（我克）：财富、务实能力、掌控的资源。',
+    s4li4: '<strong>正官、七杀</strong>（克我）：纪律、事业、压力与责任。',
+    s4li5: '<strong>正印、偏印</strong>（生我）：学习、庇荫、长辈与内在涵养。',
+    s4p2: '十神同时对应六亲（父母、配偶、子女等），使八字能同时谈性格、事业、财运与人际。',
+    s5h: '大运与流年：人生的节奏',
+    s5p1: '八字是静态的先天结构，<strong>大运</strong>与<strong>流年</strong>则是动态的时间变数。大运由月柱推排而出，每十年更换一组干支，代表人生每十年的大环境走向；流年即每一年的干支（如 2026 丙午年），代表当年的外来能量。',
+    s5p2: '解读时，将大运、流年的干支与原局八字互动比对——生扶喜用神则机会浮现，冲克关键字则需谨慎经营。这也是为什么同样的八字，在不同年纪、不同年份会有截然不同的际遇感受。理解自己的节奏，顺势而为，正是八字最实用的价值。',
+    cta: '试用互动工具：在线八字排盘 →',
+    footer: '© 2026 命运阁 · 仅供反思启发，不构成任何决策建议。 <a href="../index.html">返回首页</a>',
+  },
+  en: {
+    navHome: 'Home',
+    navTarot: 'Tarot',
+    navBazi: 'BaZi',
+    navZiwei: 'Zi Wei',
+    navPalm: 'Palmistry',
+    navFace: 'Physiognomy',
+    navPricing: 'Pricing',
+    heroTitle: 'BaZi for Beginners',
+    heroSub: 'BaZi · The Wisdom of the Four Pillars',
+    s1h: 'What Is BaZi?',
+    s1p1: 'BaZi, also known as the <strong>Four Pillars of Destiny</strong>, assigns a Heavenly Stem and an Earthly Branch to each of the four moments of one\'s birth — year, month, day, and hour — forming four pillars of eight characters in total, hence the name ("eight characters"). Its theoretical framework was laid down by Li Xuzhong in the Tang dynasty; in the Song dynasty, Xu Ziping established the Day Stem as the analytical core, which is why the art is also called "Ziping astrology."',
+    s1p2: 'The basic premise of BaZi is that the qi of heaven and earth at the moment of birth encodes a person\'s innate endowment. It is not a verdict of fate, but a descriptive "owner\'s manual" of temperament, energetic structure, and the rhythm of one\'s life.',
+    s2h: 'Heavenly Stems and Earthly Branches: A Coordinate System of Time',
+    s2p1: 'BaZi uses the ancient Chinese stem-branch calendar. The <strong>ten Heavenly Stems</strong> are Jia, Yi, Bing, Ding, Wu, Ji, Geng, Xin, Ren, and Gui; the <strong>twelve Earthly Branches</strong> are Zi, Chou, Yin, Mao, Chen, Si, Wu, Wei, Shen, You, Xu, and Hai — the same symbols behind the twelve zodiac animals. Pairing stems with branches in sequence yields a cycle of sixty combinations, the "sixty Jiazi" — the origin of the saying that sixty years complete one full cycle.',
+    s2p2: 'Note that BaZi divides months by the <strong>solar terms</strong> rather than by the first day of the lunar month (the new year begins only at Lichun, the "Start of Spring"), and each two-hour period of the day corresponds to one Earthly Branch — 11 p.m. to 1 a.m., for instance, is the hour of Zi.',
+    s3h: 'The Five Elements: Cycles of Generation and Control',
+    s3p1: 'Every stem and branch carries one of the Five Elements along with a yin or yang polarity. Two basic relationships link the elements: <strong>generation</strong> (Wood feeds Fire, Fire creates Earth, Earth bears Metal, Metal carries Water, Water nourishes Wood) and <strong>control</strong> (Wood breaks Earth, Earth dams Water, Water quenches Fire, Fire melts Metal, Metal cuts Wood).',
+    s3p2: 'The first step in analyzing a chart is to map the distribution of the Five Elements: which is dominant, which is lacking, and how they check and balance one another. Tradition holds that a chart whose elements circulate in balance makes for a smoother life, while an element that is too strong or too weak marks specific themes in character and circumstance. The so-called "useful god" (yong shen) is precisely the key element that brings the whole structure back toward balance.',
+    s4h: 'The Ten Gods: A Web of Relationships Around the Day Master',
+    s4p1: 'In BaZi, the <strong>Heavenly Stem of the day pillar</strong> — the Day Master — represents the person. The other seven characters are classified by their elemental and yin-yang relationship to the Day Master into ten roles, known as the "Ten Gods":',
+    s4li1: '<strong>Friend and Rob Wealth</strong> (same as self): identity, peers, competition, and cooperation.',
+    s4li2: '<strong>Eating God and Hurting Officer</strong> (produced by self): talent, expression, and creativity.',
+    s4li3: '<strong>Direct and Indirect Wealth</strong> (controlled by self): wealth, practical ability, and resources under one\'s command.',
+    s4li4: '<strong>Direct Officer and Seven Killings</strong> (controlling self): discipline, career, pressure, and responsibility.',
+    s4li5: '<strong>Direct and Indirect Resource</strong> (producing self): learning, support, elders, and inner cultivation.',
+    s4p2: 'The Ten Gods also map onto family relations (parents, spouse, children, and so on), which lets a single chart speak of personality, career, wealth, and relationships all at once.',
+    s5h: 'Luck Pillars and Annual Cycles: The Rhythm of a Life',
+    s5p1: 'The natal chart is a static, innate structure; the <strong>Luck Pillars</strong> (ten-year cycles) and <strong>annual pillars</strong> are its dynamic time variables. Luck Pillars are derived from the month pillar and change every ten years, describing the broad climate of each decade of life; the annual pillar is simply each year\'s stem-branch pair (2026 is a Bing-Wu year), representing that year\'s incoming energy.',
+    s5p2: 'To interpret, compare how the Luck Pillar\'s and the year\'s stems and branches interact with the natal chart — where they support the useful god, opportunities surface; where they clash with key characters, careful management is called for. This is why the very same chart feels utterly different at different ages and in different years. Understanding your own rhythm — and moving with it rather than against it — is the most practical value BaZi offers.',
+    cta: 'Try the interactive tool: Online BaZi Chart →',
+    footer: '© 2026 Fatism · For reflection only. Not advice. <a href="../index.html">Back to home</a>',
+  },
+};
+
+const LANG_KEY = 'fatism_lang';
+let lang = localStorage.getItem(LANG_KEY) || 'tw';
+if (!I18N[lang]) lang = 'tw';
+
+function t(k) { return I18N[lang][k] || k; }
+
+function apply() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.dataset.i18n;
+    if (I18N[lang][k] != null) el.innerHTML = I18N[lang][k];
+  });
+  document.documentElement.lang = ({tw:'zh-TW',cn:'zh-CN',en:'en'})[lang];
+  document.querySelectorAll('#langSwitch button').forEach(b =>
+    b.classList.toggle('active', b.dataset.lang === lang));
+}
+
+document.getElementById('langSwitch').addEventListener('click', (e) => {
+  if (e.target.tagName !== 'BUTTON') return;
+  lang = e.target.dataset.lang;
+  localStorage.setItem(LANG_KEY, lang);
+  apply();
+});
+apply();
+</script>
 </body>
 </html>

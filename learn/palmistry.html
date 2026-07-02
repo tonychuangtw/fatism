@@ -46,6 +46,14 @@
   nav.topnav a { color: var(--text-dim); text-decoration: none; padding: 4px 6px; transition: color 0.15s; }
   nav.topnav a:hover { color: var(--gold); }
   nav.topnav a.current { color: var(--gold); border-bottom: 1px solid var(--gold); }
+  .lang-row { display: flex; justify-content: flex-end; margin-bottom: 14px; }
+  .lang-switch { display: flex; gap: 4px; border: 1px solid var(--gold-dim); border-radius: 999px; padding: 3px; }
+  .lang-switch button {
+    background: transparent; color: var(--text-dim); border: none;
+    padding: 6px 12px; border-radius: 999px; cursor: pointer;
+    font-family: inherit; font-size: 13px; transition: all 0.15s;
+  }
+  .lang-switch button.active { background: var(--gold); color: var(--bg-1); font-weight: 600; }
   .hero { text-align: center; margin-bottom: 48px; }
   .hero .icon { font-size: 56px; line-height: 1; margin-bottom: 12px; }
   h1 {
@@ -96,67 +104,196 @@
 </head>
 <body>
 <div class="container">
+  <div class="lang-row">
+    <div class="lang-switch" id="langSwitch">
+      <button data-lang="tw" class="active">繁中</button>
+      <button data-lang="cn">简中</button>
+      <button data-lang="en">EN</button>
+    </div>
+  </div>
+
   <nav class="topnav">
-    <a href="../index.html">首頁</a>
-    <a href="tarot.html">塔羅牌</a>
-    <a href="bazi.html">八字命盤</a>
-    <a href="ziwei.html">紫微斗數</a>
-    <a href="palmistry.html" class="current">手相</a>
-    <a href="physiognomy.html">面相</a>
-    <a href="../pricing.html">價格</a>
+    <a href="../index.html" data-i18n="navHome">首頁</a>
+    <a href="tarot.html" data-i18n="navTarot">塔羅牌</a>
+    <a href="bazi.html" data-i18n="navBazi">八字命盤</a>
+    <a href="ziwei.html" data-i18n="navZiwei">紫微斗數</a>
+    <a href="palmistry.html" class="current" data-i18n="navPalm">手相</a>
+    <a href="physiognomy.html" data-i18n="navFace">面相</a>
+    <a href="../pricing.html" data-i18n="navPricing">價格</a>
   </nav>
 
   <div class="hero">
     <div class="icon">🤲</div>
-    <h1>手相入門</h1>
-    <div class="sub">Palmistry · 掌中的人生地圖</div>
+    <h1 data-i18n="heroT">手相入門</h1>
+    <div class="sub" data-i18n="heroSub">Palmistry · 掌中的人生地圖</div>
   </div>
 
   <section class="block">
-    <h2>手相學的由來</h2>
-    <p>手相學（Palmistry / Chiromancy）在東西方各自發展出悠久傳統：印度與中國早在數千年前便有觀掌論命的記載，古希臘亦有相關文獻流傳；中國相學則將手相與面相並列，視為「形相之學」的一支。</p>
-    <p>手相的基本觀點是：手掌的紋路、形狀與丘位隆起，反映一個人的性格特質、思考模式與身心狀態。看手相通常左右手並觀——傳統說法為「左手先天、右手後天」（男女略有流派差異），也就是先天稟賦與後天發展互相對照。掌紋會隨年齡與生活狀態緩慢改變，這也提醒我們：手相反映的是狀態與傾向，而非固定不變的命運。</p>
+    <h2 data-i18n="s1H">手相學的由來</h2>
+    <p data-i18n="s1P1">手相學（Palmistry / Chiromancy）在東西方各自發展出悠久傳統：印度與中國早在數千年前便有觀掌論命的記載，古希臘亦有相關文獻流傳；中國相學則將手相與面相並列，視為「形相之學」的一支。</p>
+    <p data-i18n="s1P2">手相的基本觀點是：手掌的紋路、形狀與丘位隆起，反映一個人的性格特質、思考模式與身心狀態。看手相通常左右手並觀——傳統說法為「左手先天、右手後天」（男女略有流派差異），也就是先天稟賦與後天發展互相對照。掌紋會隨年齡與生活狀態緩慢改變，這也提醒我們：手相反映的是狀態與傾向，而非固定不變的命運。</p>
   </section>
 
   <section class="block">
-    <h2>生命線：體質與生命力</h2>
-    <p><strong>生命線</strong>起於食指與拇指之間，環繞拇指根部的金星丘弧形而下。常見的誤解是「生命線長短等於壽命長短」——傳統相學實際上以生命線觀察的是<strong>體質強弱、精力充沛程度與生活穩定度</strong>。</p>
-    <p>線條深長清晰、弧度飽滿，表示生命力旺盛、行動力強；線淺而弧度窄貼拇指，多半體力保守、行事謹慎；線上出現島紋（小圈）或斷裂，傳統解讀為該時期健康或生活起伏需多留意，宜視為保養提醒而非凶兆。</p>
+    <h2 data-i18n="s2H">生命線：體質與生命力</h2>
+    <p data-i18n="s2P1"><strong>生命線</strong>起於食指與拇指之間，環繞拇指根部的金星丘弧形而下。常見的誤解是「生命線長短等於壽命長短」——傳統相學實際上以生命線觀察的是<strong>體質強弱、精力充沛程度與生活穩定度</strong>。</p>
+    <p data-i18n="s2P2">線條深長清晰、弧度飽滿，表示生命力旺盛、行動力強；線淺而弧度窄貼拇指，多半體力保守、行事謹慎；線上出現島紋（小圈）或斷裂，傳統解讀為該時期健康或生活起伏需多留意，宜視為保養提醒而非凶兆。</p>
   </section>
 
   <section class="block">
-    <h2>智慧線：思考與決策模式</h2>
-    <p><strong>智慧線</strong>（頭腦線）多與生命線同源或相近起點，橫向劃過掌心。它反映的是思考風格與心智運作方式：</p>
+    <h2 data-i18n="s3H">智慧線：思考與決策模式</h2>
+    <p data-i18n="s3P1"><strong>智慧線</strong>（頭腦線）多與生命線同源或相近起點，橫向劃過掌心。它反映的是思考風格與心智運作方式：</p>
     <ul>
-      <li><strong>線直而長</strong>：邏輯縝密、務實理性，適合分析性工作。</li>
-      <li><strong>線尾下垂向月丘</strong>：想像力豐富、感性直覺強，具藝術傾向。</li>
-      <li><strong>與生命線起點相連較長</strong>：思慮周密、行事謹慎；<strong>起點分離</strong>則獨立果斷、敢於冒險。</li>
-      <li><strong>線淺或多分岔</strong>：思緒多元但易分心，需要練習專注。</li>
+      <li data-i18n="s3L1"><strong>線直而長</strong>：邏輯縝密、務實理性，適合分析性工作。</li>
+      <li data-i18n="s3L2"><strong>線尾下垂向月丘</strong>：想像力豐富、感性直覺強，具藝術傾向。</li>
+      <li data-i18n="s3L3"><strong>與生命線起點相連較長</strong>：思慮周密、行事謹慎；<strong>起點分離</strong>則獨立果斷、敢於冒險。</li>
+      <li data-i18n="s3L4"><strong>線淺或多分岔</strong>：思緒多元但易分心，需要練習專注。</li>
     </ul>
   </section>
 
   <section class="block">
-    <h2>感情線：情感表達的方式</h2>
-    <p><strong>感情線</strong>位於三大主線最上方，從小指下緣向食指方向延伸。它談的不是「會遇到誰」，而是<strong>一個人表達與經營情感的方式</strong>。線長而末端達食指與中指之間，情感深厚、重視承諾；線短而止於中指下，感情表達較直接務實；線深刻清晰者用情專注，線呈鎖鏈狀者感情細膩敏感、容易多慮。末端分岔常解讀為理性與感性並存，能在關係中保有彈性。</p>
+    <h2 data-i18n="s4H">感情線：情感表達的方式</h2>
+    <p data-i18n="s4P1"><strong>感情線</strong>位於三大主線最上方，從小指下緣向食指方向延伸。它談的不是「會遇到誰」，而是<strong>一個人表達與經營情感的方式</strong>。線長而末端達食指與中指之間，情感深厚、重視承諾；線短而止於中指下，感情表達較直接務實；線深刻清晰者用情專注，線呈鎖鏈狀者感情細膩敏感、容易多慮。末端分岔常解讀為理性與感性並存，能在關係中保有彈性。</p>
   </section>
 
   <section class="block">
-    <h2>八大丘位：掌上的能量地圖</h2>
-    <p>掌中隆起的部位稱為「丘」，西方手相以行星命名，各對應一種特質：<strong>金星丘</strong>（拇指根部，熱情與活力）、<strong>木星丘</strong>（食指下，企圖心與領導）、<strong>土星丘</strong>（中指下，責任與自律）、<strong>太陽丘</strong>（無名指下，名聲與藝術才華）、<strong>水星丘</strong>（小指下，溝通與商業頭腦）、<strong>月丘</strong>（掌底外側，想像力與直覺），以及掌緣的第一、第二火星丘（勇氣與韌性）。丘位飽滿表示該特質能量充足，平坦則相對低調。</p>
+    <h2 data-i18n="s5H">八大丘位：掌上的能量地圖</h2>
+    <p data-i18n="s5P1">掌中隆起的部位稱為「丘」，西方手相以行星命名，各對應一種特質：<strong>金星丘</strong>（拇指根部，熱情與活力）、<strong>木星丘</strong>（食指下，企圖心與領導）、<strong>土星丘</strong>（中指下，責任與自律）、<strong>太陽丘</strong>（無名指下，名聲與藝術才華）、<strong>水星丘</strong>（小指下，溝通與商業頭腦）、<strong>月丘</strong>（掌底外側，想像力與直覺），以及掌緣的第一、第二火星丘（勇氣與韌性）。丘位飽滿表示該特質能量充足，平坦則相對低調。</p>
   </section>
 
   <section class="block">
-    <h2>基本判讀步驟</h2>
-    <p>初學者可依序觀察：先看<strong>手形與整體</strong>（掌厚薄、手指長短、皮膚質感），建立性格底色；再看<strong>三大主線</strong>的深淺、長短、走向與起訖點；接著看<strong>丘位</strong>的飽滿與否；最後才處理輔助線（事業線、太陽線、婚姻線）與雜紋。切記綜合判斷、左右對照，單一紋路不足以下結論——手相是認識自己的參考鏡，而非人生的判決。</p>
+    <h2 data-i18n="s6H">基本判讀步驟</h2>
+    <p data-i18n="s6P1">初學者可依序觀察：先看<strong>手形與整體</strong>（掌厚薄、手指長短、皮膚質感），建立性格底色；再看<strong>三大主線</strong>的深淺、長短、走向與起訖點；接著看<strong>丘位</strong>的飽滿與否；最後才處理輔助線（事業線、太陽線、婚姻線）與雜紋。切記綜合判斷、左右對照，單一紋路不足以下結論——手相是認識自己的參考鏡，而非人生的判決。</p>
   </section>
 
   <div class="cta">
-    <span class="soon">互動工具即將推出</span>
+    <span class="soon" data-i18n="ctaSoon">互動工具即將推出</span>
   </div>
 
   <footer>
-    <p>© 2026 命運閣 · 僅供反思啟發，不構成任何決策建議。 <a href="../index.html">返回首頁</a></p>
+    <p data-i18n="footer">© 2026 命運閣 · 僅供反思啟發，不構成任何決策建議。 <a href="../index.html">返回首頁</a></p>
   </footer>
 </div>
+
+<script>
+const I18N = {
+  tw: {
+    navHome: '首頁',
+    navTarot: '塔羅牌',
+    navBazi: '八字命盤',
+    navZiwei: '紫微斗數',
+    navPalm: '手相',
+    navFace: '面相',
+    navPricing: '價格',
+    heroT: '手相入門',
+    heroSub: 'Palmistry · 掌中的人生地圖',
+    s1H: '手相學的由來',
+    s1P1: '手相學（Palmistry / Chiromancy）在東西方各自發展出悠久傳統：印度與中國早在數千年前便有觀掌論命的記載，古希臘亦有相關文獻流傳；中國相學則將手相與面相並列，視為「形相之學」的一支。',
+    s1P2: '手相的基本觀點是：手掌的紋路、形狀與丘位隆起，反映一個人的性格特質、思考模式與身心狀態。看手相通常左右手並觀——傳統說法為「左手先天、右手後天」（男女略有流派差異），也就是先天稟賦與後天發展互相對照。掌紋會隨年齡與生活狀態緩慢改變，這也提醒我們：手相反映的是狀態與傾向，而非固定不變的命運。',
+    s2H: '生命線：體質與生命力',
+    s2P1: '<strong>生命線</strong>起於食指與拇指之間，環繞拇指根部的金星丘弧形而下。常見的誤解是「生命線長短等於壽命長短」——傳統相學實際上以生命線觀察的是<strong>體質強弱、精力充沛程度與生活穩定度</strong>。',
+    s2P2: '線條深長清晰、弧度飽滿，表示生命力旺盛、行動力強；線淺而弧度窄貼拇指，多半體力保守、行事謹慎；線上出現島紋（小圈）或斷裂，傳統解讀為該時期健康或生活起伏需多留意，宜視為保養提醒而非凶兆。',
+    s3H: '智慧線：思考與決策模式',
+    s3P1: '<strong>智慧線</strong>（頭腦線）多與生命線同源或相近起點，橫向劃過掌心。它反映的是思考風格與心智運作方式：',
+    s3L1: '<strong>線直而長</strong>：邏輯縝密、務實理性，適合分析性工作。',
+    s3L2: '<strong>線尾下垂向月丘</strong>：想像力豐富、感性直覺強，具藝術傾向。',
+    s3L3: '<strong>與生命線起點相連較長</strong>：思慮周密、行事謹慎；<strong>起點分離</strong>則獨立果斷、敢於冒險。',
+    s3L4: '<strong>線淺或多分岔</strong>：思緒多元但易分心，需要練習專注。',
+    s4H: '感情線：情感表達的方式',
+    s4P1: '<strong>感情線</strong>位於三大主線最上方，從小指下緣向食指方向延伸。它談的不是「會遇到誰」，而是<strong>一個人表達與經營情感的方式</strong>。線長而末端達食指與中指之間，情感深厚、重視承諾；線短而止於中指下，感情表達較直接務實；線深刻清晰者用情專注，線呈鎖鏈狀者感情細膩敏感、容易多慮。末端分岔常解讀為理性與感性並存，能在關係中保有彈性。',
+    s5H: '八大丘位：掌上的能量地圖',
+    s5P1: '掌中隆起的部位稱為「丘」，西方手相以行星命名，各對應一種特質：<strong>金星丘</strong>（拇指根部，熱情與活力）、<strong>木星丘</strong>（食指下，企圖心與領導）、<strong>土星丘</strong>（中指下，責任與自律）、<strong>太陽丘</strong>（無名指下，名聲與藝術才華）、<strong>水星丘</strong>（小指下，溝通與商業頭腦）、<strong>月丘</strong>（掌底外側，想像力與直覺），以及掌緣的第一、第二火星丘（勇氣與韌性）。丘位飽滿表示該特質能量充足，平坦則相對低調。',
+    s6H: '基本判讀步驟',
+    s6P1: '初學者可依序觀察：先看<strong>手形與整體</strong>（掌厚薄、手指長短、皮膚質感），建立性格底色；再看<strong>三大主線</strong>的深淺、長短、走向與起訖點；接著看<strong>丘位</strong>的飽滿與否；最後才處理輔助線（事業線、太陽線、婚姻線）與雜紋。切記綜合判斷、左右對照，單一紋路不足以下結論——手相是認識自己的參考鏡，而非人生的判決。',
+    ctaSoon: '互動工具即將推出',
+    footer: '© 2026 命運閣 · 僅供反思啟發，不構成任何決策建議。 <a href="../index.html">返回首頁</a>',
+  },
+  cn: {
+    navHome: '首页',
+    navTarot: '塔罗牌',
+    navBazi: '八字命盘',
+    navZiwei: '紫微斗数',
+    navPalm: '手相',
+    navFace: '面相',
+    navPricing: '价格',
+    heroT: '手相入门',
+    heroSub: 'Palmistry · 掌中的人生地图',
+    s1H: '手相学的由来',
+    s1P1: '手相学（Palmistry / Chiromancy）在东西方各自发展出悠久传统：印度与中国早在数千年前便有观掌论命的记载，古希腊亦有相关文献流传；中国相学则将手相与面相并列，视为“形相之学”的一支。',
+    s1P2: '手相的基本观点是：手掌的纹路、形状与丘位隆起，反映一个人的性格特质、思考模式与身心状态。看手相通常左右手并观——传统说法为“左手先天、右手后天”（男女略有流派差异），也就是先天禀赋与后天发展互相对照。掌纹会随年龄与生活状态缓慢改变，这也提醒我们：手相反映的是状态与倾向，而非固定不变的命运。',
+    s2H: '生命线：体质与生命力',
+    s2P1: '<strong>生命线</strong>起于食指与拇指之间，环绕拇指根部的金星丘弧形而下。常见的误解是“生命线长短等于寿命长短”——传统相学实际上以生命线观察的是<strong>体质强弱、精力充沛程度与生活稳定度</strong>。',
+    s2P2: '线条深长清晰、弧度饱满，表示生命力旺盛、行动力强；线浅而弧度窄贴拇指，多半体力保守、行事谨慎；线上出现岛纹（小圈）或断裂，传统解读为该时期健康或生活起伏需多留意，宜视为保养提醒而非凶兆。',
+    s3H: '智慧线：思考与决策模式',
+    s3P1: '<strong>智慧线</strong>（头脑线）多与生命线同源或相近起点，横向划过掌心。它反映的是思考风格与心智运作方式：',
+    s3L1: '<strong>线直而长</strong>：逻辑缜密、务实理性，适合分析性工作。',
+    s3L2: '<strong>线尾下垂向月丘</strong>：想象力丰富、感性直觉强，具艺术倾向。',
+    s3L3: '<strong>与生命线起点相连较长</strong>：思虑周密、行事谨慎；<strong>起点分离</strong>则独立果断、敢于冒险。',
+    s3L4: '<strong>线浅或多分岔</strong>：思绪多元但易分心，需要练习专注。',
+    s4H: '感情线：情感表达的方式',
+    s4P1: '<strong>感情线</strong>位于三大主线最上方，从小指下缘向食指方向延伸。它谈的不是“会遇到谁”，而是<strong>一个人表达与经营情感的方式</strong>。线长而末端达食指与中指之间，情感深厚、重视承诺；线短而止于中指下，感情表达较直接务实；线深刻清晰者用情专注，线呈锁链状者感情细腻敏感、容易多虑。末端分岔常解读为理性与感性并存，能在关系中保有弹性。',
+    s5H: '八大丘位：掌上的能量地图',
+    s5P1: '掌中隆起的部位称为“丘”，西方手相以行星命名，各对应一种特质：<strong>金星丘</strong>（拇指根部，热情与活力）、<strong>木星丘</strong>（食指下，企图心与领导）、<strong>土星丘</strong>（中指下，责任与自律）、<strong>太阳丘</strong>（无名指下，名声与艺术才华）、<strong>水星丘</strong>（小指下，沟通与商业头脑）、<strong>月丘</strong>（掌底外侧，想象力与直觉），以及掌缘的第一、第二火星丘（勇气与韧性）。丘位饱满表示该特质能量充足，平坦则相对低调。',
+    s6H: '基本判读步骤',
+    s6P1: '初学者可依序观察：先看<strong>手形与整体</strong>（掌厚薄、手指长短、皮肤质感），建立性格底色；再看<strong>三大主线</strong>的深浅、长短、走向与起讫点；接着看<strong>丘位</strong>的饱满与否；最后才处理辅助线（事业线、太阳线、婚姻线）与杂纹。切记综合判断、左右对照，单一纹路不足以下结论——手相是认识自己的参考镜，而非人生的判决。',
+    ctaSoon: '互动工具即将推出',
+    footer: '© 2026 命运阁 · 仅供反思启发，不构成任何决策建议。 <a href="../index.html">返回首页</a>',
+  },
+  en: {
+    navHome: 'Home',
+    navTarot: 'Tarot',
+    navBazi: 'BaZi Chart',
+    navZiwei: 'Zi Wei Dou Shu',
+    navPalm: 'Palmistry',
+    navFace: 'Physiognomy',
+    navPricing: 'Pricing',
+    heroT: 'Palmistry Basics',
+    heroSub: 'Palmistry · A Life Map in Your Hands',
+    s1H: 'The Origins of Palmistry',
+    s1P1: 'Palmistry (also called chiromancy) developed long, independent traditions in both East and West: records of reading palms date back thousands of years in India and China, and related texts survive from ancient Greece. In the Chinese tradition, palmistry stands alongside face reading as one branch of the broader art of "reading the form."',
+    s1P2: 'Its basic premise is that the lines, shape, and raised mounts of the palm reflect a person\'s character, thinking style, and physical and mental state. Readers usually examine both hands together — traditionally, "the left hand shows what you were born with, the right hand what you have made of it" (schools differ slightly for men and women) — comparing innate endowment with acquired development. Palm lines also change slowly with age and lifestyle, a useful reminder that palmistry describes states and tendencies, not an unchangeable fate.',
+    s2H: 'The Life Line: Constitution and Vitality',
+    s2P1: 'The <strong>life line</strong> begins between the index finger and thumb and arcs down around the Mount of Venus at the base of the thumb. A common misconception is that its length equals lifespan — in traditional palmistry, the life line actually indicates <strong>physical constitution, energy levels, and the stability of one\'s life</strong>.',
+    s2P2: 'A deep, long, clearly drawn line with a full arc suggests strong vitality and drive. A faint line hugging the thumb in a narrow arc points to conservative energy and a cautious way of doing things. Islands (small loops) or breaks along the line are traditionally read as periods when health or life circumstances deserve extra attention — best treated as a reminder to take care of yourself, not as an omen.',
+    s3H: 'The Head Line: How You Think and Decide',
+    s3P1: 'The <strong>head line</strong> usually shares its starting point with the life line, or begins close by, and runs horizontally across the palm. It reflects your thinking style and how your mind works:',
+    s3L1: '<strong>Straight and long</strong>: rigorous logic, practical and rational — well suited to analytical work.',
+    s3L2: '<strong>Curving down toward the Mount of the Moon</strong>: rich imagination, strong intuition, and artistic leanings.',
+    s3L3: '<strong>Joined to the life line for a long stretch at the start</strong>: careful, deliberate, and prudent; <strong>a separated starting point</strong> signals independence, decisiveness, and a taste for risk.',
+    s3L4: '<strong>Faint or heavily branched</strong>: a versatile but easily scattered mind that benefits from practicing focus.',
+    s4H: 'The Heart Line: How You Express Emotion',
+    s4P1: 'The <strong>heart line</strong> is the uppermost of the three major lines, running from beneath the little finger toward the index finger. It speaks not of "who you will meet" but of <strong>how a person expresses and manages emotion</strong>. A long line ending between the index and middle fingers marks deep feeling and respect for commitment; a shorter line stopping under the middle finger suggests a direct, pragmatic emotional style. A deep, clear line shows devoted affection, while a chained line indicates a delicate, sensitive heart prone to overthinking. A forked end is often read as reason and feeling in balance — flexibility within a relationship.',
+    s5H: 'The Mounts of the Palm: An Energy Map',
+    s5P1: 'The raised pads of the palm are called mounts. Western palmistry names them after planets, each corresponding to a trait: the <strong>Mount of Venus</strong> (base of the thumb — passion and vitality), the <strong>Mount of Jupiter</strong> (under the index finger — ambition and leadership), the <strong>Mount of Saturn</strong> (under the middle finger — responsibility and self-discipline), the <strong>Mount of Apollo</strong> (under the ring finger — reputation and artistic talent), the <strong>Mount of Mercury</strong> (under the little finger — communication and business sense), the <strong>Mount of the Moon</strong> (outer base of the palm — imagination and intuition), plus the inner and outer Mounts of Mars along the palm\'s edge (courage and resilience). A full mount signals abundant energy in that trait; a flat one, a quieter presence.',
+    s6H: 'A Basic Reading Sequence',
+    s6P1: 'Beginners can observe in order: first the <strong>hand shape and overall impression</strong> (thickness of the palm, finger length, skin texture) to establish a baseline of character; then the <strong>three major lines</strong> — their depth, length, direction, and where they begin and end; next the <strong>mounts</strong> and how full they are; and only then the secondary lines (fate line, sun line, marriage lines) and minor markings. Always judge holistically and compare both hands — no single line justifies a conclusion. Palmistry is a mirror for knowing yourself, not a verdict on your life.',
+    ctaSoon: 'Interactive tool coming soon',
+    footer: '© 2026 Fatism · For reflection only. Not advice. <a href="../index.html">Back to home</a>',
+  },
+};
+
+let lang = 'tw';
+try { const saved = localStorage.getItem('fatism_lang'); if (I18N[saved]) lang = saved; } catch (e) {}
+
+function apply() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.dataset.i18n;
+    if (I18N[lang][k] != null) el.innerHTML = I18N[lang][k];
+  });
+  document.documentElement.lang = ({tw:'zh-TW',cn:'zh-CN',en:'en'})[lang];
+}
+
+document.getElementById('langSwitch').addEventListener('click', (e) => {
+  if (e.target.tagName !== 'BUTTON') return;
+  lang = e.target.dataset.lang;
+  try { localStorage.setItem('fatism_lang', lang); } catch (e2) {}
+  document.querySelectorAll('#langSwitch button').forEach(b =>
+    b.classList.toggle('active', b.dataset.lang === lang));
+  apply();
+});
+document.querySelectorAll('#langSwitch button').forEach(b =>
+  b.classList.toggle('active', b.dataset.lang === lang));
+apply();
+</script>
 </body>
 </html>

@@ -38,6 +38,14 @@
     z-index: 0;
   }
   .container { max-width: 860px; margin: 0 auto; position: relative; z-index: 1; }
+  .lang-row { display: flex; justify-content: flex-end; margin-bottom: 14px; }
+  .lang-switch { display: flex; gap: 4px; border: 1px solid var(--gold-dim); border-radius: 999px; padding: 3px; }
+  .lang-switch button {
+    background: transparent; color: var(--text-dim); border: none;
+    padding: 6px 12px; border-radius: 999px; cursor: pointer;
+    font-family: inherit; font-size: 13px; transition: all 0.15s;
+  }
+  .lang-switch button.active { background: var(--gold); color: var(--bg-1); font-weight: 600; }
   nav.topnav {
     display: flex; flex-wrap: wrap; gap: 6px 14px; justify-content: center;
     margin-bottom: 40px; font-size: 14px; letter-spacing: 0.08em;
@@ -96,66 +104,202 @@
 </head>
 <body>
 <div class="container">
+  <div class="lang-row">
+    <div class="lang-switch" id="langSwitch">
+      <button data-lang="tw" class="active">繁中</button>
+      <button data-lang="cn">简中</button>
+      <button data-lang="en">EN</button>
+    </div>
+  </div>
+
   <nav class="topnav">
-    <a href="../index.html">首頁</a>
-    <a href="tarot.html" class="current">塔羅牌</a>
-    <a href="bazi.html">八字命盤</a>
-    <a href="ziwei.html">紫微斗數</a>
-    <a href="palmistry.html">手相</a>
-    <a href="physiognomy.html">面相</a>
-    <a href="../pricing.html">價格</a>
+    <a href="../index.html" data-i18n="navHome">首頁</a>
+    <a href="tarot.html" class="current" data-i18n="navTarot">塔羅牌</a>
+    <a href="bazi.html" data-i18n="navBazi">八字命盤</a>
+    <a href="ziwei.html" data-i18n="navZiwei">紫微斗數</a>
+    <a href="palmistry.html" data-i18n="navPalm">手相</a>
+    <a href="physiognomy.html" data-i18n="navFace">面相</a>
+    <a href="../pricing.html" data-i18n="navPricing">價格</a>
   </nav>
 
   <div class="hero">
     <div class="icon">🔮</div>
-    <h1>塔羅牌入門</h1>
-    <div class="sub">Tarot · 西方占卜的鏡子</div>
+    <h1 data-i18n="heroTitle">塔羅牌入門</h1>
+    <div class="sub" data-i18n="heroSub">Tarot · 西方占卜的鏡子</div>
   </div>
 
   <section class="block">
-    <h2>塔羅牌的起源與歷史</h2>
-    <p>塔羅牌最早可追溯至十五世紀的義大利北部，原本是貴族間流行的紙牌遊戲「Tarocchi」，米蘭維斯孔蒂家族委製的手繪牌組至今仍有留存。直到十八世紀末，法國神祕學者傑柏林（Court de Gébelin）與艾特拉（Etteilla）才將其與占卜、古埃及智慧等神祕學傳統連結起來。</p>
-    <p>1909 年出版的<strong>偉特牌</strong>（Rider–Waite–Smith）由學者偉特設計、畫家史密斯繪製，首次讓小阿爾克那的每一張牌都有完整情境圖像，大幅降低學習門檻，成為今日最通行的系統；另一大主流則是二十世紀中葉的托特牌（Thoth）。現代塔羅早已脫離「預言吉凶」的框架，更常被視為一套象徵語言與自我對話的工具。</p>
+    <h2 data-i18n="s1h">塔羅牌的起源與歷史</h2>
+    <p data-i18n="s1p1">塔羅牌最早可追溯至十五世紀的義大利北部，原本是貴族間流行的紙牌遊戲「Tarocchi」，米蘭維斯孔蒂家族委製的手繪牌組至今仍有留存。直到十八世紀末，法國神祕學者傑柏林（Court de Gébelin）與艾特拉（Etteilla）才將其與占卜、古埃及智慧等神祕學傳統連結起來。</p>
+    <p data-i18n="s1p2">1909 年出版的<strong>偉特牌</strong>（Rider–Waite–Smith）由學者偉特設計、畫家史密斯繪製，首次讓小阿爾克那的每一張牌都有完整情境圖像，大幅降低學習門檻，成為今日最通行的系統；另一大主流則是二十世紀中葉的托特牌（Thoth）。現代塔羅早已脫離「預言吉凶」的框架，更常被視為一套象徵語言與自我對話的工具。</p>
   </section>
 
   <section class="block">
-    <h2>大阿爾克那：22 張生命歷程</h2>
-    <p>一副標準塔羅共 <strong>78 張</strong>，分成大阿爾克那（Major Arcana）22 張與小阿爾克那（Minor Arcana）56 張。大阿爾克那從 0 號「愚者」到 21 號「世界」，常被解讀為一趟「愚者之旅」——象徵人從天真啟程、歷經學習（魔術師、女祭司）、建立秩序（皇帝、教皇）、面對抉擇與考驗（戀人、命運之輪、吊人、死神）、到整合與完成（星星、太陽、世界）的完整生命歷程。</p>
-    <p>占卜時若大阿爾克那出現比例偏高，通常表示問題觸及人生重要課題，而非日常瑣事。</p>
+    <h2 data-i18n="s2h">大阿爾克那：22 張生命歷程</h2>
+    <p data-i18n="s2p1">一副標準塔羅共 <strong>78 張</strong>，分成大阿爾克那（Major Arcana）22 張與小阿爾克那（Minor Arcana）56 張。大阿爾克那從 0 號「愚者」到 21 號「世界」，常被解讀為一趟「愚者之旅」——象徵人從天真啟程、歷經學習（魔術師、女祭司）、建立秩序（皇帝、教皇）、面對抉擇與考驗（戀人、命運之輪、吊人、死神）、到整合與完成（星星、太陽、世界）的完整生命歷程。</p>
+    <p data-i18n="s2p2">占卜時若大阿爾克那出現比例偏高，通常表示問題觸及人生重要課題，而非日常瑣事。</p>
   </section>
 
   <section class="block">
-    <h2>小阿爾克那：四元素與日常面向</h2>
-    <p>小阿爾克那分為四個牌組，各對應一種元素與生活領域：</p>
+    <h2 data-i18n="s3h">小阿爾克那：四元素與日常面向</h2>
+    <p data-i18n="s3p1">小阿爾克那分為四個牌組，各對應一種元素與生活領域：</p>
     <ul>
-      <li><strong>權杖（Wands・火）</strong>：行動力、熱情、事業企圖與創造。</li>
-      <li><strong>聖杯（Cups・水）</strong>:情感、關係、直覺與內在感受。</li>
-      <li><strong>寶劍（Swords・風）</strong>：思考、溝通、衝突與抉擇。</li>
-      <li><strong>錢幣（Pentacles・土）</strong>：金錢、工作、健康與物質基礎。</li>
+      <li data-i18n="s3li1"><strong>權杖（Wands・火）</strong>：行動力、熱情、事業企圖與創造。</li>
+      <li data-i18n="s3li2"><strong>聖杯（Cups・水）</strong>:情感、關係、直覺與內在感受。</li>
+      <li data-i18n="s3li3"><strong>寶劍（Swords・風）</strong>：思考、溝通、衝突與抉擇。</li>
+      <li data-i18n="s3li4"><strong>錢幣（Pentacles・土）</strong>：金錢、工作、健康與物質基礎。</li>
     </ul>
-    <p>每組 14 張：數字牌一到十描述事件的發展階段，宮廷牌（侍者、騎士、王后、國王）則常代表人物性格或當事人的心理狀態。</p>
+    <p data-i18n="s3p2">每組 14 張：數字牌一到十描述事件的發展階段，宮廷牌（侍者、騎士、王后、國王）則常代表人物性格或當事人的心理狀態。</p>
   </section>
 
   <section class="block">
-    <h2>常見牌陣</h2>
-    <p><strong>單張牌</strong>：最簡潔的形式，適合每日抽牌或需要一個明確切入點的問題。</p>
-    <p><strong>三張牌陣</strong>：最經典的組合，常見配置為「過去－現在－未來」，也可依問題調整為「處境－阻礙－建議」，兼顧脈絡與可讀性。</p>
-    <p><strong>凱爾特十字</strong>：十張牌的完整牌陣，涵蓋現況、阻力、根源、過去、目標、未來、自我狀態、環境影響、希望恐懼與最終走向，適合分析複雜、多面向的課題。</p>
+    <h2 data-i18n="s4h">常見牌陣</h2>
+    <p data-i18n="s4p1"><strong>單張牌</strong>：最簡潔的形式，適合每日抽牌或需要一個明確切入點的問題。</p>
+    <p data-i18n="s4p2"><strong>三張牌陣</strong>：最經典的組合，常見配置為「過去－現在－未來」，也可依問題調整為「處境－阻礙－建議」，兼顧脈絡與可讀性。</p>
+    <p data-i18n="s4p3"><strong>凱爾特十字</strong>：十張牌的完整牌陣，涵蓋現況、阻力、根源、過去、目標、未來、自我狀態、環境影響、希望恐懼與最終走向，適合分析複雜、多面向的課題。</p>
   </section>
 
   <section class="block">
-    <h2>如何解讀一張牌</h2>
-    <p>解牌不是背誦關鍵字，而是把三層資訊疊在一起看：<strong>牌面圖像</strong>（人物姿態、色彩、符號給你的直觀感受）、<strong>牌的傳統牌義</strong>（含正位與逆位——逆位常表示能量受阻、內化或過度），以及<strong>位置脈絡</strong>（同一張牌落在「阻礙」與「建議」的位置，意義截然不同）。</p>
-    <p>問題也要問得好：把「他愛不愛我？」換成「這段關係目前的狀態與我能做的調整是什麼？」，開放式的問題才能得到有用的答案。塔羅呈現的是趨勢與心理狀態的鏡像，而非不可改變的定局——選擇權始終在自己手上。</p>
+    <h2 data-i18n="s5h">如何解讀一張牌</h2>
+    <p data-i18n="s5p1">解牌不是背誦關鍵字，而是把三層資訊疊在一起看：<strong>牌面圖像</strong>（人物姿態、色彩、符號給你的直觀感受）、<strong>牌的傳統牌義</strong>（含正位與逆位——逆位常表示能量受阻、內化或過度），以及<strong>位置脈絡</strong>（同一張牌落在「阻礙」與「建議」的位置，意義截然不同）。</p>
+    <p data-i18n="s5p2">問題也要問得好：把「他愛不愛我？」換成「這段關係目前的狀態與我能做的調整是什麼？」，開放式的問題才能得到有用的答案。塔羅呈現的是趨勢與心理狀態的鏡像，而非不可改變的定局——選擇權始終在自己手上。</p>
   </section>
 
   <div class="cta">
-    <a href="../widgets/tarot/index.html">試用互動工具：線上塔羅占卜 →</a>
+    <a href="../widgets/tarot/index.html" data-i18n="cta">試用互動工具：線上塔羅占卜 →</a>
   </div>
 
   <footer>
-    <p>© 2026 命運閣 · 僅供反思啟發，不構成任何決策建議。 <a href="../index.html">返回首頁</a></p>
+    <p data-i18n="footer">© 2026 命運閣 · 僅供反思啟發，不構成任何決策建議。 <a href="../index.html">返回首頁</a></p>
   </footer>
 </div>
+
+<script>
+const I18N = {
+  tw: {
+    navHome: '首頁',
+    navTarot: '塔羅牌',
+    navBazi: '八字命盤',
+    navZiwei: '紫微斗數',
+    navPalm: '手相',
+    navFace: '面相',
+    navPricing: '價格',
+    heroTitle: '塔羅牌入門',
+    heroSub: 'Tarot · 西方占卜的鏡子',
+    s1h: '塔羅牌的起源與歷史',
+    s1p1: '塔羅牌最早可追溯至十五世紀的義大利北部，原本是貴族間流行的紙牌遊戲「Tarocchi」，米蘭維斯孔蒂家族委製的手繪牌組至今仍有留存。直到十八世紀末，法國神祕學者傑柏林（Court de Gébelin）與艾特拉（Etteilla）才將其與占卜、古埃及智慧等神祕學傳統連結起來。',
+    s1p2: '1909 年出版的<strong>偉特牌</strong>（Rider–Waite–Smith）由學者偉特設計、畫家史密斯繪製，首次讓小阿爾克那的每一張牌都有完整情境圖像，大幅降低學習門檻，成為今日最通行的系統；另一大主流則是二十世紀中葉的托特牌（Thoth）。現代塔羅早已脫離「預言吉凶」的框架，更常被視為一套象徵語言與自我對話的工具。',
+    s2h: '大阿爾克那：22 張生命歷程',
+    s2p1: '一副標準塔羅共 <strong>78 張</strong>，分成大阿爾克那（Major Arcana）22 張與小阿爾克那（Minor Arcana）56 張。大阿爾克那從 0 號「愚者」到 21 號「世界」，常被解讀為一趟「愚者之旅」——象徵人從天真啟程、歷經學習（魔術師、女祭司）、建立秩序（皇帝、教皇）、面對抉擇與考驗（戀人、命運之輪、吊人、死神）、到整合與完成（星星、太陽、世界）的完整生命歷程。',
+    s2p2: '占卜時若大阿爾克那出現比例偏高，通常表示問題觸及人生重要課題，而非日常瑣事。',
+    s3h: '小阿爾克那：四元素與日常面向',
+    s3p1: '小阿爾克那分為四個牌組，各對應一種元素與生活領域：',
+    s3li1: '<strong>權杖（Wands・火）</strong>：行動力、熱情、事業企圖與創造。',
+    s3li2: '<strong>聖杯（Cups・水）</strong>:情感、關係、直覺與內在感受。',
+    s3li3: '<strong>寶劍（Swords・風）</strong>：思考、溝通、衝突與抉擇。',
+    s3li4: '<strong>錢幣（Pentacles・土）</strong>：金錢、工作、健康與物質基礎。',
+    s3p2: '每組 14 張：數字牌一到十描述事件的發展階段，宮廷牌（侍者、騎士、王后、國王）則常代表人物性格或當事人的心理狀態。',
+    s4h: '常見牌陣',
+    s4p1: '<strong>單張牌</strong>：最簡潔的形式，適合每日抽牌或需要一個明確切入點的問題。',
+    s4p2: '<strong>三張牌陣</strong>：最經典的組合，常見配置為「過去－現在－未來」，也可依問題調整為「處境－阻礙－建議」，兼顧脈絡與可讀性。',
+    s4p3: '<strong>凱爾特十字</strong>：十張牌的完整牌陣，涵蓋現況、阻力、根源、過去、目標、未來、自我狀態、環境影響、希望恐懼與最終走向，適合分析複雜、多面向的課題。',
+    s5h: '如何解讀一張牌',
+    s5p1: '解牌不是背誦關鍵字，而是把三層資訊疊在一起看：<strong>牌面圖像</strong>（人物姿態、色彩、符號給你的直觀感受）、<strong>牌的傳統牌義</strong>（含正位與逆位——逆位常表示能量受阻、內化或過度），以及<strong>位置脈絡</strong>（同一張牌落在「阻礙」與「建議」的位置，意義截然不同）。',
+    s5p2: '問題也要問得好：把「他愛不愛我？」換成「這段關係目前的狀態與我能做的調整是什麼？」，開放式的問題才能得到有用的答案。塔羅呈現的是趨勢與心理狀態的鏡像，而非不可改變的定局——選擇權始終在自己手上。',
+    cta: '試用互動工具：線上塔羅占卜 →',
+    footer: '© 2026 命運閣 · 僅供反思啟發，不構成任何決策建議。 <a href="../index.html">返回首頁</a>',
+  },
+  cn: {
+    navHome: '首页',
+    navTarot: '塔罗牌',
+    navBazi: '八字命盘',
+    navZiwei: '紫微斗数',
+    navPalm: '手相',
+    navFace: '面相',
+    navPricing: '价格',
+    heroTitle: '塔罗牌入门',
+    heroSub: 'Tarot · 西方占卜的镜子',
+    s1h: '塔罗牌的起源与历史',
+    s1p1: '塔罗牌最早可追溯至十五世纪的意大利北部，原本是贵族间流行的纸牌游戏「Tarocchi」，米兰维斯孔蒂家族委制的手绘牌组至今仍有留存。直到十八世纪末，法国神秘学者杰柏林（Court de Gébelin）与艾特拉（Etteilla）才将其与占卜、古埃及智慧等神秘学传统连结起来。',
+    s1p2: '1909 年出版的<strong>韦特牌</strong>（Rider–Waite–Smith）由学者韦特设计、画家史密斯绘制，首次让小阿尔克那的每一张牌都有完整情境图像，大幅降低学习门槛，成为今日最通行的系统；另一大主流则是二十世纪中叶的托特牌（Thoth）。现代塔罗早已脱离「预言吉凶」的框架，更常被视为一套象征语言与自我对话的工具。',
+    s2h: '大阿尔克那：22 张生命历程',
+    s2p1: '一副标准塔罗共 <strong>78 张</strong>，分成大阿尔克那（Major Arcana）22 张与小阿尔克那（Minor Arcana）56 张。大阿尔克那从 0 号「愚者」到 21 号「世界」，常被解读为一趟「愚者之旅」——象征人从天真启程、历经学习（魔术师、女祭司）、建立秩序（皇帝、教皇）、面对抉择与考验（恋人、命运之轮、吊人、死神）、到整合与完成（星星、太阳、世界）的完整生命历程。',
+    s2p2: '占卜时若大阿尔克那出现比例偏高，通常表示问题触及人生重要课题，而非日常琐事。',
+    s3h: '小阿尔克那：四元素与日常面向',
+    s3p1: '小阿尔克那分为四个牌组，各对应一种元素与生活领域：',
+    s3li1: '<strong>权杖（Wands・火）</strong>：行动力、热情、事业企图与创造。',
+    s3li2: '<strong>圣杯（Cups・水）</strong>：情感、关系、直觉与内在感受。',
+    s3li3: '<strong>宝剑（Swords・风）</strong>：思考、沟通、冲突与抉择。',
+    s3li4: '<strong>钱币（Pentacles・土）</strong>：金钱、工作、健康与物质基础。',
+    s3p2: '每组 14 张：数字牌一到十描述事件的发展阶段，宫廷牌（侍者、骑士、王后、国王）则常代表人物性格或当事人的心理状态。',
+    s4h: '常见牌阵',
+    s4p1: '<strong>单张牌</strong>：最简洁的形式，适合每日抽牌或需要一个明确切入点的问题。',
+    s4p2: '<strong>三张牌阵</strong>：最经典的组合，常见配置为「过去－现在－未来」，也可依问题调整为「处境－阻碍－建议」，兼顾脉络与可读性。',
+    s4p3: '<strong>凯尔特十字</strong>：十张牌的完整牌阵，涵盖现况、阻力、根源、过去、目标、未来、自我状态、环境影响、希望恐惧与最终走向，适合分析复杂、多面向的课题。',
+    s5h: '如何解读一张牌',
+    s5p1: '解牌不是背诵关键字，而是把三层信息叠在一起看：<strong>牌面图像</strong>（人物姿态、色彩、符号给你的直观感受）、<strong>牌的传统牌义</strong>（含正位与逆位——逆位常表示能量受阻、内化或过度），以及<strong>位置脉络</strong>（同一张牌落在「阻碍」与「建议」的位置，意义截然不同）。',
+    s5p2: '问题也要问得好：把「他爱不爱我？」换成「这段关系目前的状态与我能做的调整是什么？」，开放式的问题才能得到有用的答案。塔罗呈现的是趋势与心理状态的镜像，而非不可改变的定局——选择权始终在自己手上。',
+    cta: '试用互动工具：在线塔罗占卜 →',
+    footer: '© 2026 命运阁 · 仅供反思启发，不构成任何决策建议。 <a href="../index.html">返回首页</a>',
+  },
+  en: {
+    navHome: 'Home',
+    navTarot: 'Tarot',
+    navBazi: 'BaZi',
+    navZiwei: 'Zi Wei',
+    navPalm: 'Palmistry',
+    navFace: 'Physiognomy',
+    navPricing: 'Pricing',
+    heroTitle: 'Tarot for Beginners',
+    heroSub: 'Tarot · A Mirror from the West',
+    s1h: 'Origins and History of Tarot',
+    s1p1: 'Tarot traces back to fifteenth-century northern Italy, where it began as <strong>Tarocchi</strong>, a card game popular among the nobility — hand-painted decks commissioned by the Visconti family of Milan survive to this day. Only in the late eighteenth century did French occultists Court de Gébelin and Etteilla connect the cards to divination and supposed ancient Egyptian wisdom.',
+    s1p2: 'The <strong>Rider–Waite–Smith deck</strong>, published in 1909 — designed by the scholar A. E. Waite and illustrated by Pamela Colman Smith — was the first to give every Minor Arcana card a full scenic image, dramatically lowering the barrier to learning and becoming today\'s most widely used system. The other major tradition is the mid-twentieth-century Thoth deck. Modern tarot has long moved past "predicting fortune and doom"; it is more often treated as a symbolic language and a tool for dialogue with oneself.',
+    s2h: 'The Major Arcana: 22 Stages of Life',
+    s2p1: 'A standard tarot deck holds <strong>78 cards</strong>: 22 Major Arcana and 56 Minor Arcana. The Major Arcana run from card 0, The Fool, to card 21, The World, and are often read as the "Fool\'s Journey" — a complete arc of life in which one sets out in innocence, learns (The Magician, The High Priestess), builds order (The Emperor, The Hierophant), faces choices and trials (The Lovers, Wheel of Fortune, The Hanged Man, Death), and finally reaches integration and completion (The Star, The Sun, The World).',
+    s2p2: 'When Major Arcana cards appear in an unusually high proportion in a reading, the question usually touches a significant life theme rather than everyday trivia.',
+    s3h: 'The Minor Arcana: Four Elements of Daily Life',
+    s3p1: 'The Minor Arcana are divided into four suits, each tied to an element and a domain of life:',
+    s3li1: '<strong>Wands (Fire)</strong>: drive, passion, ambition, and creativity.',
+    s3li2: '<strong>Cups (Water)</strong>: emotions, relationships, intuition, and inner feelings.',
+    s3li3: '<strong>Swords (Air)</strong>: thought, communication, conflict, and decisions.',
+    s3li4: '<strong>Pentacles (Earth)</strong>: money, work, health, and material foundations.',
+    s3p2: 'Each suit has 14 cards: the numbered cards, Ace through Ten, describe the stages by which a situation unfolds, while the court cards (Page, Knight, Queen, King) often represent people around the question — or the querent\'s own state of mind.',
+    s4h: 'Common Spreads',
+    s4p1: '<strong>Single card</strong>: the simplest form, ideal for a daily draw or any question that needs one clear point of focus.',
+    s4p2: '<strong>Three-card spread</strong>: the classic layout, most often "past – present – future," and easily adapted to "situation – obstacle – advice" — a good balance of context and readability.',
+    s4p3: '<strong>Celtic Cross</strong>: a full ten-card spread covering the present situation, obstacles, root causes, the past, goals, the near future, one\'s inner state, outside influences, hopes and fears, and the final outcome — well suited to complex, many-sided questions.',
+    s5h: 'How to Read a Card',
+    s5p1: 'Reading a card is not reciting keywords; it is layering three kinds of information: the <strong>imagery</strong> (your intuitive response to figures, colors, and symbols), the card\'s <strong>traditional meaning</strong> (upright and reversed — a reversal often signals energy that is blocked, internalized, or in excess), and the <strong>positional context</strong> (the same card means very different things in the "obstacle" position than in the "advice" position).',
+    s5p2: 'Ask better questions, too: replace "Does he love me?" with "What is the current state of this relationship, and what can I adjust?" Open-ended questions yield useful answers. Tarot mirrors tendencies and states of mind, not an unchangeable verdict — the choice always remains in your own hands.',
+    cta: 'Try the interactive tool: Online Tarot Reading →',
+    footer: '© 2026 Fatism · For reflection only. Not advice. <a href="../index.html">Back to home</a>',
+  },
+};
+
+const LANG_KEY = 'fatism_lang';
+let lang = localStorage.getItem(LANG_KEY) || 'tw';
+if (!I18N[lang]) lang = 'tw';
+
+function t(k) { return I18N[lang][k] || k; }
+
+function apply() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.dataset.i18n;
+    if (I18N[lang][k] != null) el.innerHTML = I18N[lang][k];
+  });
+  document.documentElement.lang = ({tw:'zh-TW',cn:'zh-CN',en:'en'})[lang];
+  document.querySelectorAll('#langSwitch button').forEach(b =>
+    b.classList.toggle('active', b.dataset.lang === lang));
+}
+
+document.getElementById('langSwitch').addEventListener('click', (e) => {
+  if (e.target.tagName !== 'BUTTON') return;
+  lang = e.target.dataset.lang;
+  localStorage.setItem(LANG_KEY, lang);
+  apply();
+});
+apply();
+</script>
 </body>
 </html>
