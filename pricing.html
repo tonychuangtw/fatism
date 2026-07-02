@@ -231,7 +231,28 @@
   </div>
 </div>
 
+<script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
 <script>
+// === Paddle config — fill in when Tony's Paddle account is ready ===
+// clientToken: from Paddle dashboard > Developer tools > Authentication (pk_/test_ prefix, safe to embed)
+// priceIds: from Paddle dashboard > Catalog > Products > each price's ID (pri_...)
+// workerUrl: deployed CF Worker base URL for credit sync (see worker/README.md)
+const PADDLE_CONFIG = {
+  environment: 'sandbox',        // 'sandbox' | 'production'
+  clientToken: '',               // e.g. 'test_xxxx' (sandbox) or 'live_xxxx'
+  priceIds: {
+    pack5:  '',                  // pri_...
+    pack20: '',
+    pack50: '',
+  },
+  workerUrl: '',                 // e.g. 'https://fatism-credits.<acct>.workers.dev'
+};
+const PADDLE_READY = !!(window.Paddle && PADDLE_CONFIG.clientToken && PADDLE_CONFIG.priceIds.pack5);
+if (PADDLE_READY) {
+  Paddle.Environment.set(PADDLE_CONFIG.environment);
+  Paddle.Initialize({ token: PADDLE_CONFIG.clientToken });
+}
+
 const I18N = {
   tw: {
     backHome: '命運閣 · Fatism',
@@ -513,10 +534,12 @@ function renderCheckoutModalLogin() {
 
 function renderCheckoutModalConfirm() {
   const p = PACKS[pendingPack];
+  const devTag = PADDLE_READY ? '' : `<span class="dev-tag">${t('coDevTag')}</span>`;
+  const devNote = PADDLE_READY ? '' : `<p style="color:var(--text-dim);font-size:12px">${t('coDevNote')}</p>`;
   document.getElementById('checkoutModalBody').innerHTML = `
-    <h2>${t('coTitle')}<span class="dev-tag">${t('coDevTag')}</span></h2>
+    <h2>${t('coTitle')}${devTag}</h2>
     <p>${t('coBody').replace('{n}', p.credits).replace('{p}', p.price)}</p>
-    <p style="color:var(--text-dim);font-size:12px">${t('coDevNote')}</p>
+    ${devNote}
     <div class="modal-actions">
       <button class="acct-btn" onclick="closeCheckoutModal()">${t('coCancel')}</button>
       <button class="acct-btn primary" onclick="confirmCheckout()">${t('coConfirm')}</button>
@@ -525,16 +548,46 @@ function renderCheckoutModalConfirm() {
 
 function confirmCheckout() {
   if (!pendingPack || !isLoggedIn()) return;
-  const p = PACKS[pendingPack];
-  // Dev stub: grant credits locally. Production will open Paddle Checkout
-  // and only credit on transaction.completed webhook callback.
+  const packId = pendingPack;
+  const p = PACKS[packId];
+  if (PADDLE_READY) {
+    closeCheckoutModal();
+    Paddle.Checkout.open({
+      items: [{ priceId: PADDLE_CONFIG.priceIds[packId], quantity: 1 }],
+      customer: { email: state.user.email },
+      customData: { email: state.user.email, pack: packId, credits: p.credits },
+      settings: {
+        displayMode: 'overlay',
+        locale: ({tw:'zh-Hant',cn:'zh-Hans',en:'en'})[state.lang],
+        successUrl: location.origin + location.pathname + '?status=success&n=' + p.credits,
+      },
+    });
+    return;
+  }
+  // Dev stub: grant credits locally. Real crediting happens server-side
+  // on transaction.completed webhook (see worker/).
   state.credits += p.credits;
   localStorage.setItem('fatism_credits', String(state.credits));
   const n = p.credits;
   pendingPack = null;
   closeCheckoutModal();
-  // Redirect to ?status=success to show banner
   location.href = 'pricing.html?status=success&n=' + n;
+}
+
+// Sync credits from the Worker (authoritative once payments are live).
+async function syncCredits() {
+  if (!PADDLE_CONFIG.workerUrl || !isLoggedIn()) return;
+  try {
+    const r = await fetch(PADDLE_CONFIG.workerUrl + '/credits?email=' + encodeURIComponent(state.user.email));
+    if (!r.ok) return;
+    const d = await r.json();
+    if (typeof d.credits === 'number') {
+      state.credits = d.credits;
+      localStorage.setItem('fatism_credits', String(d.credits));
+      renderAccountBar();
+      renderBanner();
+    }
+  } catch (e) { /* offline or worker not deployed yet */ }
 }
 
 // === Wire up ===
@@ -555,6 +608,12 @@ document.getElementById('checkoutModal').addEventListener('click', (e) => {
 });
 
 applyI18n();
+syncCredits();
+// After a successful checkout the webhook may lag a few seconds — retry sync.
+if (new URLSearchParams(location.search).get('status') === 'success') {
+  setTimeout(syncCredits, 3000);
+  setTimeout(syncCredits, 8000);
+}
 </script>
 </body>
 </html>
