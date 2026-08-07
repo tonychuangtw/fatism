@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>手相解讀 · 命運閣</title>
+<style>
+  :root {
+    --bg-1: #1a1340;
+    --bg-2: #2d1b5e;
+    --bg-3: #4a1a6e;
+    --gold: #d4af37;
+    --gold-dim: #8a7028;
+    --ivory: #f5e9c8;
+    --text: #ece4d3;
+    --text-dim: #b3a98c;
+    --shadow: 0 8px 32px rgba(0,0,0,0.5);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Serif TC', 'Noto Serif SC', 'Cormorant Garamond', Georgia, serif;
+    background: radial-gradient(ellipse at top, var(--bg-3) 0%, var(--bg-2) 40%, var(--bg-1) 100%);
+    min-height: 100vh;
+    color: var(--text);
+    padding: 32px 16px 48px;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.4), transparent),
+      radial-gradient(1px 1px at 60% 70%, rgba(255,255,255,0.3), transparent),
+      radial-gradient(1.5px 1.5px at 80% 20%, rgba(255,255,255,0.5), transparent),
+      radial-gradient(1px 1px at 30% 80%, rgba(255,255,255,0.3), transparent),
+      radial-gradient(2px 2px at 90% 50%, rgba(255,255,255,0.4), transparent);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .container { max-width: 760px; margin: 0 auto; position: relative; z-index: 1; }
+  .back {
+    display: inline-block; color: var(--gold-dim); text-decoration: none;
+    font-size: 13px; letter-spacing: 0.1em; margin-bottom: 12px; transition: color 0.15s;
+  }
+  .back:hover { color: var(--gold); }
+  header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; flex-wrap: wrap; gap: 12px; }
+  h1 {
+    font-size: clamp(28px, 5vw, 40px);
+    color: var(--gold);
+    letter-spacing: 0.12em;
+    text-shadow: 0 2px 16px rgba(212,175,55,0.35);
+    line-height: 1.2;
+  }
+  h1 .sub { color: var(--text-dim); font-size: 0.4em; letter-spacing: 0.3em; display: block; margin-top: 6px; }
+  .lang-switch { display: flex; gap: 4px; background: rgba(0,0,0,0.3); border: 1px solid var(--gold-dim); border-radius: 999px; padding: 4px; }
+  .lang-switch button {
+    background: transparent; color: var(--text-dim); border: none;
+    padding: 6px 12px; border-radius: 999px; cursor: pointer;
+    font-family: inherit; font-size: 13px; transition: all 0.15s;
+  }
+  .lang-switch button.active { background: var(--gold); color: var(--bg-1); font-weight: 600; }
+  .lang-switch button:hover:not(.active) { color: var(--ivory); }
+
+  .intro { color: var(--text-dim); font-size: 14px; line-height: 1.8; margin: 16px 0 28px; }
+
+  .panel {
+    background: rgba(0,0,0,0.35);
+    border: 1px solid var(--gold-dim);
+    border-radius: 16px;
+    padding: 28px 24px;
+    box-shadow: var(--shadow);
+    margin-bottom: 22px;
+  }
+
+  .dropzone {
+    border: 2px dashed rgba(212,175,55,0.4);
+    border-radius: 14px;
+    padding: 40px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .dropzone:hover, .dropzone.drag { border-color: var(--gold); background: rgba(212,175,55,0.05); }
+  .dropzone .icon { font-size: 52px; margin-bottom: 12px; }
+  .dropzone .hint { color: var(--text); font-size: 15px; margin-bottom: 8px; }
+  .dropzone .subhint { color: var(--text-dim); font-size: 12px; line-height: 1.7; }
+
+  .preview-wrap { display: none; text-align: center; }
+  .preview-wrap img {
+    max-width: 100%; max-height: 420px; border-radius: 12px;
+    border: 1px solid var(--gold-dim); box-shadow: var(--shadow);
+  }
+  .btn-row { display: flex; gap: 12px; justify-content: center; margin-top: 18px; flex-wrap: wrap; }
+  .btn {
+    font-family: inherit; font-size: 15px; letter-spacing: 0.08em; font-weight: 600;
+    padding: 11px 28px; border-radius: 8px; cursor: pointer; transition: all 0.2s;
+  }
+  .btn-gold {
+    background: linear-gradient(180deg, var(--gold) 0%, var(--gold-dim) 100%);
+    color: var(--bg-1); border: none;
+  }
+  .btn-gold:hover:not(:disabled) { filter: brightness(1.12); transform: translateY(-1px); }
+  .btn-gold:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-ghost {
+    background: transparent; color: var(--text-dim); border: 1px solid var(--gold-dim);
+  }
+  .btn-ghost:hover { color: var(--gold); border-color: var(--gold); }
+
+  .loading { display: none; text-align: center; padding: 28px 0 8px; }
+  .spinner {
+    width: 44px; height: 44px; margin: 0 auto 16px;
+    border: 3px solid rgba(212,175,55,0.2); border-top-color: var(--gold);
+    border-radius: 50%; animation: spin 0.9s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading p { color: var(--text-dim); font-size: 13px; line-height: 1.8; }
+
+  .error-box {
+    display: none;
+    background: rgba(180,60,60,0.12); border: 1px solid rgba(220,120,120,0.4);
+    border-radius: 12px; padding: 16px 20px; color: #eec9c9; font-size: 14px; line-height: 1.7;
+    margin-bottom: 22px;
+  }
+
+  .result { display: none; }
+  .result h2 {
+    color: var(--gold); font-size: 20px; letter-spacing: 0.08em;
+    margin: 26px 0 10px; padding-bottom: 8px;
+    border-bottom: 1px solid rgba(212,175,55,0.25);
+  }
+  .result h2:first-child { margin-top: 0; }
+  .result h3 { color: var(--ivory); font-size: 16px; margin: 18px 0 8px; }
+  .result p { font-size: 15px; line-height: 1.9; margin-bottom: 12px; }
+  .result li { font-size: 15px; line-height: 1.9; margin: 4px 0 4px 22px; }
+  .result strong { color: var(--ivory); }
+  .result em { color: var(--text-dim); font-size: 13px; }
+  .quota-note { color: var(--text-dim); font-size: 12px; text-align: center; margin-top: 14px; letter-spacing: 0.05em; }
+
+  footer {
+    text-align: center; margin-top: 48px;
+    color: var(--text-dim); font-size: 12px; letter-spacing: 0.1em; line-height: 1.9;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <a class="back" href="../../index.html">← 命運閣 · Fatism</a>
+  <header>
+    <h1>🤲 <span data-i18n="title">手相解讀</span>
+      <span class="sub">Palmistry · AI Vision</span>
+    </h1>
+    <div class="lang-switch" id="langSwitch">
+      <button data-lang="tw" class="active">繁中</button>
+      <button data-lang="cn">简中</button>
+      <button data-lang="en">EN</button>
+    </div>
+  </header>
+
+  <p class="intro" data-i18n="intro">
+    上傳一張手掌照片，AI 視覺模型將辨識你的掌紋，解讀生命線、智慧線、感情線、事業線與掌丘。
+    照片僅在分析當下傳送給 AI 模型，不會儲存在伺服器。
+  </p>
+
+  <div class="panel" id="uploadPanel">
+    <div class="dropzone" id="dropzone">
+      <div class="icon">🤲</div>
+      <div class="hint" data-i18n="dropHint">點擊或拖曳上傳手掌照片</div>
+      <div class="subhint" data-i18n="dropSub">拍攝訣竅：光線充足、五指張開、掌心正對鏡頭<br>支援 JPG / PNG，分析前會自動壓縮</div>
+    </div>
+    <input type="file" id="fileInput" accept="image/*" hidden>
+    <div class="preview-wrap" id="previewWrap">
+      <img id="previewImg" alt="palm preview">
+      <div class="btn-row">
+        <button class="btn btn-gold" id="analyzeBtn" data-i18n="analyzeBtn">開始解讀</button>
+        <button class="btn btn-ghost" id="retakeBtn" data-i18n="retakeBtn">重新選擇</button>
+      </div>
+    </div>
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      <p data-i18n="loadingText">AI 正在細看你的掌紋⋯⋯<br>約需 30–60 秒，請勿關閉頁面</p>
+    </div>
+  </div>
+
+  <div class="error-box" id="errorBox"></div>
+
+  <div class="panel result" id="resultPanel">
+    <div id="resultBody"></div>
+    <div class="btn-row">
+      <button class="btn btn-ghost" id="againBtn" data-i18n="againBtn">再測一張</button>
+    </div>
+    <div class="quota-note" id="quotaNote"></div>
+  </div>
+
+  <footer>
+    <p data-i18n="footer">© 2026 命運閣 · 手相解讀僅供反思啟發，不構成任何決策建議。</p>
+  </footer>
+</div>
+
+<script>
+// 後端 Worker 網址（部署 worker/ 後填入，例：https://fatism-credits.xxx.workers.dev）
+const WORKER_URL = '';
+const KIND = 'palm';
+
+const I18N = {
+  tw: {
+    title: '手相解讀',
+    intro: '上傳一張手掌照片，AI 視覺模型將辨識你的掌紋，解讀生命線、智慧線、感情線、事業線與掌丘。照片僅在分析當下傳送給 AI 模型，不會儲存在伺服器。',
+    dropHint: '點擊或拖曳上傳手掌照片',
+    dropSub: '拍攝訣竅：光線充足、五指張開、掌心正對鏡頭<br>支援 JPG / PNG，分析前會自動壓縮',
+    analyzeBtn: '開始解讀',
+    retakeBtn: '重新選擇',
+    againBtn: '再測一張',
+    loadingText: 'AI 正在細看你的掌紋⋯⋯<br>約需 30–60 秒，請勿關閉頁面',
+    errNoBackend: '分析服務尚未上線，請稍後再試。',
+    errNetwork: '連線失敗，請檢查網路後再試一次。',
+    errLimit: '今日免費解讀次數已用完，明天再來吧。',
+    errGeneric: '分析失敗，請稍後再試。',
+    errFile: '請選擇圖片檔案（JPG / PNG）。',
+    quota: '今日剩餘免費次數：',
+    footer: '© 2026 命運閣 · 手相解讀僅供反思啟發，不構成任何決策建議。',
+  },
+  cn: {
+    title: '手相解读',
+    intro: '上传一张手掌照片，AI 视觉模型将辨识你的掌纹，解读生命线、智慧线、感情线、事业线与掌丘。照片仅在分析当下传送给 AI 模型，不会储存在服务器。',
+    dropHint: '点击或拖拽上传手掌照片',
+    dropSub: '拍摄诀窍：光线充足、五指张开、掌心正对镜头<br>支持 JPG / PNG，分析前会自动压缩',
+    analyzeBtn: '开始解读',
+    retakeBtn: '重新选择',
+    againBtn: '再测一张',
+    loadingText: 'AI 正在细看你的掌纹⋯⋯<br>约需 30–60 秒，请勿关闭页面',
+    errNoBackend: '分析服务尚未上线，请稍后再试。',
+    errNetwork: '连接失败，请检查网络后再试一次。',
+    errLimit: '今日免费解读次数已用完，明天再来吧。',
+    errGeneric: '分析失败，请稍后再试。',
+    errFile: '请选择图片文件（JPG / PNG）。',
+    quota: '今日剩余免费次数：',
+    footer: '© 2026 命运阁 · 手相解读仅供反思启发，不构成任何决策建议。',
+  },
+  en: {
+    title: 'Palm Reading',
+    intro: 'Upload a photo of your palm. An AI vision model reads your life, head, heart, and fate lines plus the mounts. Your photo is sent to the AI model only for this analysis and is never stored on our servers.',
+    dropHint: 'Click or drag to upload a palm photo',
+    dropSub: 'Tips: good lighting, fingers spread, palm facing the camera<br>JPG / PNG supported; compressed automatically before analysis',
+    analyzeBtn: 'Read my palm',
+    retakeBtn: 'Choose another',
+    againBtn: 'Read another',
+    loadingText: 'The AI is studying your palm lines…<br>This takes 30–60 seconds. Please keep the page open.',
+    errNoBackend: 'The analysis service is not live yet. Please try again later.',
+    errNetwork: 'Connection failed. Please check your network and retry.',
+    errLimit: 'You have used today\'s free readings. Come back tomorrow!',
+    errGeneric: 'Analysis failed. Please try again later.',
+    errFile: 'Please choose an image file (JPG / PNG).',
+    quota: 'Free readings left today: ',
+    footer: '© 2026 Fatism · Palm readings are for reflection only. Not advice.',
+  },
+};
+
+let lang = 'tw';
+try { const saved = localStorage.getItem('fatism_lang'); if (I18N[saved]) lang = saved; } catch (e) {}
+function t(k) { return I18N[lang][k] || k; }
+function applyI18n() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.dataset.i18n;
+    if (I18N[lang][k] != null) el.innerHTML = I18N[lang][k];
+  });
+  document.documentElement.lang = ({tw:'zh-TW',cn:'zh-CN',en:'en'})[lang];
+}
+document.getElementById('langSwitch').addEventListener('click', (e) => {
+  if (e.target.tagName !== 'BUTTON') return;
+  lang = e.target.dataset.lang;
+  try { localStorage.setItem('fatism_lang', lang); } catch (e2) {}
+  document.querySelectorAll('#langSwitch button').forEach(b =>
+    b.classList.toggle('active', b.dataset.lang === lang));
+  applyI18n();
+});
+document.querySelectorAll('#langSwitch button').forEach(b =>
+  b.classList.toggle('active', b.dataset.lang === lang));
+applyI18n();
+
+// --- upload & preview ---
+const dropzone = document.getElementById('dropzone');
+const fileInput = document.getElementById('fileInput');
+const previewWrap = document.getElementById('previewWrap');
+const previewImg = document.getElementById('previewImg');
+const loading = document.getElementById('loading');
+const errorBox = document.getElementById('errorBox');
+const resultPanel = document.getElementById('resultPanel');
+const resultBody = document.getElementById('resultBody');
+const quotaNote = document.getElementById('quotaNote');
+const analyzeBtn = document.getElementById('analyzeBtn');
+
+let imageDataUrl = null;
+
+dropzone.addEventListener('click', () => fileInput.click());
+dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('drag'); });
+dropzone.addEventListener('dragleave', () => dropzone.classList.remove('drag'));
+dropzone.addEventListener('drop', (e) => {
+  e.preventDefault(); dropzone.classList.remove('drag');
+  if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+});
+fileInput.addEventListener('change', () => { if (fileInput.files[0]) handleFile(fileInput.files[0]); });
+
+function handleFile(file) {
+  hideError();
+  if (!file.type.startsWith('image/')) { showError(t('errFile')); return; }
+  const reader = new FileReader();
+  reader.onload = () => downscale(reader.result);
+  reader.readAsDataURL(file);
+}
+
+// Downscale to max 1280px JPEG — keeps upload small and vision tokens cheap
+function downscale(dataUrl) {
+  const img = new Image();
+  img.onload = () => {
+    const MAX = 1280;
+    let { width: w, height: h } = img;
+    if (Math.max(w, h) > MAX) {
+      const s = MAX / Math.max(w, h);
+      w = Math.round(w * s); h = Math.round(h * s);
+    }
+    const canvas = document.createElement('canvas');
+    canvas.width = w; canvas.height = h;
+    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+    imageDataUrl = canvas.toDataURL('image/jpeg', 0.85);
+    previewImg.src = imageDataUrl;
+    dropzone.style.display = 'none';
+    previewWrap.style.display = 'block';
+    resultPanel.style.display = 'none';
+  };
+  img.src = dataUrl;
+}
+
+function resetUpload() {
+  imageDataUrl = null;
+  fileInput.value = '';
+  previewWrap.style.display = 'none';
+  dropzone.style.display = 'block';
+  resultPanel.style.display = 'none';
+  hideError();
+}
+document.getElementById('retakeBtn').addEventListener('click', resetUpload);
+document.getElementById('againBtn').addEventListener('click', () => {
+  resetUpload();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+function showError(msg) { errorBox.textContent = msg; errorBox.style.display = 'block'; }
+function hideError() { errorBox.style.display = 'none'; }
+
+// --- analyze ---
+analyzeBtn.addEventListener('click', async () => {
+  if (!imageDataUrl) return;
+  if (!WORKER_URL) { showError(t('errNoBackend')); return; }
+  hideError();
+  previewWrap.style.display = 'none';
+  loading.style.display = 'block';
+  analyzeBtn.disabled = true;
+
+  try {
+    const res = await fetch(WORKER_URL.replace(/\/$/, '') + '/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ kind: KIND, image: imageDataUrl, lang }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (res.status === 429) { showError(t('errLimit')); previewWrap.style.display = 'block'; return; }
+    if (!res.ok || !data.result) { showError(t('errGeneric')); previewWrap.style.display = 'block'; return; }
+    resultBody.innerHTML = renderMarkdown(data.result);
+    quotaNote.textContent = (typeof data.remaining === 'number') ? t('quota') + data.remaining : '';
+    resultPanel.style.display = 'block';
+    resultPanel.scrollIntoView({ behavior: 'smooth' });
+  } catch (e) {
+    showError(t('errNetwork'));
+    previewWrap.style.display = 'block';
+  } finally {
+    loading.style.display = 'none';
+    analyzeBtn.disabled = false;
+  }
+});
+
+// Minimal markdown renderer: ##/### headings, **bold**, *italic*, - lists, paragraphs
+function renderMarkdown(md) {
+  const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const inline = (s) => esc(s)
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>');
+  const lines = md.split('\n');
+  let html = '', inList = false;
+  for (const raw of lines) {
+    const line = raw.trim();
+    if (inList && !/^[-*] /.test(line)) { html += '</ul>'; inList = false; }
+    if (!line) continue;
+    if (line.startsWith('### ')) html += '<h3>' + inline(line.slice(4)) + '</h3>';
+    else if (line.startsWith('## ')) html += '<h2>' + inline(line.slice(3)) + '</h2>';
+    else if (line.startsWith('# ')) html += '<h2>' + inline(line.slice(2)) + '</h2>';
+    else if (/^[-*] /.test(line)) {
+      if (!inList) { html += '<ul>'; inList = true; }
+      html += '<li>' + inline(line.slice(2)) + '</li>';
+    }
+    else html += '<p>' + inline(line) + '</p>';
+  }
+  if (inList) html += '</ul>';
+  return html;
+}
+</script>
+</body>
+</html>

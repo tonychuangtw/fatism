@@ -9,8 +9,8 @@
 | 塔羅牌 Tarot | ✅ v2 (78 張完整 + 位置脈絡 + 凱爾特對位 + 整體綜觀) | 自製 |
 | 八字命盤 BaZi | ✅ v2 (六親/三分項/大運評分/四柱解讀/當前運勢解讀) | `lunar-javascript` |
 | 紫微斗數 Zi Wei | ✅ v2 (12 宮位+大限流年+三方四正+命宮深度+12宮逐宮+格局判讀) | `iztro` |
-| 手相 Palmistry | 規劃中 | 照片上傳 → 人工 AI 解讀 |
-| 面相 Physiognomy | 規劃中 | 照片上傳 → 人工 AI 解讀 |
+| 手相 Palmistry | ✅ v1 (照片上傳 → AI 視覺分析) | Kimi K3 vision (經 CF Worker) |
+| 面相 Physiognomy | ✅ v1 (照片上傳 → AI 視覺分析) | Kimi K3 vision (經 CF Worker) |
 
 ## 目錄
 
@@ -21,7 +21,13 @@ widgets/
   tarot/index.html      塔羅 · 78 張全 + 位置脈絡解讀 + 凱爾特對位 + 整體綜觀
   bazi/index.html       八字命盤 · 含六親 / 三分項 / 大運評分 / 四柱解讀 / 流年解讀
   ziwei/index.html      紫微斗數 · 12 宮位排盤 + 大限流年 + 命宮深度 + 12宮逐宮 + 格局判讀
+  palm/index.html       手相 · 照片上傳 → Kimi K3 視覺分析（走 worker /analyze）
+  face/index.html       面相 · 照片上傳 → Kimi K3 視覺分析（走 worker /analyze）
+worker/                 Cloudflare Worker · Paddle webhook + 點數查詢 + /analyze 代理
 ```
+
+手相／面相需要後端：部署 `worker/`（見 `worker/README.md`），再把 workers.dev 網址填入
+`widgets/palm/index.html` 與 `widgets/face/index.html` 頂部的 `WORKER_URL`。
 
 ## 本機預覽首頁
 

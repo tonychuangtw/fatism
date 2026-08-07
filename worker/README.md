@@ -1,14 +1,37 @@
 # fatism-credits Worker
 
-Paddle webhook → 發點數到 KV；前端用 `/credits?email=` 查餘額。
+三個功能：
 
-## 部署步驟（Tony 的 Paddle 帳號開好後）
+1. Paddle webhook → 發點數到 KV；前端用 `/credits?email=` 查餘額
+2. `POST /analyze` — 手相/面相照片 → Kimi K3 視覺分析（API key 藏在 Worker secret，不進前端）
+   - 免費額度：每 IP 每日 5 次（KV 計數，`rl:` 前綴，24h 過期）
+   - body：`{"kind":"palm"|"face","image":"data:image/jpeg;base64,...","lang":"tw"|"cn"|"en"}`
+
+## 部署步驟
 
 ```bash
 cd worker
+npx wrangler login
 npx wrangler kv namespace create CREDITS   # 把回傳的 id 填進 wrangler.toml
-npx wrangler secret put PADDLE_WEBHOOK_SECRET   # 貼 Paddle notification 的 secret
+npx wrangler secret put KIMI_API_KEY       # 貼 Kimi 中國站 key（~/.kimi-code/config.toml 裡那把）
+npx wrangler secret put PADDLE_WEBHOOK_SECRET   # Paddle 開好後再補；沒設之前 /webhook 一律 401，不影響 /analyze
 npx wrangler deploy
+```
+
+部署完把 workers.dev 網址填進：
+- `widgets/palm/index.html` 頂部 `WORKER_URL`
+- `widgets/face/index.html` 頂部 `WORKER_URL`
+- `pricing.html` 的 `PADDLE_CONFIG.workerUrl`（Paddle 上線時）
+
+## 本機測試 /analyze
+
+```bash
+cd worker
+echo 'KIMI_API_KEY=sk-...' > .dev.vars    # 已在 .gitignore，不會進 repo
+npx wrangler dev --local
+# 另開 shell：
+curl -X POST http://localhost:8787/analyze -H 'Content-Type: application/json' \
+  -d '{"kind":"palm","image":"data:image/jpeg;base64,...","lang":"tw"}'
 ```
 
 ## Paddle dashboard 設定

@@ -8,3 +8,5 @@ Thumbs.db
 *.log
 .vscode/
 .idea/
+.dev.vars
+.wrangler/
