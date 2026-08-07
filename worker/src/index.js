@@ -81,17 +81,22 @@ async function verifyPaddleSignature(rawBody, sigHeader, secret) {
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    // 2026-08-07 Tony：網址一律不分大小寫。路徑與 query 參數名都轉小寫後再比對，
+    // /Credits?Email=x 跟 /credits?email=x 走同一條路。參數「值」不動（email 另外自己轉）。
+    const path = url.pathname.toLowerCase().replace(/\/+$/, '') || '/';
+    const qs = new URLSearchParams();
+    for (const [k, v] of url.searchParams) qs.append(k.toLowerCase(), v);
 
     if (request.method === 'OPTIONS') return new Response(null, { headers: CORS });
 
-    if (url.pathname === '/credits' && request.method === 'GET') {
-      const email = (url.searchParams.get('email') || '').trim().toLowerCase();
+    if (path === '/credits' && request.method === 'GET') {
+      const email = (qs.get('email') || '').trim().toLowerCase();
       if (!email || !email.includes('@')) return json({ error: 'invalid email' }, 400);
       const v = await env.CREDITS.get(email);
       return json({ email, credits: v ? parseInt(v, 10) : 0 });
     }
 
-    if (url.pathname === '/webhook' && request.method === 'POST') {
+    if (path === '/webhook' && request.method === 'POST') {
       const rawBody = await request.text();
       const ok = await verifyPaddleSignature(
         rawBody, request.headers.get('Paddle-Signature'), env.PADDLE_WEBHOOK_SECRET);
@@ -118,7 +123,7 @@ export default {
       return json({ ok: true, email, granted: credits, balance: cur + credits });
     }
 
-    if (url.pathname === '/analyze' && request.method === 'POST') {
+    if (path === '/analyze' && request.method === 'POST') {
       let body;
       try { body = await request.json(); } catch { return json({ error: 'bad json' }, 400); }
 
