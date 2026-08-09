@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>命運閣 · 管理後台</title>
+<style>
+  :root {
+    --bg-1: #1a1340; --bg-2: #2d1b5e; --bg-3: #4a1a6e;
+    --gold: #d4af37; --gold-dim: #8a7028;
+    --ivory: #f5e9c8; --text: #ece4d3; --text-dim: #b3a98c;
+    --shadow: 0 8px 32px rgba(0,0,0,0.5);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Serif TC', Georgia, serif;
+    background: radial-gradient(ellipse at top, var(--bg-3) 0%, var(--bg-2) 40%, var(--bg-1) 100%);
+    min-height: 100vh; color: var(--text); padding: 24px 16px 48px;
+  }
+  .container { max-width: 1080px; margin: 0 auto; }
+  .home-link { color: var(--gold-dim); text-decoration: none; font-size: 13px; letter-spacing: 0.1em; }
+  .home-link:hover { color: var(--gold); }
+  header { display: flex; justify-content: space-between; align-items: center; margin: 10px 0 24px; flex-wrap: wrap; gap: 12px; }
+  h1 { font-size: clamp(24px, 4vw, 34px); color: var(--gold); letter-spacing: 0.1em; }
+  h2 { color: var(--gold); font-size: 18px; letter-spacing: 0.06em; margin-bottom: 14px; }
+  .who { font-size: 13px; color: var(--text-dim); display: flex; align-items: center; gap: 10px; }
+  .who button { background: transparent; color: var(--text-dim); border: 1px solid var(--gold-dim);
+    border-radius: 999px; padding: 5px 14px; cursor: pointer; font-family: inherit; font-size: 12px; }
+  .who button:hover { color: var(--gold); border-color: var(--gold); }
+
+  .panel { background: rgba(0,0,0,0.35); border: 1px solid var(--gold-dim); border-radius: 16px;
+    padding: 24px 22px; box-shadow: var(--shadow); margin-bottom: 22px; }
+  .gate { text-align: center; padding: 48px 20px; }
+  .gate p { color: var(--text-dim); margin-bottom: 18px; line-height: 1.8; }
+  .btn { font-family: inherit; font-size: 14px; font-weight: 600; letter-spacing: 0.06em;
+    padding: 10px 26px; border-radius: 8px; cursor: pointer; border: none;
+    background: linear-gradient(180deg, var(--gold) 0%, var(--gold-dim) 100%); color: var(--bg-1); }
+  .btn:hover { filter: brightness(1.1); }
+  .btn-sm { padding: 4px 10px; font-size: 12px; border-radius: 6px; }
+  .btn-ghost { background: transparent; color: var(--text-dim); border: 1px solid var(--gold-dim); }
+  .btn-ghost:hover { color: var(--gold); border-color: var(--gold); filter: none; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid rgba(212,175,55,0.15); }
+  th { color: var(--text-dim); font-weight: 400; letter-spacing: 0.08em; font-size: 12px; }
+  td .role-super { color: var(--gold); font-weight: 700; }
+  td .credits { color: var(--gold); }
+  .table-wrap { overflow-x: auto; }
+  .row-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+  .muted { color: var(--text-dim); font-size: 12px; }
+  .toolbar { display: flex; gap: 10px; align-items: center; margin-bottom: 14px; flex-wrap: wrap; }
+  input[type="text"], input[type="number"] {
+    background: rgba(0,0,0,0.35); border: 1px solid var(--gold-dim); border-radius: 8px;
+    color: var(--text); font-family: inherit; font-size: 13px; padding: 8px 10px; }
+  .grant-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 14px; }
+  .bar-row { display: flex; align-items: center; gap: 10px; margin: 4px 0; font-size: 12px; }
+  .bar-day { width: 84px; color: var(--text-dim); cursor: pointer; }
+  .bar-day:hover { color: var(--gold); text-decoration: underline; }
+  .bar { height: 14px; background: linear-gradient(90deg, var(--gold), var(--gold-dim)); border-radius: 4px; min-width: 2px; }
+  .bar-n { color: var(--gold); }
+  #msg { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+    background: rgba(0,0,0,0.85); border: 1px solid var(--gold); color: var(--ivory);
+    border-radius: 10px; padding: 10px 20px; font-size: 13px; display: none; z-index: 500; }
+</style>
+</head>
+<body>
+<div class="container">
+  <a class="home-link" href="index.html">← 命運閣 · Fatism</a>
+  <header>
+    <h1>⚙️ 管理後台</h1>
+    <div class="who" id="who"></div>
+  </header>
+
+  <div class="panel gate" id="gate">
+    <p>此頁僅限 super 帳號使用。</p>
+    <button class="btn" id="gateLoginBtn">登入</button>
+  </div>
+
+  <div id="dash" style="display:none">
+    <div class="panel">
+      <h2>用戶列表</h2>
+      <div class="toolbar">
+        <input type="text" id="filterInput" placeholder="搜尋 email…" style="flex:1;min-width:180px">
+        <button class="btn btn-sm btn-ghost" onclick="loadUsers()">重新整理</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Email</th><th>角色</th><th>點數</th><th>註冊時間</th><th>最後登入</th><th>操作</th></tr></thead>
+          <tbody id="userRows"></tbody>
+        </table>
+      </div>
+      <div class="grant-row">
+        <span class="muted">手動發點（可發給尚未註冊的 email）：</span>
+        <input type="text" id="grantEmail" placeholder="email" style="min-width:200px">
+        <input type="number" id="grantN" placeholder="點數" value="5" style="width:80px">
+        <button class="btn btn-sm" onclick="grantTo()">發放</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>每日解讀用量（近 14 天）</h2>
+      <div id="statsBox" class="muted">載入中…</div>
+      <div id="dayDetail" style="margin-top:14px"></div>
+    </div>
+  </div>
+</div>
+<div id="msg"></div>
+
+<script src="assets/auth.js"></script>
+<script>
+const gate = document.getElementById('gate');
+const dash = document.getElementById('dash');
+const who = document.getElementById('who');
+let allUsers = [];
+
+function toast(s) {
+  const m = document.getElementById('msg');
+  m.textContent = s; m.style.display = 'block';
+  clearTimeout(toast._t); toast._t = setTimeout(() => m.style.display = 'none', 2600);
+}
+
+async function adminApi(path, opts) {
+  const r = await FatismAuth.api(path, opts);
+  if (r.status === 401) { FatismAuth.logout(); boot(); throw new Error('token 過期，請重新登入'); }
+  if (r.status === 403) { boot(); throw new Error('此帳號不是 super'); }
+  const d = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(d.error || ('HTTP ' + r.status));
+  return d;
+}
+
+function fmtTime(iso) {
+  if (!iso) return '—';
+  try { return new Date(iso).toLocaleString('zh-TW', { hour12: false }).replace(/:\d\d$/, ''); }
+  catch (e) { return iso.slice(0, 16).replace('T', ' '); }
+}
+
+function renderUsers() {
+  const q = document.getElementById('filterInput').value.trim().toLowerCase();
+  const rows = allUsers.filter(u => !q || u.email.includes(q)).map(u => `
+    <tr>
+      <td>${u.email}</td>
+      <td>${u.role === 'super' ? '<span class="role-super">SUPER</span>' : '一般'}</td>
+      <td class="credits">${u.role === 'super' ? '∞' : u.credits}</td>
+      <td class="muted">${fmtTime(u.createdAt)}</td>
+      <td class="muted">${fmtTime(u.lastLoginAt)}</td>
+      <td><div class="row-actions">
+        <button class="btn btn-sm btn-ghost" onclick="adjust('${u.email}', 5)">+5</button>
+        <button class="btn btn-sm btn-ghost" onclick="adjust('${u.email}', -5)">−5</button>
+        <button class="btn btn-sm btn-ghost" onclick="setCredits('${u.email}')">設為…</button>
+        ${u.role === 'super'
+          ? `<button class="btn btn-sm btn-ghost" onclick="setRole('${u.email}','user')">降為一般</button>`
+          : `<button class="btn btn-sm btn-ghost" onclick="setRole('${u.email}','super')">升 SUPER</button>`}
+      </div></td>
+    </tr>`).join('');
+  document.getElementById('userRows').innerHTML =
+    rows || '<tr><td colspan="6" class="muted">沒有符合的帳號</td></tr>';
+}
+
+async function loadUsers() {
+  try {
+    const d = await adminApi('/admin/users');
+    allUsers = d.users;
+    renderUsers();
+    if (d.truncated) toast('注意：帳號超過 1000 筆，僅顯示前 1000');
+  } catch (e) { toast(e.message); }
+}
+
+async function adjust(email, delta) {
+  try {
+    const d = await adminApi('/admin/credits', { method: 'POST', body: { email, delta } });
+    toast(`${email} → ${d.credits} 點`);
+    loadUsers();
+  } catch (e) { toast(e.message); }
+}
+
+async function setCredits(email) {
+  const v = prompt(`把 ${email} 的點數設為：`);
+  if (v == null) return;
+  const n = parseInt(v, 10);
+  if (isNaN(n) || n < 0) { toast('請輸入 0 以上的整數'); return; }
+  try {
+    const d = await adminApi('/admin/credits', { method: 'POST', body: { email, set: n } });
+    toast(`${email} → ${d.credits} 點`);
+    loadUsers();
+  } catch (e) { toast(e.message); }
+}
+
+async function setRole(email, role) {
+  if (role === 'super' && !confirm(`確定把 ${email} 升為 SUPER？（不扣點、可進後台）`)) return;
+  try {
+    await adminApi('/admin/role', { method: 'POST', body: { email, role } });
+    toast(`${email} → ${role}`);
+    loadUsers();
+  } catch (e) { toast(e.message); }
+}
+
+async function grantTo() {
+  const email = document.getElementById('grantEmail').value.trim().toLowerCase();
+  const n = parseInt(document.getElementById('grantN').value, 10);
+  if (!email.includes('@') || isNaN(n)) { toast('email 或點數不對'); return; }
+  try {
+    const d = await adminApi('/admin/credits', { method: 'POST', body: { email, delta: n } });
+    toast(`${email} → ${d.credits} 點`);
+    loadUsers();
+  } catch (e) { toast(e.message); }
+}
+
+async function loadStats() {
+  const box = document.getElementById('statsBox');
+  try {
+    const d = await adminApi('/admin/stats?days=14');
+    const max = Math.max(1, ...d.days.map(x => x.total));
+    box.innerHTML = d.days.map(x => `
+      <div class="bar-row">
+        <span class="bar-day" onclick="loadDay('${x.day}')" title="看當日各用戶用量">${x.day}</span>
+        <div class="bar" style="width:${Math.round(x.total / max * 60)}%"></div>
+        <span class="bar-n">${x.total}</span>
+      </div>`).join('') +
+      '<p class="muted" style="margin-top:8px">點日期可看當日各用戶用量。統計只含手相/面相 AI 解讀（會打 API 花錢的部分）。</p>';
+  } catch (e) { box.textContent = e.message; }
+}
+
+async function loadDay(day) {
+  const el = document.getElementById('dayDetail');
+  el.innerHTML = '<span class="muted">載入中…</span>';
+  try {
+    const d = await adminApi('/admin/stats?day=' + day);
+    el.innerHTML = `<h2 style="font-size:15px">${day} 各用戶用量</h2>` +
+      (d.users.length
+        ? '<table><thead><tr><th>Email</th><th>次數</th></tr></thead><tbody>' +
+          d.users.map(u => `<tr><td>${u.email}</td><td class="credits">${u.count}</td></tr>`).join('') +
+          '</tbody></table>'
+        : '<p class="muted">當日沒有使用紀錄</p>');
+  } catch (e) { el.innerHTML = '<span class="muted">' + e.message + '</span>'; }
+}
+
+async function boot() {
+  const a = FatismAuth.token() ? await FatismAuth.me() : null;
+  if (a && a.role === 'super') {
+    gate.style.display = 'none';
+    dash.style.display = 'block';
+    who.innerHTML = `${a.email} · <span style="color:var(--gold)">SUPER</span> <button onclick="FatismAuth.logout();location.reload()">登出</button>`;
+    loadUsers();
+    loadStats();
+  } else {
+    gate.style.display = 'block';
+    dash.style.display = 'none';
+    who.innerHTML = '';
+    gate.querySelector('p').textContent = a
+      ? `${a.email} 不是 super 帳號，無法使用管理後台。`
+      : '此頁僅限 super 帳號使用。';
+  }
+}
+
+document.getElementById('gateLoginBtn').addEventListener('click', () =>
+  FatismAuth.openModal({ lang: 'tw', onSuccess: boot }));
+document.getElementById('filterInput').addEventListener('input', renderUsers);
+boot();
+</script>
+</body>
+</html>

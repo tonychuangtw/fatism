@@ -1,11 +1,13 @@
 # fatism-credits Worker
 
-三個功能：
+功能（完整 API 規格見 `../docs/app-sync.md`）：
 
-1. Paddle webhook → 發點數到 KV；前端用 `/credits?email=` 查餘額
-2. `POST /analyze` — 手相/面相照片 → Kimi K3 視覺分析（API key 藏在 Worker secret，不進前端）
-   - 免費額度：每 IP 每日 5 次（KV 計數，`rl:` 前綴，24h 過期）
+1. 帳號系統 `/auth/*` — email+密碼註冊/登入，JWT 90 天；新帳號送 3 點
+   - `tonychuangtw@gmail.com` 硬編為 super（不扣點、不限量、可用 /admin/*）
+2. `POST /analyze` — 手相/面相照片 → Kimi K3 視覺分析（要登入；成功才扣 1 點；每帳號每日上限 30 次防濫用）
    - body：`{"kind":"palm"|"face","image":"data:image/jpeg;base64,...","lang":"tw"|"cn"|"en"}`
+3. Paddle webhook → 發點數到 KV；前端用 `/credits?email=` 查餘額
+4. `/admin/*` — 管理後台 API（`../admin.html` 用）：用戶列表、調點數、設角色、每日用量
 
 ## 部署步驟
 
@@ -13,6 +15,7 @@
 cd worker
 npx wrangler login
 npx wrangler kv namespace create CREDITS   # 把回傳的 id 填進 wrangler.toml
+npx wrangler secret put AUTH_SECRET        # JWT 簽名用，隨機 64 字元；換掉＝全站強制重新登入
 npx wrangler secret put KIMI_API_KEY       # 貼 Kimi 中國站 key（~/.kimi-code/config.toml 裡那把）
 npx wrangler secret put PADDLE_WEBHOOK_SECRET   # Paddle 開好後再補；沒設之前 /webhook 一律 401，不影響 /analyze
 npx wrangler deploy

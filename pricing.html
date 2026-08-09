@@ -204,7 +204,7 @@
   </div>
 
   <p style="text-align:center;color:var(--text-dim);font-size:12px;margin:0 0 24px;font-style:italic" data-i18n="firstBonus">
-    💎 首次註冊免費送 1 點 · 立即體驗一次完整解讀
+    💎 新帳號免費送 3 點 · 網頁版與 App 點數互通
   </p>
 
   <div class="pricing-note">
@@ -232,6 +232,7 @@
 </div>
 
 <script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
+<script src="assets/auth.js"></script>
 <script>
 // === Paddle config — fill in when Tony's Paddle account is ready ===
 // clientToken: from Paddle dashboard > Developer tools > Authentication (pk_/test_ prefix, safe to embed)
@@ -245,7 +246,7 @@ const PADDLE_CONFIG = {
     pack20: '',
     pack50: '',
   },
-  workerUrl: '',                 // e.g. 'https://fatism-credits.<acct>.workers.dev'
+  workerUrl: 'https://fatism-credits.tonychuangtw.workers.dev',
 };
 const PADDLE_READY = !!(window.Paddle && PADDLE_CONFIG.clientToken && PADDLE_CONFIG.priceIds.pack5);
 if (PADDLE_READY) {
@@ -263,7 +264,7 @@ const I18N = {
     popular: '入門',
     bestValue: '最划算',
     buyBtn: '結帳',
-    firstBonus: '💎 首次註冊免費送 1 點 · 立即體驗一次完整解讀',
+    firstBonus: '💎 新帳號免費送 3 點 · 網頁版與 App 點數互通',
     p5Name: '入門套餐', p5Each: '每點 NT$50',
     p5Desc: '夠你跨三館各看一次還有餘。日常推薦。',
     p20Name: '深度年用', p20Each: '每點 NT$40 · 8 折',
@@ -282,8 +283,8 @@ const I18N = {
     coBody: '購買 <strong>{n} 點</strong>，金額 <strong>NT$ {p}</strong>',
     coConfirm: '確認購買',
     coCancel: '取消',
-    coDevTag: 'DEV',
-    coDevNote: '開發中：目前直接發放點數到瀏覽器，不會實際扣款。正式版會跳轉 Paddle Checkout。',
+    coDevTag: '準備中',
+    coDevNote: '金流開通中，暫時無法線上購買。開通後即可用信用卡等方式付款。',
     coLoginFirst: '請先登入或註冊，才能購買點數。',
     coLoginBtn: '前往登入',
     acctLoginTitle: '登入 / 註冊',
@@ -308,7 +309,7 @@ const I18N = {
     popular: '入门',
     bestValue: '最划算',
     buyBtn: '结账',
-    firstBonus: '💎 首次注册免费送 1 点 · 立即体验一次完整解读',
+    firstBonus: '💎 新帐号免费送 3 点 · 网页版与 App 点数互通',
     p5Name: '入门套餐', p5Each: '每点 NT$50',
     p5Desc: '够你跨三馆各看一次还有余。日常推荐。',
     p20Name: '深度年用', p20Each: '每点 NT$40 · 8 折',
@@ -327,8 +328,8 @@ const I18N = {
     coBody: '购买 <strong>{n} 点</strong>，金额 <strong>NT$ {p}</strong>',
     coConfirm: '确认购买',
     coCancel: '取消',
-    coDevTag: 'DEV',
-    coDevNote: '开发中：目前直接发放点数到浏览器，不会实际扣款。正式版会跳转 Paddle Checkout。',
+    coDevTag: '准备中',
+    coDevNote: '金流开通中，暂时无法在线购买。开通后即可用信用卡等方式付款。',
     coLoginFirst: '请先登入或注册，才能购买点数。',
     coLoginBtn: '前往登入',
     acctLoginTitle: '登入 / 注册',
@@ -353,7 +354,7 @@ const I18N = {
     popular: 'Starter',
     bestValue: 'Best value',
     buyBtn: 'Check out',
-    firstBonus: '💎 First-time sign-up grants 1 free credit — try one full reading instantly',
+    firstBonus: '💎 New accounts get 3 free credits — shared between web and app',
     p5Name: 'Starter', p5Each: 'NT$50 each',
     p5Desc: 'Enough for one of each reading with credits to spare.',
     p20Name: 'Year supply', p20Each: 'NT$40 each · 20% off',
@@ -372,8 +373,8 @@ const I18N = {
     coBody: 'Buy <strong>{n} credits</strong> for <strong>NT$ {p}</strong>',
     coConfirm: 'Confirm purchase',
     coCancel: 'Cancel',
-    coDevTag: 'DEV',
-    coDevNote: 'Dev preview: credits are granted locally — no actual charge. Production will open Paddle Checkout.',
+    coDevTag: 'Coming soon',
+    coDevNote: 'Payments are being set up — online purchase is not available quite yet.',
     coLoginFirst: 'Please sign in first before purchasing credits.',
     coLoginBtn: 'Sign in',
     acctLoginTitle: 'Sign in / sign up',
@@ -397,15 +398,12 @@ const PACKS = {
   pack50: { credits: 50, price: 1800 },
 };
 
-function loadUser() {
-  try { return JSON.parse(localStorage.getItem('fatism_user') || 'null'); } catch (e) { return null; }
-}
-
 let savedLang = 'tw'; try { const sl = localStorage.getItem('fatism_lang'); if (sl === 'cn' || sl === 'en') savedLang = sl; } catch (e) {}
+const _acct0 = FatismAuth.account();
 let state = {
   lang: savedLang,
-  user: loadUser(),
-  credits: parseInt(localStorage.getItem('fatism_credits') || '0', 10),
+  user: _acct0,                       // {email, role, credits} — 以 FatismAuth/Worker 為準
+  credits: _acct0 ? (_acct0.credits || 0) : 0,
 };
 
 function t(k) { return I18N[state.lang][k] || k; }
@@ -425,7 +423,8 @@ function applyI18n() {
 }
 
 function renderAccountBar() {
-  document.getElementById('acctCredits').textContent = state.credits + ' ' + t('creditsUnit');
+  const sup = state.user && state.user.role === 'super';
+  document.getElementById('acctCredits').textContent = sup ? '∞' : (state.credits + ' ' + t('creditsUnit'));
   document.getElementById('acctBtn').textContent = isLoggedIn() ? t('acctMember') : t('acctLogin');
 }
 
@@ -446,62 +445,44 @@ function renderBanner() {
   }
 }
 
-// === Account modal (login/member) ===
+// === Account（登入/註冊走 FatismAuth 共用視窗；會員資訊沿用本頁 modal） ===
 
-function openAccountModal() { renderAccountModal(); document.getElementById('acctModal').classList.add('open'); }
+function openAccountModal() {
+  if (!isLoggedIn()) {
+    FatismAuth.openModal({ lang: state.lang, onSuccess: () => refreshAcct() });
+    return;
+  }
+  renderAccountModal();
+  document.getElementById('acctModal').classList.add('open');
+}
 function closeAccountModal() { document.getElementById('acctModal').classList.remove('open'); }
 
-function login(email) {
-  email = (email || '').trim().toLowerCase();
-  if (!email || !email.includes('@') || email.length < 5) return false;
-  const isFirstTime = !state.user;
-  state.user = { email };
-  localStorage.setItem('fatism_user', JSON.stringify(state.user));
-  if (isFirstTime && state.credits === 0) {
-    state.credits = 1;
-    localStorage.setItem('fatism_credits', '1');
-  }
-  renderAccountBar();
-  renderAccountModal();
-  return true;
-}
-
 function logout() {
-  state.user = null;
-  localStorage.removeItem('fatism_user');
+  FatismAuth.logout();
+  state.user = null; state.credits = 0;
   renderAccountBar();
-  renderAccountModal();
+  closeAccountModal();
 }
 
-function handleLoginSubmit() {
-  const v = document.getElementById('acctEmailInput').value;
-  if (!login(v)) alert(t('acctEmailErr'));
+async function refreshAcct() {
+  const a = await FatismAuth.me();
+  state.user = a || FatismAuth.account();
+  state.credits = state.user ? (state.user.credits || 0) : 0;
+  renderAccountBar();
+  renderBanner();
 }
 
 function renderAccountModal() {
   const body = document.getElementById('acctModalBody');
-  if (isLoggedIn()) {
-    body.innerHTML = `
-      <h2>${t('acctMemberTitle')}</h2>
-      <p>${t('acctEmailLab')}: <strong style="color:var(--gold)">${state.user.email}</strong></p>
-      <p>${t('acctCreditsLab')}: <strong style="color:var(--gold)">${state.credits} ${t('creditsUnit')}</strong></p>
-      <div class="modal-actions">
-        <button class="acct-btn" onclick="logout()">${t('acctLogout')}</button>
-        <button class="acct-btn primary" onclick="closeAccountModal()">${t('acctClose')}</button>
-      </div>`;
-  } else {
-    body.innerHTML = `
-      <h2>${t('acctLoginTitle')}</h2>
-      <p>${t('acctLoginBody')}</p>
-      <input id="acctEmailInput" type="email" placeholder="${t('acctEmailPh')}" style="width:100%;padding:10px 12px;background:rgba(0,0,0,0.3);border:1px solid var(--gold-dim);border-radius:8px;color:var(--text);font-family:inherit;font-size:14px;margin:10px 0 4px" />
-      <p style="color:var(--text-dim);font-size:11px;margin:6px 0 2px">${t('acctFirstBonus')}</p>
-      <p style="color:var(--text-dim);font-size:11px;margin-top:2px">${t('acctStubNote')}</p>
-      <div class="modal-actions">
-        <button class="acct-btn" onclick="closeAccountModal()">${t('acctClose')}</button>
-        <button class="acct-btn primary" onclick="handleLoginSubmit()">${t('acctLoginBtn')}</button>
-      </div>`;
-    setTimeout(() => { const e = document.getElementById('acctEmailInput'); if (e) { e.focus(); e.addEventListener('keydown', ev => { if (ev.key === 'Enter') handleLoginSubmit(); }); } }, 50);
-  }
+  const sup = state.user.role === 'super';
+  body.innerHTML = `
+    <h2>${t('acctMemberTitle')}</h2>
+    <p>${t('acctEmailLab')}: <strong style="color:var(--gold)">${state.user.email}</strong>${sup ? ' <span style="color:var(--gold)">· SUPER</span>' : ''}</p>
+    <p>${t('acctCreditsLab')}: <strong style="color:var(--gold)">${sup ? '∞' : state.credits + ' ' + t('creditsUnit')}</strong></p>
+    <div class="modal-actions">
+      <button class="acct-btn" onclick="logout()">${t('acctLogout')}</button>
+      <button class="acct-btn primary" onclick="closeAccountModal()">${t('acctClose')}</button>
+    </div>`;
 }
 
 // === Checkout flow ===
@@ -543,7 +524,7 @@ function renderCheckoutModalConfirm() {
     ${devNote}
     <div class="modal-actions">
       <button class="acct-btn" onclick="closeCheckoutModal()">${t('coCancel')}</button>
-      <button class="acct-btn primary" onclick="confirmCheckout()">${t('coConfirm')}</button>
+      ${PADDLE_READY ? `<button class="acct-btn primary" onclick="confirmCheckout()">${t('coConfirm')}</button>` : ''}
     </div>`;
 }
 
@@ -565,30 +546,8 @@ function confirmCheckout() {
     });
     return;
   }
-  // Dev stub: grant credits locally. Real crediting happens server-side
-  // on transaction.completed webhook (see worker/).
-  state.credits += p.credits;
-  localStorage.setItem('fatism_credits', String(state.credits));
-  const n = p.credits;
-  pendingPack = null;
+  // Paddle 未開通時確認鈕不會出現，這裡只是保險
   closeCheckoutModal();
-  location.href = 'pricing.html?status=success&n=' + n;
-}
-
-// Sync credits from the Worker (authoritative once payments are live).
-async function syncCredits() {
-  if (!PADDLE_CONFIG.workerUrl || !isLoggedIn()) return;
-  try {
-    const r = await fetch(PADDLE_CONFIG.workerUrl + '/credits?email=' + encodeURIComponent(state.user.email));
-    if (!r.ok) return;
-    const d = await r.json();
-    if (typeof d.credits === 'number') {
-      state.credits = d.credits;
-      localStorage.setItem('fatism_credits', String(d.credits));
-      renderAccountBar();
-      renderBanner();
-    }
-  } catch (e) { /* offline or worker not deployed yet */ }
 }
 
 // === Wire up ===
@@ -611,11 +570,11 @@ document.getElementById('checkoutModal').addEventListener('click', (e) => {
 
 document.querySelectorAll('#langSwitch button').forEach(b => b.classList.toggle('active', b.dataset.lang === state.lang));
 applyI18n();
-syncCredits();
+refreshAcct();
 // After a successful checkout the webhook may lag a few seconds — retry sync.
 if (new URLSearchParams(location.search).get('status') === 'success') {
-  setTimeout(syncCredits, 3000);
-  setTimeout(syncCredits, 8000);
+  setTimeout(refreshAcct, 3000);
+  setTimeout(refreshAcct, 8000);
 }
 </script>
 </body>

@@ -12,7 +12,7 @@
 // ⚠️ PATHS 由 claude-shared 的 gen404.py 產生，新增頁面後重跑一次即可。
 (function () {
   var BASE = "/fatism/";
-  var PATHS = ["index.html", "learn/bazi.html", "learn/palmistry.html", "learn/physiognomy.html", "learn/tarot.html", "learn/ziwei.html", "pricing.html", "widgets/bazi/", "widgets/bazi/index.html", "widgets/face/", "widgets/face/index.html", "widgets/palm/", "widgets/palm/index.html", "widgets/tarot/", "widgets/tarot/index.html", "widgets/ziwei/", "widgets/ziwei/index.html"];
+  var PATHS = ["admin.html", "index.html", "learn/bazi.html", "learn/palmistry.html", "learn/physiognomy.html", "learn/tarot.html", "learn/ziwei.html", "pricing.html", "widgets/bazi/", "widgets/bazi/index.html", "widgets/face/", "widgets/face/index.html", "widgets/palm/", "widgets/palm/index.html", "widgets/tarot/", "widgets/tarot/index.html", "widgets/ziwei/", "widgets/ziwei/index.html"];
   var p = decodeURIComponent(location.pathname);
   var rest = p.indexOf(BASE) === 0 ? p.slice(BASE.length) : p.replace(/^\//, '');
   var key = rest.toLowerCase().replace(/^\/+/, '');

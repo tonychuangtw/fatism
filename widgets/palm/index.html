@@ -60,6 +60,16 @@
   }
   .lang-switch button.active { background: var(--gold); color: var(--bg-1); font-weight: 600; }
   .lang-switch button:hover:not(.active) { color: var(--ivory); }
+  .head-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .acct-bar { display: flex; align-items: center; gap: 6px; background: rgba(0,0,0,0.3);
+    border: 1px solid var(--gold-dim); border-radius: 999px; padding: 4px 6px; font-size: 12px; }
+  .acct-bar .acct-credits { color: var(--gold); letter-spacing: 0.06em; white-space: nowrap; padding-left: 8px; }
+  .acct-bar .acct-credits:empty { display: none; }
+  .acct-bar button { background: transparent; color: var(--text-dim); border: none; padding: 5px 12px;
+    border-radius: 999px; cursor: pointer; font-family: inherit; font-size: 12px; transition: all 0.15s; }
+  .acct-bar button:hover { color: var(--gold); }
+  .acct-bar button.primary { background: var(--gold); color: var(--bg-1); font-weight: 600; }
+  .acct-bar button.primary:hover { color: var(--bg-1); filter: brightness(1.1); }
 
   .intro { color: var(--text-dim); font-size: 14px; line-height: 1.8; margin: 16px 0 28px; }
 
@@ -149,10 +159,16 @@
     <h1>🤲 <span data-i18n="title">手相解讀</span>
       <span class="sub">Palmistry · AI Vision</span>
     </h1>
-    <div class="lang-switch" id="langSwitch">
-      <button data-lang="tw" class="active">繁中</button>
-      <button data-lang="cn">简中</button>
-      <button data-lang="en">EN</button>
+    <div class="head-right">
+      <div class="acct-bar" id="acctBar">
+        <span class="acct-credits" id="acctCredits"></span>
+        <button id="acctBtn" class="primary">登入</button>
+      </div>
+      <div class="lang-switch" id="langSwitch">
+        <button data-lang="tw" class="active">繁中</button>
+        <button data-lang="cn">简中</button>
+        <button data-lang="en">EN</button>
+      </div>
     </div>
   </header>
 
@@ -196,9 +212,9 @@
   </footer>
 </div>
 
+<script src="../../assets/auth.js"></script>
 <script>
-// 後端 Worker 網址（部署 worker/ 後填入，例：https://fatism-credits.xxx.workers.dev）
-const WORKER_URL = 'https://fatism-credits.tonychuangtw.workers.dev';
+// Worker 網址統一放 ../../assets/auth.js（FatismAuth.WORKER_URL）；登入、點數、分析都走它
 const KIND = 'palm';
 
 const I18N = {
@@ -213,10 +229,16 @@ const I18N = {
     loadingText: 'AI 正在細看你的掌紋⋯⋯<br>約需 30–60 秒，請勿關閉頁面',
     errNoBackend: '分析服務尚未上線，請稍後再試。',
     errNetwork: '連線失敗，請檢查網路後再試一次。',
-    errLimit: '今日免費解讀次數已用完，明天再來吧。',
+    errLimit: '今日解讀次數已達上限，明天再來吧。',
     errGeneric: '分析失敗，請稍後再試。',
     errFile: '請選擇圖片檔案（JPG / PNG）。',
-    quota: '今日剩餘免費次數：',
+    errNoCredits: '點數不足，每次解讀需要 1 點。',
+    buyMore: '購買點數',
+    quota: '剩餘點數：',
+    quotaSuper: 'Super 帳號 · 不限次數',
+    creditsUnit: '點',
+    barLogin: '登入',
+    barLogout: '登出',
     footer: '© 2026 命運閣 · 手相解讀僅供反思啟發，不構成任何決策建議。',
   },
   cn: {
@@ -230,10 +252,16 @@ const I18N = {
     loadingText: 'AI 正在细看你的掌纹⋯⋯<br>约需 30–60 秒，请勿关闭页面',
     errNoBackend: '分析服务尚未上线，请稍后再试。',
     errNetwork: '连接失败，请检查网络后再试一次。',
-    errLimit: '今日免费解读次数已用完，明天再来吧。',
+    errLimit: '今日解读次数已达上限，明天再来吧。',
     errGeneric: '分析失败，请稍后再试。',
     errFile: '请选择图片文件（JPG / PNG）。',
-    quota: '今日剩余免费次数：',
+    errNoCredits: '点数不足，每次解读需要 1 点。',
+    buyMore: '购买点数',
+    quota: '剩余点数：',
+    quotaSuper: 'Super 帐号 · 不限次数',
+    creditsUnit: '点',
+    barLogin: '登入',
+    barLogout: '登出',
     footer: '© 2026 命运阁 · 手相解读仅供反思启发，不构成任何决策建议。',
   },
   en: {
@@ -247,10 +275,16 @@ const I18N = {
     loadingText: 'The AI is studying your palm lines…<br>This takes 30–60 seconds. Please keep the page open.',
     errNoBackend: 'The analysis service is not live yet. Please try again later.',
     errNetwork: 'Connection failed. Please check your network and retry.',
-    errLimit: 'You have used today\'s free readings. Come back tomorrow!',
+    errLimit: 'Daily reading limit reached. Come back tomorrow!',
     errGeneric: 'Analysis failed. Please try again later.',
     errFile: 'Please choose an image file (JPG / PNG).',
-    quota: 'Free readings left today: ',
+    errNoCredits: 'Not enough credits — each reading costs 1 credit.',
+    buyMore: 'Buy credits',
+    quota: 'Credits left: ',
+    quotaSuper: 'Super account · unlimited',
+    creditsUnit: 'cr',
+    barLogin: 'Sign in',
+    barLogout: 'Sign out',
     footer: '© 2026 Fatism · Palm readings are for reflection only. Not advice.',
   },
 };
@@ -272,6 +306,7 @@ document.getElementById('langSwitch').addEventListener('click', (e) => {
   document.querySelectorAll('#langSwitch button').forEach(b =>
     b.classList.toggle('active', b.dataset.lang === lang));
   applyI18n();
+  updateAcctBar();
 });
 document.querySelectorAll('#langSwitch button').forEach(b =>
   b.classList.toggle('active', b.dataset.lang === lang));
@@ -344,29 +379,64 @@ document.getElementById('againBtn').addEventListener('click', () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
-function showError(msg) { errorBox.textContent = msg; errorBox.style.display = 'block'; }
+function showError(msg, html) { errorBox[html ? 'innerHTML' : 'textContent'] = msg; errorBox.style.display = 'block'; }
 function hideError() { errorBox.style.display = 'none'; }
 
-// --- analyze ---
+// --- account bar ---
+const acctCredits = document.getElementById('acctCredits');
+const acctBtn = document.getElementById('acctBtn');
+function updateAcctBar() {
+  const a = FatismAuth.account();
+  if (a) {
+    acctCredits.textContent = a.role === 'super' ? '∞' : (a.credits + ' ' + t('creditsUnit'));
+    acctCredits.title = a.email;
+    acctBtn.textContent = t('barLogout');
+    acctBtn.classList.remove('primary');
+  } else {
+    acctCredits.textContent = '';
+    acctBtn.textContent = t('barLogin');
+    acctBtn.classList.add('primary');
+  }
+}
+acctBtn.addEventListener('click', () => {
+  if (FatismAuth.account()) { FatismAuth.logout(); updateAcctBar(); }
+  else FatismAuth.openModal({ lang, onSuccess: updateAcctBar });
+});
+updateAcctBar();
+if (FatismAuth.token()) FatismAuth.me().then(updateAcctBar);
+
+// --- analyze（要登入；super 不扣點，其他每次 1 點，成功才扣） ---
 analyzeBtn.addEventListener('click', async () => {
   if (!imageDataUrl) return;
-  if (!WORKER_URL) { showError(t('errNoBackend')); return; }
+  if (!FatismAuth.token()) { FatismAuth.openModal({ lang, onSuccess: updateAcctBar }); return; }
   hideError();
   previewWrap.style.display = 'none';
   loading.style.display = 'block';
   analyzeBtn.disabled = true;
 
   try {
-    const res = await fetch(WORKER_URL.replace(/\/$/, '') + '/analyze', {
+    const res = await FatismAuth.api('/analyze', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ kind: KIND, image: imageDataUrl, lang }),
+      body: { kind: KIND, image: imageDataUrl, lang },
     });
     const data = await res.json().catch(() => ({}));
+    if (res.status === 401) {
+      FatismAuth.logout(); updateAcctBar();
+      previewWrap.style.display = 'block';
+      FatismAuth.openModal({ lang, onSuccess: updateAcctBar });
+      return;
+    }
+    if (res.status === 402) {
+      showError(t('errNoCredits') + ' <a href="../../pricing.html" style="color:var(--gold)">' + t('buyMore') + ' →</a>', true);
+      previewWrap.style.display = 'block';
+      return;
+    }
     if (res.status === 429) { showError(t('errLimit')); previewWrap.style.display = 'block'; return; }
     if (!res.ok || !data.result) { showError(t('errGeneric')); previewWrap.style.display = 'block'; return; }
     resultBody.innerHTML = renderMarkdown(data.result);
-    quotaNote.textContent = (typeof data.remaining === 'number') ? t('quota') + data.remaining : '';
+    quotaNote.textContent = data.role === 'super' ? t('quotaSuper')
+      : (typeof data.remaining === 'number' ? t('quota') + data.remaining : '');
+    FatismAuth.me().then(updateAcctBar);
     resultPanel.style.display = 'block';
     resultPanel.scrollIntoView({ behavior: 'smooth' });
   } catch (e) {

@@ -16,7 +16,10 @@
 
 ```
 index.html              ← 命運閣首頁（串接 3 個 widget）
-pricing.html            ← 點數方案頁（3 種 pack + 結帳 stub）
+pricing.html            ← 點數方案頁（3 種 pack；登入走 FatismAuth，Paddle 開通前隱藏結帳鈕）
+admin.html              ← 管理後台（super 帳號限定：用戶/點數/角色/每日用量）
+assets/auth.js          ← FatismAuth 共用登入元件（token、登入/註冊 modal、API 包裝）
+docs/app-sync.md        ← 帳號/點數 API 規格 · 網頁與 App 共用後端說明
 widgets/
   tarot/index.html      塔羅 · 78 張全 + 位置脈絡解讀 + 凱爾特對位 + 整體綜觀
   bazi/index.html       八字命盤 · 含六親 / 三分項 / 大運評分 / 四柱解讀 / 流年解讀
@@ -26,8 +29,9 @@ widgets/
 worker/                 Cloudflare Worker · Paddle webhook + 點數查詢 + /analyze 代理
 ```
 
-手相／面相需要後端：部署 `worker/`（見 `worker/README.md`），再把 workers.dev 網址填入
-`widgets/palm/index.html` 與 `widgets/face/index.html` 頂部的 `WORKER_URL`。
+手相／面相需要後端 `worker/`（見 `worker/README.md`），且**需登入**：
+新帳號送 3 點，每次 AI 解讀扣 1 點；super 帳號（Tony）不扣點不限量。
+Worker 網址統一放在 `assets/auth.js` 的 `WORKER_URL`。
 
 ## 本機預覽首頁
 
