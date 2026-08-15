@@ -976,7 +976,9 @@ function tryUnlock() {
 
 function handleLoginSubmit() {
   const v = document.getElementById('acctEmailInput').value;
-  if (!login(v)) alert(t('acctEmailErr'));
+  const err = document.getElementById('acctEmailErrBox');
+  if (login(v)) return;
+  if (err) { err.textContent = t('acctEmailErr'); err.style.display = 'block'; }
 }
 
 function renderAccountBar() {
@@ -1007,6 +1009,7 @@ function renderAccountModal() {
       <h2>${t('acctLoginTitle')}</h2>
       <p>${t('acctLoginBody')}</p>
       <input id="acctEmailInput" type="email" placeholder="${t('acctEmailPh')}" style="width:100%;padding:10px 12px;background:rgba(0,0,0,0.3);border:1px solid var(--gold-dim);border-radius:8px;color:var(--text);font-family:inherit;font-size:14px;margin:10px 0 4px" />
+      <p id="acctEmailErrBox" style="display:none;color:#eec9c9;background:rgba(180,60,60,0.15);border:1px solid rgba(220,120,120,0.4);border-radius:8px;padding:8px 12px;font-size:13px;margin:6px 0 2px"></p>
       <p style="color:var(--text-dim);font-size:11px;margin:6px 0 2px">${t('acctFirstBonus')}</p>
       <p style="color:var(--text-dim);font-size:11px;margin-top:2px">${t('acctStubNote')}</p>
       <div class="modal-actions">

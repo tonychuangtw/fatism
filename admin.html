@@ -58,6 +58,19 @@
   .bar-day:hover { color: var(--gold); text-decoration: underline; }
   .bar { height: 14px; background: linear-gradient(90deg, var(--gold), var(--gold-dim)); border-radius: 4px; min-width: 2px; }
   .bar-n { color: var(--gold); }
+  .adm-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.78); display: none;
+    align-items: center; justify-content: center; z-index: 600; padding: 16px; }
+  .adm-overlay.open { display: flex; }
+  .adm-dialog { background: linear-gradient(160deg, var(--bg-2) 0%, var(--bg-1) 100%);
+    border: 1px solid var(--gold); border-radius: 16px; padding: 24px 22px 20px;
+    max-width: 380px; width: 100%; box-shadow: var(--shadow); }
+  .adm-dialog h3 { color: var(--gold); font-size: 17px; letter-spacing: 0.06em; margin-bottom: 10px; }
+  .adm-dialog p { color: var(--text); font-size: 14px; line-height: 1.7; word-break: break-all; }
+  .adm-dialog input { width: 100%; margin-top: 12px;
+    background: rgba(0,0,0,0.35); border: 1px solid var(--gold-dim); border-radius: 8px;
+    color: var(--text); font-family: inherit; font-size: 14px; padding: 10px 12px; }
+  .adm-dialog input:focus { outline: none; border-color: var(--gold); }
+  .adm-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 18px; }
   #msg { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
     background: rgba(0,0,0,0.85); border: 1px solid var(--gold); color: var(--ivory);
     border-radius: 10px; padding: 10px 20px; font-size: 13px; display: none; z-index: 500; }
@@ -105,6 +118,7 @@
   </div>
 </div>
 <div id="msg"></div>
+<div class="adm-overlay" id="admDialog"><div class="adm-dialog" id="admDialogBox"></div></div>
 
 <script src="assets/auth.js"></script>
 <script>
@@ -118,6 +132,47 @@ function toast(s) {
   m.textContent = s; m.style.display = 'block';
   clearTimeout(toast._t); toast._t = setTimeout(() => m.style.display = 'none', 2600);
 }
+
+// 站內風格對話框，取代原生 confirm() / prompt()
+// uiConfirm(msg) → Promise<boolean>；uiPrompt(msg, opts) → Promise<string|null>（取消回 null）
+function admDialog(opts) {
+  const overlay = document.getElementById('admDialog');
+  const box = document.getElementById('admDialogBox');
+  return new Promise((resolve) => {
+    let done = false;
+    function finish(v) {
+      if (done) return;
+      done = true;
+      overlay.classList.remove('open');
+      overlay.onclick = null;
+      document.removeEventListener('keydown', onKey);
+      resolve(v);
+    }
+    function onKey(e) {
+      if (e.key === 'Escape') finish(opts.input ? null : false);
+      else if (e.key === 'Enter' && opts.input) { e.preventDefault(); submit(); }
+    }
+    box.innerHTML = `
+      <h3>${opts.title}</h3>
+      ${opts.body ? `<p>${opts.body}</p>` : ''}
+      ${opts.input ? `<input id="admInput" type="${opts.inputType || 'text'}"
+        value="${opts.value == null ? '' : String(opts.value).replace(/"/g, '&quot;')}">` : ''}
+      <div class="adm-actions">
+        <button class="btn btn-sm btn-ghost" id="admCancel">取消</button>
+        <button class="btn btn-sm" id="admOk">${opts.okText || '確定'}</button>
+      </div>`;
+    const inputEl = opts.input ? document.getElementById('admInput') : null;
+    function submit() { finish(inputEl ? inputEl.value : true); }
+    document.getElementById('admOk').onclick = submit;
+    document.getElementById('admCancel').onclick = () => finish(inputEl ? null : false);
+    overlay.onclick = (e) => { if (e.target === overlay) finish(inputEl ? null : false); };
+    document.addEventListener('keydown', onKey);
+    overlay.classList.add('open');
+    if (inputEl) setTimeout(() => { inputEl.focus(); inputEl.select(); }, 50);
+  });
+}
+function uiConfirm(title, body) { return admDialog({ title, body }); }
+function uiPrompt(title, opts) { return admDialog(Object.assign({ title, input: true }, opts || {})); }
 
 async function adminApi(path, opts) {
   const r = await FatismAuth.api(path, opts);
@@ -174,7 +229,11 @@ async function adjust(email, delta) {
 }
 
 async function setCredits(email) {
-  const v = prompt(`把 ${email} 的點數設為：`);
+  const cur = (allUsers.find(u => u.email === email) || {}).credits;
+  const v = await uiPrompt('設定點數', {
+    body: `把 <strong style="color:var(--gold)">${email}</strong> 的點數設為：`,
+    inputType: 'number', value: cur == null ? '' : cur,
+  });
   if (v == null) return;
   const n = parseInt(v, 10);
   if (isNaN(n) || n < 0) { toast('請輸入 0 以上的整數'); return; }
@@ -186,7 +245,11 @@ async function setCredits(email) {
 }
 
 async function setRole(email, role) {
-  if (role === 'super' && !confirm(`確定把 ${email} 升為 SUPER？（不扣點、可進後台）`)) return;
+  if (role === 'super') {
+    const ok = await uiConfirm('升為 SUPER',
+      `確定把 <strong style="color:var(--gold)">${email}</strong> 升為 SUPER？（不扣點、可進後台）`);
+    if (!ok) return;
+  }
   try {
     await adminApi('/admin/role', { method: 'POST', body: { email, role } });
     toast(`${email} → ${role}`);
